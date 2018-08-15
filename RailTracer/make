@@ -1,0 +1,10 @@
+routeRegistryInterface{
+  ["mode"]="EVENT"
+  ["event"]="Chat"
+  ["script"]="RailTracer/routeRegistryInterface"
+}
+railTracerMain{
+  ["mode"]="KEY_DOWN"
+  ["event"]="R"
+  ["script"]="RailTracer/railTracerMain"
+}
