@@ -1,0 +1,81 @@
+if RAILTRACKERRUNNING==nil then RAILTRACKERRUNNING=false end
+RAILTRACKERRUNNING=not RAILTRACKERRUNNING
+if RAILTRACKERRUNNING then log("Rail Tracer running") end
+local routeRegDir="common"
+local routeRegPath=routeRegDir.."/routeRegistry"
+if not filesystem.exists(routeRegDir) then filesystem.mkDir(routeRegDir) end
+if not filesystem.exists(routeRegPath) then filesystem.open(routeRegPath, "w"):close() end
+local routeReg=catRel(routeRegPath, true)
+run("RailTracer/railTracerLib")
+--Example route entry
+--name{
+--	{x:-404;y:55;z:1591}
+--	{x:-404;y:55;z:1590}
+--	{x:-404;y:55;z:1589}
+--	{x:-404;y:55;z:1588}
+--	{x:-405;y:55;z:1590}
+--	{x:-406;y:55;z:1590}
+--}
+
+local recordingRoute=false
+local currentRoute={}
+
+local railIds={
+  "minecraft:golden_rail",
+  "minecraft:activator_rail",
+  "minecraft:rail",
+  "minecraft:detector_rail"
+}
+function isOnRail()
+  local isOnGround=getPlayer()["onGround"]
+  local x, y, z=getPlayerBlockPos()
+  local block=getBlock(x, y+1, z)
+  local blockIsRail=false
+  for key, id in pairs(railIds) do
+    if block["id"]==id then
+      blockIsRail=true
+    end
+  end
+  if not isOnGround and blockIsRail then
+    return true
+  else
+    return false
+  end
+end
+function isMoving()
+  local vel=getPlayer()["velocity"]
+  local velocity=math.sqrt(math.pow(vel[1], 2) + math.pow(vel[3], 2))
+  if velocity == 0 then
+    return false
+  else
+    return true
+  end
+end
+
+function tracePath()
+  local x, y, z = getPlayerBlockPos()
+  y=y+1
+  if not doesPointExist(currentRoute, x, y, z) then
+    if currentRoute["path"]==nil then currentRoute["path"]={} end
+    table.insert(currentRoute["path"], {x=x, y=y, z=z})
+  end
+end
+
+while RAILTRACKERRUNNING do
+  if isOnRail() and not recordingRoute then
+    local routeName
+    while routeName==nil or doesRouteExist(routeReg, routeName) do
+      routeName=prompt("Enter a name for the route.", "text")
+    end
+    currentRoute["name"]=routeName
+    recordingRoute=true
+  end
+  if recordingRoute then
+    tracePath()
+  end
+  if not isOnRail() and recordingRoute and not isMoving() then
+    recordingRoute=false
+    logRoute(routeRegPath, currentRoute)
+    currentRoute={}
+  end
+end

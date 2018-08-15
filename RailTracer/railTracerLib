@@ -1,0 +1,83 @@
+function getRoute(routeReg, line)
+  local route={}
+  local foundRoute=false
+  while line <= routeReg["lines"] and not foundRoute do
+    if routeReg[line]:match("{") then
+      local name=routeReg[line]:match("^[^{]*")
+      line=line+1
+      route["name"]=name
+      local path={}
+      local pathId=1
+      while not routeReg[line]:match("^%}$") do
+        local entry=routeReg[line]:gsub("^[%s]*", "")
+        local a=entry:find("[%a]")
+        entry=entry:sub(a)
+        entry=entry:gsub("}", "")
+        local fields=split(entry, ";")
+        fields["length"]=nil
+        path[pathId]={}
+        for id, field in pairs(fields) do
+          local key=split(field, ":")[1]
+          local value=split(field, ":")[2]
+          path[pathId][key]=value
+        end
+        line=line+1
+        pathId=pathId+1
+      end
+      route["path"]=path
+      foundRoute=true
+    else
+      line=line+1
+    end
+  end
+  return route, line
+end
+
+function doesRouteExist(routeReg, routeName)
+  local line=1
+  local routeExists=false
+  while line <= routeReg["lines"] do
+    local route
+    route, line=getRoute(routeReg, line)
+    if route["name"]==routeName then
+      routeExists=true
+    end
+    line=line+1
+  end
+  return routeExists
+end
+
+function doesPointExist(currentRoute, x, y, z)
+  local points=currentRoute["path"]
+  local doesExist=false
+  if points~= nil then
+    for id, point in pairs(points) do
+      if x==point["x"] and y==point["y"] and z==point["z"] then
+        doesExist=true
+      end
+    end
+  end
+  return doesExist
+end
+
+function logRoute(routeRegPath, currentRoute, suppressLog)
+  if suppressLog==nil then suppressLog=false end
+  local file=filesystem.open(routeRegPath, "a")
+  file:write(currentRoute["name"].."{\n")
+  local path=currentRoute["path"]
+  local currentPoint=1
+  for id, point in pairs(path) do
+    local point=path[currentPoint]
+    currentPoint=currentPoint+1
+    local x=point["x"]
+    local y=point["y"]
+    local z=point["z"]
+    file:write("\t{x:"..x..";y:"..y..";z:"..z.."}\n")
+  end
+  file:write("}\n")
+  file:close()
+  if not suppressLog then
+    log("Finished tracing "..currentRoute["name"])
+    log("Successfully traced "..tostring(currentPoint-1).." blocks")
+  end
+end
