@@ -1,0 +1,5 @@
+combatTag:{
+  ["mode"]="EVENT"
+  ["event"]="Chat"
+  ["script"]="CombatTag/combatTag"
+}
