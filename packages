@@ -1,1 +1,4 @@
-SpiderCalc:<SpiderCalc URL Here>
+--Package list. Points to an individual list for each package which contains links to all the scripts
+--the package needs to operate.
+
+SpiderCalc:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/scriptsList
