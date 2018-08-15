@@ -1,0 +1,143 @@
+local debug=false
+--same regexes exist in shuntYard
+local operatorReg="[%+%-%*/%^%%!,]" --comma is an operator used to tell it to get another token for function args
+local groupingReg="[%(%)%[%]{}]"
+local leftGroupingReg="[%(%[{]"
+local rightGroupingReg="[%)%]}]"
+local functions={"sqrt", "cbrt", "ln", "log", "floor", "ceil", "sin", "cos", "tan", "sec", "csc", "cot", "sto"}
+local variables={"pi", "e", "tau", "ans", "x", "y", "z", "theta", "phi"}
+local chatDelay=800 --Used for help functions
+run("SpiderCalc/spiderLib")
+
+--formatting functions
+function removeSpaces(eq)
+  eq=eq:gsub("[%s]", "")
+  return eq
+end
+
+function isOperator(token)
+  local matchOp=false
+  if token~=nil then
+    token=tostring(token)
+    if token:match(operatorReg) then
+      matchOp=true
+    end
+  end
+  return matchOp
+end
+
+--matches a token to a function
+--returns true if matched and the function or false if not
+function matchFunction(token)
+  local foundMatch=false
+  local matchFunc=nil
+  if token~=nil then
+    for id, _function in pairs(functions) do
+      if token==_function then
+        foundMatch=true
+        matchFunc=_function
+      end
+    end
+  end
+  return foundMatch, matchFunc
+end
+--matches a token to a variable
+--returns true if matched and the variable or false if not
+function matchVariable(token)
+  local foundMatch=false
+  local matchVar=nil
+  if token~=nil then
+    for id, variable in pairs(variables) do
+      if token==variable then
+        foundMatch=true
+        matchVar=variable
+      end
+    end
+  end
+  return foundMatch, matchVar
+end
+
+--takes a token and returns if it is a number
+function isNumber(token)
+  token=tostring(token)
+  if token:match("[%d]+[%.%d]*") then
+    return true
+  else
+    return false
+  end
+end
+
+--breaks an equation up into tokens in a table
+function tokenize(eq)
+  eq=tostring(eq) --should be a string but just to be safe.
+  local char=1
+  local tokens={}
+  while char <= eq:len() do
+    local foundMatch=false
+    --character is a digit
+    if eq:sub(char, char):match("[%d]+[%.%d]*") then
+      foundMatch=true
+      local a, b = eq:find("[%d]+[%.%d]*", char)
+      char=b+1
+      table.insert(tokens, eq:sub(a, b))
+      --eq=eq:sub(char)
+    --character is an operator, only supports single-character operators or parenthetical
+    elseif eq:sub(char, char):match(operatorReg) or eq:sub(char, char):match(groupingReg) then
+      foundMatch=true
+      table.insert(tokens, eq:sub(char, char))
+      char=char+1
+      --eq=eq:sub(char)
+    --character is the beginning of a function or variable
+    else
+      --function matching
+      for id, _function in pairs(functions) do
+        if eq:sub(char, char+_function:len()-1):match(_function) then
+          foundMatch=true
+          table.insert(tokens, eq:sub(char, char+_function:len()-1))
+          char=char+_function:len()
+          --eq=eq:sub(char)
+        end
+      end
+      --variable matching
+      for id, variable in pairs(variables) do
+        if eq:sub(char, char+variable:len()-1):match(variable) then
+          foundMatch=true
+          table.insert(tokens, eq:sub(char, char+variable:len()-1))
+          char=char+variable:len()
+          --eq=eq:sub(char)
+        end
+      end
+    end
+    --Couldn't find a token definition
+    if not foundMatch then
+      error("Syntax error: Unhandled token at "..char..": '"..eq:sub(char).."'")
+    end
+  end
+  return tokens
+end
+--inserts astericks between implied multiplication
+--eq should be tokenized already
+--e.g. 5(3), pi(7), 5ln(7), (1+2)(3-2), 
+function insertAstericks(eq)
+  --insert astericks before opening parentheticals without left parentheticals or operators before them
+  --insert astericks before functions without left parentheticals or operators before them
+  --insert astericks before variables without left parentheticals or operators before them
+  for id, token in pairs(eq) do
+    if id~=1 and not eq[id-1]:match(leftGroupingReg) and not eq[id-1]:match(operatorReg) and not matchFunction(eq[id-1]) then
+      --parentheticals
+      if token:match(leftGroupingReg) then
+        table.insert(eq, id, "*")
+      else
+        local foundMatch, matchFunc=matchFunction(token)
+        if foundMatch then
+          table.insert(eq, id, "*")
+        end
+        local foundMatch, matchVar=matchVariable(token)
+        if foundMatch then
+          table.insert(eq, id, "*")
+        end
+      end
+    end
+  end
+  return eq
+end

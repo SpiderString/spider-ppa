@@ -1,0 +1,235 @@
+local pi=math.pi
+local e=math.e
+
+--Lists Functions and usage in pm
+function helpPage(player, arg)
+  local helpFunc={}
+  --Operators
+  local add={}
+  table.insert(add, "<-----SpiderCalc Help----->")
+  table.insert(add, "Add is an operator used to give the sum of two inputs.")
+  table.insert(add, "Add uses the symbol '+'")
+  table.insert(add, "E.G. =1+2 -> 3, =1+(4*5) -> 21")
+  local minus={}
+  table.insert(minus, "<-----SpiderCalc Help----->")
+  table.insert(minus, "Sub is an operator used to subtract two inputs.")
+  table.insert(minus, "Sub is also used to denote negative numbers.")
+  table.insert(minus, "It should be noted that subtraction is not associative mathematically, 1-5 does not equal 5-1")
+  table.insert(minus, "Sub uses the symbol '-'")
+  table.insert(minus, "E.G. =3-1 -> 2, =5-(2*3) -> -1")
+  local multiply={}
+  table.insert(multiply, "<-----SpiderCalc Help----->")
+  table.insert(multiply, "Multiply is an operator used to give the product of two inputs.")
+  table.insert(multiply, "Multiply uses the symbol '*'")
+  table.insert(multiply, "Multiplication can also be done by putting a number in front of a parenthetical, variable, or function")
+  table.insert(multiply, "E.G. =5*9 -> 45, =2(5sin(3pi)) -> -10")
+  local divide={}
+  table.insert(divide, "<-----SpiderCalc Help----->")
+  table.insert(divide, "Divide is an operator used to divide two inputs.")
+  table.insert(divide, "Division can be thought of as multiplying by the reciprocal.")
+  table.insert(divide, "Divide uses the symbol '/'")
+  table.insert(divide, "E.G. =1/2 -> 0.5, =20/(2*5) -> 2")
+  local exponent={}
+  table.insert(exponent, "<-----SpiderCalc Help----->")
+  table.insert(exponent, "Exponent is an operator used to raise one input to the power of another.")
+  table.insert(exponent, "The first input is called the base, the second the degree or power.")
+  table.insert(exponent, "For integer degrees greater than 0, exponentiation can be thought of as repeated multiplication.")
+  table.insert(exponent, "Anything to the power of 0 is 1, including 0.")
+  table.insert(exponent, "Raising a number to a negative power is equal to dividing 1 by the number raised to the positive power.")
+  table.insert(exponent, "Exponent uses the symbol '^'")
+  table.insert(exponent, "E.G. =3^3 -> 27, =2^-1 -> 0.5")
+  local modulo={}
+  table.insert(modulo, "<-----SpiderCalc Help----->")
+  table.insert(modulo, "Modulo is an operator used to return the remainder after dividing.")
+  table.insert(modulo, "Modulo uses the symbol '%'")
+  table.insert(modulo, "E.G. =9 % 3 -> 0, =23 % 5 -> 3")
+  local factorial={}
+  table.insert(factorial, "<-----SpiderCalc Help----->")
+  table.insert(factorial, "Factorial is an operator used in combinatronics and statistics.")
+  table.insert(factorial, "It only accepts non-negative integers.")
+  table.insert(factorial, "Factorial can be defined as multiplying every non-negative integer less than or equal to the argument.")
+  table.insert(factorial, "Factorial uses the symbol '!'")
+  table.insert(factorial, "E.G. =5! -> 120, =(6-3)! -> 6")
+  --Functions
+  local sqrt={}
+  table.insert(sqrt, "<-----SpiderCalc Help----->")
+  table.insert(sqrt, "Sqrt(x) is a function used to find the square root of its input.")
+  table.insert(sqrt, "The square root of x is the number y such that y^2=x")
+  table.insert(sqrt, "The square root returns positive numbers, so is technically a principle root.")
+  table.insert(sqrt, "Sqrt(x) is undefined for negative inputs as they are imaginary.")
+  table.insert(sqrt, "Extremely limited support for imaginary outputs exists.")
+  table.insert(sqrt, "Sqrt(x) can also be defined as x^(1/2)")
+  table.insert(sqrt, "E.G. =sqrt(9) -> 3, =sqrt(-16) -> Loop Error: 4i")
+  local cbrt={}
+  table.insert(cbrt, "<-----SpiderCalc Help----->")
+  table.insert(cbrt, "Cbrt(x) is a function used to find the cube root of its input.")
+  table.insert(cbrt, "The cube root of x is the number y such that y^3=x")
+  table.insert(cbrt, "Cbrt(x) can also be defined as x^(1/3)")
+  table.insert(cbrt, "E.G. =cbrt(8) -> 2, =cbrt(9(5-2)) -> 3")
+  local ln={}
+  table.insert(ln, "<-----SpiderCalc Help----->")
+  table.insert(ln, "Ln(x) is a function used to find the natural log of its input.")
+  table.insert(ln, "The natural log of x is the number y such that e^y=x, where e is approximately "..e)
+  table.insert(ln, "Ln(x) cannot accept numbers less than or equal to 0.")
+  table.insert(ln, "E.G. =ln(e^5) -> 5, =ln(9-3e) -> -0.16823524")
+  local _log={}
+  table.insert(_log, "<-----SpiderCalc Help----->")
+  table.insert(_log, "Log(x, [base]) is a function used to find the logarithm of its input.")
+  table.insert(_log, "The log of x base b is the number y such that b^y=x.")
+  table.insert(_log, "The default base is 10. This is called the common log.")
+  table.insert(_log, "Log(x) cannot accept numbers less than or equal to 0.")
+  table.insert(_log, "Log(x, base) must have a base greater than 0 and it cannot be 1.")
+  table.insert(_log, "E.G. =log(1000) -> 3, =log(32, 2) -> 5")
+  local floor={}
+  table.insert(floor, "<-----SpiderCalc Help----->")
+  table.insert(floor, "Floor(x) returns the greatest integer less than or equal to x.")
+  table.insert(floor, "Also known as the greatest integer function, the step function, or the integer part function.")
+  table.insert(floor, "Floor can also be defined in terms of the modulo operation by first converting x to a fraction.")
+  table.insert(floor, "E.G. =floor(1.5) -> 1, =floor(-1.7) -> -2")
+  local ceil={}
+  table.insert(ceil, "<-----SpiderCalc Help----->")
+  table.insert(ceil, "Ceil(x) returns the least integer greater than or equal to x.")
+  table.insert(ceil, "Closely related to floor(x) and modulo, the ceiling function is used mostly in computer science.")
+  table.insert(ceil, "E.G. =ceil(8/9) -> 1, =ceil(-6.8) -> -6")
+  --Trig Functions
+  local sin={}
+  table.insert(sin, "<-----SpiderCalc Help----->")
+  table.insert(sin, "Sin(x) is a trigonometric function.")
+  table.insert(sin, "Like all trig functions, sine takes an angle in radians and outputs a ratio.")
+  table.insert(sin, "The ratio output by sine is equal to the side length opposite the angle over the hypotenuse of a right triangle.")
+  table.insert(sin, "Radians are a measure for angles in terms of a circle's radius. a=x°π/180")
+  table.insert(sin, "E.G. =sin(60pi/180) -> 0.86602545, =sin(-pi/6) -> -0.5")
+  local cos={}
+  table.insert(cos, "<-----SpiderCalc Help----->")
+  table.insert(cos, "Cos(x) is a trigonometric function.")
+  table.insert(cos, "Like all trig functions, cosine takes an angle in radians and outputs a ratio.")
+  table.insert(cos, "The ratio output by cosine is equal to the side length adjacent to the angle over the hypotenuse of a right triangle.")
+  table.insert(cos, "Radians are a measure for angles in terms of a circle's radius. a=x°π/180")
+  table.insert(cos, "E.G. =cos(60pi/180) -> 0.5, =cos(2pi-pi/6) -> 0.8660258")
+  local tan={}
+  table.insert(tan, "<-----SpiderCalc Help----->")
+  table.insert(tan, "Tan(x) is a trigonometric function.")
+  table.insert(tan, "Like all trig functions, tangent takes an angle in radians and outputs a ratio.")
+  table.insert(tan, "Tangent outputs a ratio equal to the side adjacent to the angle over the side opposite it in a right triangle.")
+  table.insert(tan, "Tangent can also be defined as tan(x)=sin(x)/cos(x)")
+  table.insert(tan, "Radians are a measure for angles in terms of a circle's radius. a=x°π/180")
+  table.insert(tan, "E.G. =tan(45pi/180) -> 1, =tan(pi/3) -> 1.732051")
+  --Secondary Trig Functions
+  local sec={}
+  table.insert(sec, "<-----SpiderCalc Help----->")
+  table.insert(sec, "Sec(x) is a trigonometric function.")
+  table.insert(sec, "Like all trig functions, secant takes an angle in radians and outputs a ratio.")
+  table.insert(sec, "Secant outputs a ratio equal to the hypotenuse over the side adjacent to the angle in a right triangle.")
+  table.insert(sec, "Secant can also be defined as sec(x)=1/cos(x)")
+  table.insert(sec, "Radians are a measure for angles in terms of a circle's radius. a=x°π/180")
+  table.insert(sec, "E.G. =sec(pi/3) -> 2, =sec(pi) -> -1")
+  local csc={}
+  table.insert(csc, "<-----SpiderCalc Help----->")
+  table.insert(csc, "Csc(x) is a trigonometric function.")
+  table.insert(csc, "Like all trig functions, cosecant takes an angle in radians and outputs a ratio.")
+  table.insert(csc, "Cosecant outputs a ratio equal to the hypotenuse over the side opposite the angle in a right triangle.")
+  table.insert(csc, "Cosecant can also be defined as csc(x)=1/sin(x)")
+  table.insert(csc, "Radians are a measure for angles in terms of a circle's radius. a=x°π/180")
+  table.insert(csc, "E.G. =csc(pi/6) -> 2, =csc(pi/4) -> 1.4142135")
+  local cot={}
+  table.insert(cot, "<-----SpiderCalc Help----->")
+  table.insert(cot, "Cot(x) is a trigonometric function.")
+  table.insert(cot, "Like all trig functions, cotangent takes an angle in radians and outputs a ratio.")
+  table.insert(cot, "Cotangent outputs a ratio equal to the side adjacent to the angle over the side opposite the angle in a right triangle.")
+  table.insert(cot, "Cotangent can also be defined as cot(x)=1/tan(x)")
+  table.insert(cot, "Radians are a measure for angles in terms of a circle's radius. a=x°π/180")
+  table.insert(cot, "E.G. =cot(pi/4) -> 1, =cot(pi/3) -> 0.57735026")
+  local sto={}
+  table.insert(sto, "<-----SpiderCalc Help----->")
+  table.insert(sto, "Sto(x, var) is a function which evaluates x and stores the value to the variable.")
+  table.insert(sto, "The variable can then be called later in the expression or in another equation.")
+  table.insert(sto, "Supported variables by default include x, y, z, theta, and phi")
+  table.insert(sto, "E.G. =sto(5+pi/3, theta) -> 6.0471973")
+  --Operators
+  helpFunc["add"]=add
+  helpFunc["sub"]=minus
+  helpFunc["multiply"]=multiply
+  helpFunc["divide"]=divide
+  helpFunc["exponent"]=exponent
+  helpFunc["modulo"]=modulo
+  helpFunc["factorial"]=factorial
+  --Functions
+  helpFunc["sqrt"]=sqrt
+  helpFunc["cbrt"]=cbrt
+  helpFunc["ln"]=ln
+  helpFunc["log"]=_log
+  helpFunc["floor"]=floor
+  helpFunc["ceil"]=ceil
+  --Trig Functions
+  helpFunc["sin"]=sin
+  helpFunc["cos"]=cos
+  helpFunc["tan"]=tan
+  --Secondary Trig Functions
+  helpFunc["sec"]=sec
+  helpFunc["csc"]=csc
+  helpFunc["cot"]=cot
+  --Other
+  helpFunc["sto"]=sto
+  
+  local selfPlayer=getPlayer()["name"]
+  if helpFunc[arg] ~= nil then
+    if player == selfPlayer then
+      for id, text in pairs(helpFunc[arg]) do
+        log(text)
+      end
+    else
+      for id, text in pairs(helpFunc[arg]) do
+        say("/msg "..player.." "..text)
+        sleep(chatDelay)
+      end
+    end
+  else
+    if player == selfPlayer then
+      log("Help for '"..arg.."' doesn't exist or has not been made yet.")
+    else
+      say("/msg "..player.." Help for '"..arg.."' doesn't exist or has not been made yet.")
+    end
+  end
+end
+function help(player, command, commandArgs)
+  local helpText={}
+
+  table.insert(helpText, "<-----SpiderCalc Help----->")
+  table.insert(helpText, "Supported Operations: ")
+  table.insert(helpText, "Add(+), Sub(-), Multiply(*), Divide(/), Exponent(^), Modulo(%), Factorial(!)")
+  table.insert(helpText, "Supported Parentheticals(Grouping Symbols): ")
+  table.insert(helpText, "Parenthesis(), Brackets[], Braces{}")
+  table.insert(helpText, "Parentheticals are evaluated inside to outside, with no preference for type.")
+  table.insert(helpText, "Two types of parentheticals can be used in one equation, but they must come in pairs.")
+  table.insert(helpText, "Supported Functions: ")
+  table.insert(helpText, "sqrt(x), cbrt(x), ln(x), log(x, [base]), floor(x), ceil(x)")
+  table.insert(helpText, "sin(x), cos(x), tan(x), sec(x), csc(x), cot(x), sto(x, var)")
+  table.insert(helpText, "Pre-built Constants: ")
+  table.insert(helpText, "pi="..pi)
+  table.insert(helpText, "tau=2pi="..2*pi)
+  table.insert(helpText, "e="..e)
+  table.insert(helpText, "Special Variables: ")
+  table.insert(helpText, "ans, stores last result to be called upon later. e.g. 5*3=15, ans*5=75")
+  table.insert(helpText, "x,y,z,theta,phi: user-defined variables. Set by sto()")
+  table.insert(helpText, "Use '=help' and a function or the name of an operator to see a specific help page")
+  table.insert(helpText, "E.G. '=help modulo' or '=help sqrt'")
+
+  --no args, standard help
+  if commandArgs[1]==nil then
+    local selfPlayer=getPlayer()["name"]
+    --logs instead of /msg'ing
+    if player == selfPlayer then
+      for id, text in pairs(helpText) do
+        log(text)
+      end
+    else
+      for id, text in pairs(helpText) do
+        say("/msg "..player.." "..text)
+        sleep(chatDelay)
+      end
+    end
+  --args
+  else
+    helpPage(player, commandArgs[1])
+  end
+end

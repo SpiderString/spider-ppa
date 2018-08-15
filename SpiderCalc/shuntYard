@@ -1,0 +1,130 @@
+--Converts the equation to postfix using a shunting-yard algorithm
+--Same regex's exist in calcLib
+local groupingReg="[%(%)%[%]{}]"
+local leftGroupingReg="[%(%[{]"
+local rightGroupingReg="[%)%]}]"
+local operatorReg="[%+%-%*/%^%%!,]"
+
+local precedance={
+  ["+"]=2,
+  ["-"]=2,
+  ["*"]=3,
+  ["/"]=3,
+  ["^"]=4,
+  ["%"]=5,
+  ["!"]=5,
+  [","]=1,
+}
+--In cases of it being fully associative, it should default to "left".
+local associativity={
+  ["+"]="left",
+  ["-"]="left",
+  ["*"]="left",
+  ["/"]="left",
+  ["^"]="right",
+  ["%"]="left",
+}
+
+function push(stack, token)
+  table.insert(stack, 1, token)
+end
+function pop(stack)
+  return table.remove(stack, 1)
+end
+
+--converts standard math notation to postfix
+function convertToPostfix(eq)
+  local output={}
+  local opStack={}
+  run("SpiderCalc/calcLib")
+  local lastToken=nil
+  while eq[1]~=nil do
+    local token=pop(eq)
+    --numbers get pushed to the output
+    if isNumber(token) then
+      push(output, token)
+    elseif matchVariable(token) then
+      push(output, token)
+    --functions get pushed to the operator stack invariably
+    elseif matchFunction(token) then
+      push(opStack, token)
+    --factorial is already postfix and so is pushed onto the output immediately
+    elseif token=="!" then
+      push(output, token)
+    --open parentheticals
+    elseif token:match(leftGroupingReg) then
+      push(opStack, token)
+    --operators
+    elseif token:match(operatorReg) then
+      --Negative numbers handling
+      --adds a 0 operand for negative numbers
+      if token=="-" and not isNumber(lastToken) and not matchVariable(lastToken) then
+        push(output, 0)
+        --puts 0 - x in parenthesis to give precedance
+        push(opStack, "(")
+        table.insert(eq, 2, ")")
+      end
+
+      local tokenPrecedance=precedance[token]
+      local topToken=opStack[1]
+      local topTokenPrecedance=precedance[topToken]
+      if topTokenPrecedance==nil then topTokenPrecedance=-5 end 
+      local topTokenAssociativity=associativity[topToken]
+      if topToken~=nil then
+
+        local takesPrecedance=topTokenPrecedance > tokenPrecedance
+        local associativePrecedance=topTokenPrecedance==tokenPrecedance and topTokenAssociativity=="left"
+        local doPop=(matchFunction(topToken) or takesPrecedance or associativePrecedance) and not topToken:match(leftGroupingReg)
+        while doPop do
+          push(output, pop(opStack))
+          topToken=opStack[1]
+          topTokenPrecedance=precedance[topToken]
+          topTokenAssociativity=associativity[topToken]
+          
+          doPop=false
+          if topToken~=nil then
+            if topToken:match(leftGroupingReg) then
+              doPop=false
+            else
+              takesPrecedance=topTokenPrecedance > tokenPrecedance
+              associativePrecedance=topTokenPrecedance==tokenPrecedance and topTokenAssociativity=="left"
+              doPop=(matchFunction(topToken) or takesPrecedance or associativePrecedance) and not topToken:match(leftGroupingReg)
+            end
+          end
+        end
+      end
+      push(opStack, token)
+    --close parentheticals
+    elseif token:match(rightGroupingReg) then
+      local openBracket=nil
+      if token:match("%)") then
+        openBracket="("
+      elseif token:match("%]") then
+        openBracket="%["
+      elseif token:match("}") then
+        openBracket="{"
+      end
+      local topToken=opStack[1]
+      while not (topToken==openBracket) do
+        if opStack[1]==nil then
+          error("Mismatched parentheticals. '"..openBracket.."' not found.")
+        end
+        push(output, pop(opStack))
+        topToken=opStack[1]
+      end
+      --discards parentheticals
+      pop(opStack)
+    end
+    --pops the rest of the operator stack once the queue is empty
+    if eq[1]==nil then
+      while opStack[1]~=nil do
+        if opStack[1]:match(groupingReg) then
+          error("Mismatched parentheticals. '"..opStack[1].."' not found.")
+        end
+        push(output, pop(opStack))
+      end
+    end
+    lastToken=token
+  end
+  return output
+end
