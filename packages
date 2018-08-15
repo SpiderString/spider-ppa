@@ -5,4 +5,4 @@
 --packageId is case sensitive, but the installation command is not.
 
 SpiderCalc:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/scriptsList
-SpiderLib:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/spiderLib
+SpiderLib:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/scriptsList
