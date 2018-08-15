@@ -1,0 +1,40 @@
+--Main Method, should be bound to the "Chat" event and nothing else.
+
+--Configurable Variables
+local acceptCommandsFromOthers=false --set to false to ignore commands from other players
+local acceptCommandsFromPM=false --set to true to allow private messages triggering the script
+local commandPrefix="=" --prefix that should be at the start of the line for a calculator command
+
+--Inconfigurable Variables. No Touch.
+local args={...}
+local equation=args[3]
+run("SpiderCalc/spiderLib")
+
+local equation, caller=stripUsername(args[3], args[4])
+local commandArgs
+local command
+local self=getPlayer()["name"]
+command, commandArgs=getCommand(commandPrefix, equation)
+--check if the help command was run
+if equation ~= false then
+  if command=="help" and (caller==self or acceptCommandsFromOthers) then
+    run("SpiderCalc/helpLib")
+    help(caller, command, commandArgs)
+    equation=false
+  end
+end
+--Begin evalutation
+if equation ~= false and equation:match("^"..commandPrefix) and (caller==self or acceptCommandsFromOthers) then
+  run("SpiderCalc/calcLib")
+  equation=equation:gsub("^"..commandPrefix, "")
+  equation=removeSpaces(equation)
+  equation=equation:lower()
+  equation=tokenize(equation)
+  equation=insertAstericks(equation)
+  run("SpiderCalc/shuntYard")
+  equation=convertToPostfix(equation)
+  run("SpiderCalc/postfixInterpreter")
+  equation=evaluate(equation)
+  SPIDERCALCLASTANS=equation
+  say(equation)
+end
