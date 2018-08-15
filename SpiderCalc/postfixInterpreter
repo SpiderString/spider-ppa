@@ -1,6 +1,14 @@
-
 local binaryOperators="[%+%-%*/%^%%,]"
 local unaryOperators="[!]"
+
+function setVariables()
+  if SPIDERCALCLASTANS==nil then SPIDERCALCLASTANS=0 end
+  if SPIDERCALCVARIABLES==nil then SPIDERCALCVARIABLES={} end
+  for id, var in pairs(SPIDERCALCVARIABLES) do
+    if var==nil then SPIDERCALCVARIABLES[id]=0 end
+  end
+end
+setVariables()
 local variableDef={
   ["pi"]=math.pi,
   ["e"]=math.e,
@@ -101,14 +109,6 @@ function factorial(int)
   end
 end
 
-function setVariables()
-  if SPIDERCALCLASTANS==nil then SPIDERCALCLASTANS=0 end
-  if SPIDERCALCVARIABLES==nil then SPIDERCALCVARIABLES={} end
-  for id, var in pairs(SPIDERCALCVARIABLES) do
-    if var==nil then SPIDERCALCVARIABLES[id]=0 end
-  end
-end
-
 function convertVariables(token)
   local output=token
   if matchVariable(token) then
@@ -120,7 +120,6 @@ end
 
 --takes a postfix expression and evaluates it
 function evaluate(eq)
-  setVariables()
   local op={} --operand table
   eq=reverseStack(eq)
   local outputStack={}
@@ -261,5 +260,3 @@ function evaluate(eq)
   end
   return pop(outputStack)
 end
-
-
