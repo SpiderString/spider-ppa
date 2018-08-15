@@ -1,6 +1,6 @@
-spiderCalc:<spiderCalc script URL here>
-spiderLib:<spiderLib script URL here>
-shuntYard:<shuntYard script URL here>
-postfixInterpreter:
-helpLib:
-calcLib:
+spiderCalc:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/spiderCalc
+spiderLib:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/spiderLib
+shuntYard:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/shuntYard
+postfixInterpreter:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/postfixInterpreter
+helpLib:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/helpLib
+calcLib:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/calcLib
