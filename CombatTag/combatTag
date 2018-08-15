@@ -1,0 +1,22 @@
+local args={...}
+local chatGroup="group" --name of group to switch to
+local switchGroup=false --whether you should switch to a chat group before saying it. It will not switch back.
+function getCombatTag(chat, unformattedChat)
+  --&cYou have engaged in combat with &b[player]&c. 
+  local combattag
+  if chat:match("&cYou have engaged in combat with") then
+    combattag=unformattedChat:gsub("You have engaged in combat with ", "")
+    local a=combattag:find("%.")
+    combattag=combattag:sub(1, a-1)
+  end
+  return combattag
+end
+if args[2] == "Chat" then
+  local opponent=getCombatTag(args[3], args[4])
+  if opponent~= nil then
+    local x, y, z=getPlayerBlockPos()
+    local pos="[x:"..x..", y:"..y..", z:"..z.."]"
+    if switchGroup then say("/g "..chatGroup) end
+    say("Engaged in combat with "..opponent.." at "..pos)
+  end
+end
