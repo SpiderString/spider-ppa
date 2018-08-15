@@ -1,10 +1,12 @@
 --Package list. Points to an individual list for each package which contains links to all the scripts
 --the package needs to operate.
---Format is packageId:packageScriptListURL
+--Format is packageId-version:packageScriptListURL
 --packageId is required. This is the directory all scripts for the package will be put in in .minecraft/mods/advancedMacros
 --packageId is case sensitive, but the installation command is not.
+--version is required for automatic updates.
+--can be any alphanumeric string.
 
-SpiderCalc:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/scriptsList
-SpiderLib:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/scriptsList
-CombatTag:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/CombatTag/scriptsList
-RailTracer:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/RailTracer/scriptsList
+SpiderCalc-2.0:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/scriptsList
+SpiderLib-1.0:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/scriptsList
+CombatTag-1.0:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/CombatTag/scriptsList
+RailTracer-1.0:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/RailTracer/scriptsList
