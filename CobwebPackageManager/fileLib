@@ -1,0 +1,247 @@
+local repositoryListPath="macros/CobwebPackageManager/repositoryList" --path to repo list from .minecraft/advancedMacros
+local packageListPath="macros/CobwebPackageManager/packageList" --path to package list from .minecraft/advancedMacros
+local packageVersionsPath="macros/CobwebPackageManager/packageVersions"
+local httpTimeout=15 --time in seconds before a request is cancelled
+
+run("CobwebPackageManager/spiderLib")
+
+--writes a line to a file leaving all other lines untouched
+function writeLine(line, lineNum, fileName)
+  local file=catRel(fileName)
+  table.insert(file, lineNum, line)
+  local newFile=filesystem.open(fileName, "w")
+  local index=1
+  while file[index]~=nil do
+    newFile.writeLine(file[index])
+    index=index+1
+  end
+  newFile.close()
+end
+--takes a table of file lines and writes it
+function writeFile(fileTable, fileName)
+  local file=filesystem.open(fileName, "w")
+  local index=1
+  while fileTable[index]~=nil do
+    file.writeLine(fileTable[index])
+    index=index+1
+  end
+  file.close()
+end
+--gets a file from a url and puts it in a table
+function getFile(url)
+  local file=httpRequest({url=url}, {url=url, requestMethod="GET", timeout=httpTimeout})["input"]
+  local line=file:readLine()
+  local output={}
+  while line~=nil do
+    table.insert(output, line)
+    line=file:readLine()
+  end
+  return output
+end
+--gets a single instruction from the make file and deletes it
+function getInstruction(makeFile)
+  local property={}
+  local foundInstruction=false
+  local line=1
+  while makeFile[line]~=nil and not foundInstruction do
+    --beginning of instruction
+    if makeFile[line]:match("{") then
+      line=line+1
+      while not makeFile[line]:match("^%}$") do
+        local entry=makeFile[line]:gsub("[%s]", "")
+        local a, b = entry:find('%["[%a]+"%]')
+        local field=entry:sub(a+1, b-1)
+        field=field:gsub('"', "")
+        local c=entry:find("=")
+        local value=entry:sub(c+1)
+        value=value:gsub('"', ""):gsub("[%s]+", "")
+        property[field]=value
+        line=line+1
+      end
+      foundInstruction=true
+    else
+      line=line+1
+    end
+  end
+  --delete fetched instructions from file
+  local currentLine=1
+  while currentLine <= line do
+    table.remove(makeFile, 1)
+    currentLine=currentLine+1
+  end
+  return property
+end
+
+function doesBindingExist(profile, instruction)
+  local foundMatch=false
+  for id, binding in pairs(profile) do
+    if not foundMatch then
+      if binding["event"]==instruction["event"] and binding["script"]==instruction["script"] then
+        foundMatch=true
+      end
+    end
+  end
+  return foundMatch
+end
+--takes an instruction from a make file and executes it
+function setBinding(instruction)
+  local profile=getProfile()
+  local settings=getSettings()
+  profile=settings["profiles"][profile]
+  --if binding doesn't already exist
+  if not doesBindingExist(profile, instruction) then
+    instruction["enabled"]=true
+    table.insert(profile, instruction)
+  end
+  settings.save()
+end
+--handles bindings and finishes installation
+function make(makeFile)
+  local line=makeFile[1]
+  while line~=nil do
+    local instruction=getInstruction(makeFile)
+    if instruction~=nil then
+      setBinding(instruction)
+    end
+    line=makeFile[1]
+  end
+end
+
+--grabs package lists from repositories and writes to the package list
+function getRepositories(silent)
+  if silent==nil then silent=false end
+  local repoList=catRel(repositoryListPath)
+  local repositories={}
+  for id, line in pairs(repoList) do
+    if line:match("^htt[ps]+://") then
+      table.insert(repositories, line:match("[%S]+"))
+    end
+  end
+  --fetch package lists from repositories
+  local packages={}
+  for id, url in pairs(repositories) do
+    local packageList=httpRequest({url=url}, {url=url, requestMethod="GET", timeout=httpTimeout})["input"]
+    if not silent then
+      log("GET:"..id.." "..url)
+    end
+    local line=packageList:readLine()
+    while line~=nil do
+      if line:match(":htt[ps]+://") then
+        line=line:gsub("^[%s]*", "")
+        table.insert(packages, line:match("[%S]+"))
+      end
+      line=packageList:readLine()
+    end
+  end
+  --Get packages not already on the list
+  local packageList=catRel(packageListPath)
+  local newPackages=0
+  for id, package in pairs(packages) do
+    if package:match(":htt[ps]+://") and not next(search(packageList, package)) then
+      package=package:gsub("^[%s]*", "")
+      table.insert(packageList, package:match("[%S]+"))
+      newPackages=newPackages+1
+    end
+  end
+  --write package list to packageList
+  writeFile(packageList, packageListPath)
+  if not silent then
+    log("Package update complete. Added "..newPackages.." new packages.")
+  end 
+end
+--searches for a package, returns nil if not found
+function searchPackage(packageList, packageName)
+  local packages={}
+  for id, package in pairs(packageList) do
+    local packageListName=package:sub(1, package:find(":")-1)
+    if packageListName:lower()==packageName:lower() then
+      table.insert(packages, package) 
+    end
+  end
+  return packages
+end
+--searches the packageVersions file for the package and returns the version, nil if not found
+function getPackageVersion(packageName)
+  local packageVersion=nil
+  local foundMatch=false
+  if not filesystem.exists(packageVersionsPath) then filesystem.open(packageVersionsPath, "w"):close() end
+  local versionsFile=catRel(packageVersionsPath)
+  for id, line in pairs(versionsFile) do
+    if line:sub(1, line:find(":")-1):lower()==packageName:lower() and not foundMatch then
+      packageVersion=line:sub(line:find(":")+1):match("[%S]+")
+      foundMatch=true
+    end
+  end
+  return packageVersion
+end
+--updates version list for a given package
+function writePackageVersion(packageName, version)
+  local versionsFile=catRel(packageVersionsPath)
+  local foundMatch=false
+  for id, line in pairs(versionsFile) do
+    if line:sub(1, line:find(":")-1):lower()==packageName:lower() and not foundMatch then
+      packageVersion=line:sub(line:find(":")+1):match("[%S]+")
+      versionsFile[id]=packageName..":"..version
+      foundMatch=true
+    end
+  end
+  if not foundMatch then
+    table.insert(versionsFile, packageName..":"..version)
+  end
+  writeFile(versionsFile, packageVersionsPath)
+end
+--grabs scripts for a package
+function getPackage(packageName)
+  local packageList=catRel(packageListPath)
+  local package=searchPackage(packageList, packageName)
+  if next(package)==nil then
+    log("Could not find package '"..packageName.."'")
+  else
+    local packageId=package[1]:sub(1, package[1]:find(":")-1)
+    local url=package[1]:match(":[%S]+"):gsub("^:", "")
+    local scripts={}
+    local scriptList=httpRequest({url=url}, {url=url, requestMethod="GET", timeout=httpTimeout})["input"]
+    local line=scriptList:readLine()
+    local packageVersion
+    --gets script urls and names
+    while line~=nil do
+      if line:match(":http[ps]+://") then
+        line=line:gsub("^[%s]*", "")
+        local a=line:find(":")
+        local scriptName=line:sub(1,a-1)
+        local scriptUrl=line:sub(a+1)
+        scripts[scriptName]=scriptUrl
+      --get version
+      elseif line:lower():match("version:") then
+        packageVersion=line:sub(line:find(":")+1):gsub("[%s]+", "")
+      end
+      line=scriptList:readLine()
+    end
+
+    --gets current installed version
+    local installedVersion=getPackageVersion(packageId)
+    if installedVersion==nil then
+      installedVersion=-1
+    end
+    if tonumber(installedVersion)>=tonumber(packageVersion) then
+      log(packageId.." is already the newest version")
+    else
+      --makes package directory
+      if not filesystem.exists("macros/"..packageId) then 
+        filesystem.mkDir("macros/"..packageId)
+      end
+      --downloads scripts
+      for name, url in pairs(scripts) do
+        log("GET: "..url)
+        writeFile(getFile(url), "macros/"..packageId.."/"..name)
+      end
+      --get make instructions
+      local makeFile=catRel("macros/"..packageId.."/make")
+      make(makeFile)
+      filesystem.delete("macros/"..packageId.."/make")
+      --write new version
+      writePackageVersion(packageId, packageVersion)
+      log("Installation Complete")
+    end
+  end
+end

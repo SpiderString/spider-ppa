@@ -1,0 +1,24 @@
+--Can be bound to chat or to a key
+local commandPrefix="!cpm" --prefix to be put before all commands for this. Configurable.
+local args={...}
+run("CobwebPackageManager/spiderLib")
+--trigger ui
+if args[1]:lower()=="key" then
+  
+
+--parse commands
+elseif args[1]:lower()=="event" and args[2]:lower()=="chat" then
+  local command, caller=stripUsername(args[3], args[4])
+  local commandArgs
+  command, commandArgs=getCommand(commandPrefix, command)
+  if command~=false and caller==getPlayer()["name"] then
+    --begin command matching
+    if command=="update" then
+      run("CobwebPackageManager/fileLib")
+      getRepositories()
+    elseif command=="install" and commandArgs[1]~=nil then
+      run("CobwebPackageManager/fileLib")
+      getPackage(commandArgs[1])
+    end
+  end
+end

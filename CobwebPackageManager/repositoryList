@@ -1,0 +1,6 @@
+--Repository list, not to be confused with the package list which is generated automatically from these URL's.
+--Repository should point to a raw github file with URL's to the necessary scripts.
+--Follow one of the links here if you need an example
+--No stray text should be added unless it's commented out with two dashes AT THE BEGINNING of the line.
+
+https://raw.githubusercontent.com/SpiderString/spider-ppa/master/packages
