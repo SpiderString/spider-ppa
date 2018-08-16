@@ -1,0 +1,10 @@
+Join{
+  ["mode"]="EVENT"
+  ["event"]="JoinWorld"
+  ["script"]="KeyDaemon/keyDaemon"
+}
+Leave{
+  ["mode"]="EVENT"
+  ["event"]="LeaveWorld"
+  ["script"]="KeyDaemon/keyDaemon"
+}
