@@ -1,4 +1,4 @@
-Version: 1.0
+Version: 1.1
 routeRegistryInterface:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/RailTracer/routeRegistryInterface
 railTracerMain:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/RailTracer/railTracerMain
 railTracerLib:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/RailTracer/railTracerLib
