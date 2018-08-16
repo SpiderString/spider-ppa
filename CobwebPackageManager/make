@@ -1,0 +1,10 @@
+CLI{
+  ["mode"]="EVENT"
+  ["event"]="Chat"
+  ["script"]="CobwebPackageManager/cobwebUI"
+}
+GUI{
+  ["mode"]="KEY_DOWN"
+  ["event"]="P"
+  ["script"]="CobwebPackageManager/cobwebUI"
+}
