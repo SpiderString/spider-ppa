@@ -2,6 +2,9 @@ local repositoryListPath="macros/CobwebPackageManager/repositoryList" --path to 
 local packageListPath="macros/CobwebPackageManager/packageList" --path to package list from .minecraft/advancedMacros
 local packageVersionsPath="macros/CobwebPackageManager/packageVersions"
 local httpTimeout=15 --time in seconds before a request is cancelled
+local httpColor="&5" --dark purple, color for http requests
+local statusColor="&b" --aqua, color for status reports
+
 
 run("CobwebPackageManager/spiderLib")
 
@@ -123,7 +126,11 @@ function getRepositories(silent)
   for id, url in pairs(repositories) do
     local packageList=httpRequest({url=url}, {url=url, requestMethod="GET", timeout=httpTimeout})["input"]
     if not silent then
-      log("GET:"..id.." "..url)
+      local a,b=url:find(".com")
+      local c=url:find("/", b+2)
+      local user=url:sub(b+2, c-1)
+      local branch=url:sub(c+1, url:find("/", c+1)-1)
+      advLog({text="GET:"..id.." ..."..user.."/"..branch.."...", color=httpColor, tooltip=url})
     end
     local line=packageList:readLine()
     while line~=nil do
@@ -138,17 +145,24 @@ function getRepositories(silent)
   if not filesystem.exists(packageListPath) then filesystem.open(packageListPath, "w"):close() end
   local packageList=catRel(packageListPath)
   local newPackages=0
+  local newPackageList={}
   for id, package in pairs(packages) do
     if package:match(":htt[ps]+://") and not next(search(packageList, package)) then
       package=package:gsub("^[%s]*", "")
       table.insert(packageList, package:match("[%S]+"))
+      table.insert(newPackageList, package:match("[%S]+"))
       newPackages=newPackages+1
     end
   end
   --write package list to packageList
   writeFile(packageList, packageListPath)
   if not silent then
-    log("Package update complete. Added "..newPackages.." new packages.")
+    local newPackageString=""
+    for id, package in pairs(newPackageList) do
+      newPackageString=newPackageString..", "..package:sub(1, package:find(":")-1)
+    end
+    newPackageString=newPackageString:gsub("^, ", "")
+    advLog({text="Package update complete. Added "..newPackages.." new packages.", color=statusColor, tooltip=newPackageString})
   end
   return newPackages
 end
@@ -201,7 +215,7 @@ function getPackage(packageName, silent)
   local packageList=catRel(packageListPath)
   local package=searchPackage(packageList, packageName)
   if next(package)==nil then
-    log("Could not find package '"..packageName.."'")
+    advLog({text="Could not find package '"..packageName.."'", color=statusColor})
   else
     local packageId=package[1]:sub(1, package[1]:find(":")-1)
     local url=package[1]:match(":[%S]+"):gsub("^:", "")
@@ -234,7 +248,7 @@ function getPackage(packageName, silent)
     end
     if tonumber(installedVersion)>=tonumber(packageVersion) and tonumber(installedVersion)~=0 then
       if not silent then
-        log(packageId.." is already the newest version")
+        advLog({text=packageId.." is already the newest version", color=statusColor})
       end
     else
       --makes package directory
@@ -244,7 +258,10 @@ function getPackage(packageName, silent)
       --downloads scripts
       for name, url in pairs(scripts) do
         if not silent then
-          log("GET: "..url)
+          local fields=split(url, "/")
+          local packageName=fields[fields["length"]-1]
+          local scriptName=fields[fields["length"]]
+          advLog({text="GET: ".."..."..packageName.."/"..scriptName.."...", color=httpColor, tooltip=url})
         end
         writeFile(getFile(url), "macros/"..packageId.."/"..name)
       end
@@ -257,7 +274,7 @@ function getPackage(packageName, silent)
       --write new version
       writePackageVersion(packageId, packageVersion)
       if not silent then
-        log("Installation Complete")
+        advLog({text="Installation Complete", color=statusColor, tooltip="Successfully installed "..packageId})
       end
     end
   end
