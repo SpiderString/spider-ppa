@@ -26,6 +26,7 @@ function catRel(file, doStoreLines)
   if doStoreLines then
     output["lines"]=index
   end
+  file:close()
   return output
 end
 
