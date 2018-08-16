@@ -193,7 +193,8 @@ function writePackageVersion(packageName, version)
   writeFile(versionsFile, packageVersionsPath)
 end
 --grabs scripts for a package
-function getPackage(packageName)
+function getPackage(packageName, silent)
+  if silent==nil or type(silent)~="boolean" then silent=false end
   local packageList=catRel(packageListPath)
   local package=searchPackage(packageList, packageName)
   if next(package)==nil then
@@ -229,7 +230,9 @@ function getPackage(packageName)
       packageVersion=0
     end
     if tonumber(installedVersion)>=tonumber(packageVersion) and tonumber(installedVersion)~=0 then
-      log(packageId.." is already the newest version")
+      if not silent then
+        log(packageId.." is already the newest version")
+      end
     else
       --makes package directory
       if not filesystem.exists("macros/"..packageId) then 
@@ -237,7 +240,9 @@ function getPackage(packageName)
       end
       --downloads scripts
       for name, url in pairs(scripts) do
-        log("GET: "..url)
+        if not silent then
+          log("GET: "..url)
+        end
         writeFile(getFile(url), "macros/"..packageId.."/"..name)
       end
       --get make instructions
@@ -248,7 +253,9 @@ function getPackage(packageName)
       end
       --write new version
       writePackageVersion(packageId, packageVersion)
-      log("Installation Complete")
+      if not silent then
+        log("Installation Complete")
+      ends
     end
   end
 end
