@@ -109,7 +109,8 @@ end
 
 --grabs package lists from repositories and writes to the package list
 function getRepositories(silent)
-  if silent==nil then silent=false end
+  if silent=="true" or silent then silent=true
+  else silent=false end
   local repoList=catRel(repositoryListPath)
   local repositories={}
   for id, line in pairs(repoList) do
@@ -194,7 +195,9 @@ function writePackageVersion(packageName, version)
 end
 --grabs scripts for a package
 function getPackage(packageName, silent)
-  if silent==nil or type(silent)~="boolean" then silent=false end
+  if silent=="true" or silent then silent=true
+  else silent=false end
+
   local packageList=catRel(packageListPath)
   local package=searchPackage(packageList, packageName)
   if next(package)==nil then
@@ -255,7 +258,7 @@ function getPackage(packageName, silent)
       writePackageVersion(packageId, packageVersion)
       if not silent then
         log("Installation Complete")
-      ends
+      end
     end
   end
 end
