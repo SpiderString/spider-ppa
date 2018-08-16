@@ -228,7 +228,7 @@ function getPackage(packageName)
     if packageVersion==nil then
       packageVersion=0
     end
-    if tonumber(installedVersion)>=tonumber(packageVersion) then
+    if tonumber(installedVersion)>=tonumber(packageVersion) and tonumber(installedVersion)~=0 then
       log(packageId.." is already the newest version")
     else
       --makes package directory
