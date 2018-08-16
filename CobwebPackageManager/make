@@ -8,3 +8,8 @@ GUI{
   ["event"]="P"
   ["script"]="CobwebPackageManager/cobwebUI"
 }
+autoUpdate{
+  ["mode"]="EVENT"
+  ["event"]="JoinWorld"
+  ["script"]="CobwebPackageManager/autoUpdate"
+}
