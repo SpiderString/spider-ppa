@@ -1,0 +1,24 @@
+local doUpdate=true
+local packageVersionsPath="macros/CobwebPackageManager/packageVersions"
+local packageListPath="macros/CobwebPackageManager/packageList"
+
+function getInstalledPackages()
+  run("CobwebPackageManager/spiderLib")
+  local versionsFile=catRel(packageVersionsPath)
+  local packages={}
+  for id, line in pairs(versionsFile) do
+    local package=line:sub(1, line:find(":")-1):gsub("[%s]+", "")
+    table.insert(packages, package)
+  end
+  return packages
+end
+
+if doUpdate then
+  run("CobwebPackageManager/fileLib")
+  log("Checking for updates")
+  log("Found "..getRepositories(true).." new packages")
+  for id, package in pairs(getInstalledPackages()) do
+    getPackage(package, true)
+  end
+  log("Updates Complete")
+end
