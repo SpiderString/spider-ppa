@@ -109,7 +109,7 @@ end
 
 --grabs package lists from repositories and writes to the package list
 function getRepositories(silent)
-  if silent==nil then silent=false end
+  if silent==nil or type(silent)~="boolean" then silent=false end
   local repoList=catRel(repositoryListPath)
   local repositories={}
   for id, line in pairs(repoList) do
@@ -148,6 +148,7 @@ function getRepositories(silent)
   if not silent then
     log("Package update complete. Added "..newPackages.." new packages.")
   end 
+  return newPackages
 end
 --searches for a package, returns nil if not found
 function searchPackage(packageList, packageName)
@@ -191,7 +192,8 @@ function writePackageVersion(packageName, version)
   writeFile(versionsFile, packageVersionsPath)
 end
 --grabs scripts for a package
-function getPackage(packageName)
+function getPackage(packageName, silent)
+  if silent==nil or type(silent)~="boolean" then silent=false end
   local packageList=catRel(packageListPath)
   local package=searchPackage(packageList, packageName)
   if next(package)==nil then
@@ -224,7 +226,9 @@ function getPackage(packageName)
       installedVersion=-1
     end
     if tonumber(installedVersion)>=tonumber(packageVersion) then
-      log(packageId.." is already the newest version")
+      if not silent then
+        log(packageId.." is already the newest version")
+      end
     else
       --makes package directory
       if not filesystem.exists("macros/"..packageId) then 
@@ -232,7 +236,9 @@ function getPackage(packageName)
       end
       --downloads scripts
       for name, url in pairs(scripts) do
-        log("GET: "..url)
+        if not silent then
+          log("GET: "..url)
+        end
         writeFile(getFile(url), "macros/"..packageId.."/"..name)
       end
       --get make instructions
@@ -241,7 +247,9 @@ function getPackage(packageName)
       filesystem.delete("macros/"..packageId.."/make")
       --write new version
       writePackageVersion(packageId, packageVersion)
-      log("Installation Complete")
+      if not silent then
+        log("Installation Complete")
+      end
     end
   end
 end
