@@ -16,13 +16,13 @@ elseif args[1]:lower()=="event" and args[2]:lower()=="chat" then
     --begin command matching
     if command=="update" then
       run("CobwebPackageManager/fileLib")
-      getRepositories()
+      getRepositories(commandArgs[1])
     elseif command=="install" and commandArgs[1]~=nil then
       run("CobwebPackageManager/fileLib")
       if autoUpdatePackages then
         getRepositories()
       end
-      getPackage(commandArgs[1])
+      getPackage(commandArgs[1], commandArgs[2])
     end
   end
 end
