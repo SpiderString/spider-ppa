@@ -4,3 +4,4 @@ fileLib:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/CobwebP
 repositoryList:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/CobwebPackageManager/repositoryList
 spiderLib:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/spiderLib
 make:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/CobwebPackageManager/make
+autoUpdate:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/CobwebPackageManager/autoUpdate
