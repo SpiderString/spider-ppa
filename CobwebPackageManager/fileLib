@@ -241,9 +241,11 @@ function getPackage(packageName)
         writeFile(getFile(url), "macros/"..packageId.."/"..name)
       end
       --get make instructions
-      local makeFile=catRel("macros/"..packageId.."/make")
-      make(makeFile)
-      filesystem.delete("macros/"..packageId.."/make")
+      if filesystem.exists("macros/"..packageId.."/make") then
+        local makeFile=catRel("macros/"..packageId.."/make")
+        make(makeFile)
+        filesystem.delete("macros/"..packageId.."/make")
+      end
       --write new version
       writePackageVersion(packageId, packageVersion)
       log("Installation Complete")
