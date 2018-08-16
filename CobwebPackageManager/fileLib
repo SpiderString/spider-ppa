@@ -225,6 +225,9 @@ function getPackage(packageName)
     if installedVersion==nil then
       installedVersion=-1
     end
+    if packageVersion==nil then
+      packageVersion=0
+    end
     if tonumber(installedVersion)>=tonumber(packageVersion) then
       log(packageId.." is already the newest version")
     else
