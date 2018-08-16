@@ -148,7 +148,8 @@ function getRepositories(silent)
   writeFile(packageList, packageListPath)
   if not silent then
     log("Package update complete. Added "..newPackages.." new packages.")
-  end 
+  end
+  return newPackages
 end
 --searches for a package, returns nil if not found
 function searchPackage(packageList, packageName)
