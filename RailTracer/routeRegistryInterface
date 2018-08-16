@@ -54,7 +54,7 @@ function getDistance(route)
 end
 
 function drawBlock(x, y, z)
-  local block=hud3D.addBlock()
+  local block=hud3D.newBlock()
   block.setPos(x, y, z)
   block.xray(xray)
   block.changeTexture(blockTex)
