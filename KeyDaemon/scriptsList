@@ -1,4 +1,4 @@
-Version: 1.0
+Version: 1.1
 keyDaemon:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/KeyDaemon/keyDaemon
 spiderLib:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/spiderLib
 make:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/KeyDaemon/make
