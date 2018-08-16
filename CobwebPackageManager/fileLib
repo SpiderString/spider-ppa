@@ -109,7 +109,7 @@ end
 
 --grabs package lists from repositories and writes to the package list
 function getRepositories(silent)
-  if silent==nil or type(silent)~="boolean" then silent=false end
+  if silent==nil then silent=false end
   local repoList=catRel(repositoryListPath)
   local repositories={}
   for id, line in pairs(repoList) do
@@ -134,6 +134,7 @@ function getRepositories(silent)
     end
   end
   --Get packages not already on the list
+  if not filesystem.exists(packageListPath) then filesystem.open(packageListPath, "w"):close() end
   local packageList=catRel(packageListPath)
   local newPackages=0
   for id, package in pairs(packages) do
@@ -148,7 +149,6 @@ function getRepositories(silent)
   if not silent then
     log("Package update complete. Added "..newPackages.." new packages.")
   end 
-  return newPackages
 end
 --searches for a package, returns nil if not found
 function searchPackage(packageList, packageName)
@@ -192,8 +192,7 @@ function writePackageVersion(packageName, version)
   writeFile(versionsFile, packageVersionsPath)
 end
 --grabs scripts for a package
-function getPackage(packageName, silent)
-  if silent==nil or type(silent)~="boolean" then silent=false end
+function getPackage(packageName)
   local packageList=catRel(packageListPath)
   local package=searchPackage(packageList, packageName)
   if next(package)==nil then
@@ -226,9 +225,7 @@ function getPackage(packageName, silent)
       installedVersion=-1
     end
     if tonumber(installedVersion)>=tonumber(packageVersion) then
-      if not silent then
-        log(packageId.." is already the newest version")
-      end
+      log(packageId.." is already the newest version")
     else
       --makes package directory
       if not filesystem.exists("macros/"..packageId) then 
@@ -236,9 +233,7 @@ function getPackage(packageName, silent)
       end
       --downloads scripts
       for name, url in pairs(scripts) do
-        if not silent then
-          log("GET: "..url)
-        end
+        log("GET: "..url)
         writeFile(getFile(url), "macros/"..packageId.."/"..name)
       end
       --get make instructions
@@ -247,9 +242,7 @@ function getPackage(packageName, silent)
       filesystem.delete("macros/"..packageId.."/make")
       --write new version
       writePackageVersion(packageId, packageVersion)
-      if not silent then
-        log("Installation Complete")
-      end
+      log("Installation Complete")
     end
   end
 end
