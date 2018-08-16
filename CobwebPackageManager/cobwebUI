@@ -1,5 +1,6 @@
 --Can be bound to chat or to a key
 local commandPrefix="!cpm" --prefix to be put before all commands for this. Configurable.
+local autoUpdatePackages=true --updates package list before trying to install
 local args={...}
 run("CobwebPackageManager/spiderLib")
 --trigger ui
@@ -18,6 +19,9 @@ elseif args[1]:lower()=="event" and args[2]:lower()=="chat" then
       getRepositories()
     elseif command=="install" and commandArgs[1]~=nil then
       run("CobwebPackageManager/fileLib")
+      if autoUpdatePackages then
+        getRepositories()
+      end
       getPackage(commandArgs[1])
     end
   end
