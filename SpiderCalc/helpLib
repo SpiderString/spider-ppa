@@ -1,3 +1,4 @@
+local chatDelay=800
 local pi=math.pi
 local e=math.e
 
