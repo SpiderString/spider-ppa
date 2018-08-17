@@ -6,7 +6,6 @@ local leftGroupingReg="[%(%[{]"
 local rightGroupingReg="[%)%]}]"
 local functions={"sqrt", "cbrt", "ln", "log", "floor", "ceil", "sin", "cos", "tan", "sec", "csc", "cot", "sto"}
 local variables={"pi", "e", "tau", "ans", "x", "y", "z", "theta", "phi"}
-local chatDelay=800 --Used for help functions
 run("SpiderCalc/spiderLib")
 
 --formatting functions
