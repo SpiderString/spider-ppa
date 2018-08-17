@@ -173,11 +173,11 @@ function moveDistance(blocks, dir, doCrouch, debug)
       sneak(-1)
     end
     local moveTime = 50
-    if _dir == "left" then
+    if dir == "left" then
         left(moveTime)
-    elseif _dir == "right" then
+    elseif dir == "right" then
         right(moveTime)
-    elseif _dir == "back" then
+    elseif dir == "back" then
         back(moveTime)
     else
         forward(moveTime)
