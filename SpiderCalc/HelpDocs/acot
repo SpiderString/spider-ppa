@@ -1,0 +1,13 @@
+local colors=run("SpiderCalc/HelpDocs/formatting")
+local text={}
+table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
+table.insert(text, {text="Acot(x) or Arccot(x) is the inverse of Cot(theta)", color=colors["text"]})
+table.insert(text, {text="In other words, cot(theta) takes an angle and gives a ratio,", color=colors["text"]})
+table.insert(text, {text="while acot(x) takes that ratio and gives an angle.", color=colors["text"]})
+table.insert(text, {text="They are not perfect inverses, however, since cotangent is multi-valued.", color=colors["text"]})
+table.insert(text, {text="arccot(x) = π/2 - arctan(x)", color=colors["text"]}) 
+table.insert(text, {text="Acot(x) only gives answers from 0 to π", color=colors["text"]})
+table.insert(text, {text="Acot(x) can accept all real values of x.", color=colors["text"]})
+table.insert(text, {text="If you want the original angle from a pair of points, see atan(x)", color=colors["text"]})
+table.insert(text, {text="E.G. =acot(-2) -> 2.6779451=153.43495°, =arccot(sqrt(3)/3) -> 1.0471976=pi/3", color=colors["footnote"]})
+return text

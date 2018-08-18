@@ -1,0 +1,12 @@
+local colors=run("SpiderCalc/HelpDocs/formatting")
+local text={}
+table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
+table.insert(text, {text="Acos(x) or Arccos(x) is the inverse of Cos(theta)", color=colors["text"]})
+table.insert(text, {text="In other words, cos(theta) takes an angle and gives a ratio,", color=colors["text"]})
+table.insert(text, {text="while acos(x) takes that ratio and gives an angle.", color=colors["text"]})
+table.insert(text, {text="They are not perfect inverses, however, since cosine is multi-valued.", color=colors["text"]})
+table.insert(text, {text="Acos(x) only gives answers from 0 to π", color=colors["text"]})
+table.insert(text, {text="Acos(x) can also only accept values from -1 to 1.", color=colors["text"]})
+table.insert(text, {text="If you want the original angle from a pair of points, see atan(x)", color=colors["text"]})
+table.insert(text, {text="E.G. =acos(sqrt(3)/2) -> 0.5235988=pi/6, =arccos(-1) -> 3.1415927 = pi", color=colors["footnote"]})
+return text

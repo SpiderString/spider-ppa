@@ -1,0 +1,12 @@
+local colors=run("SpiderCalc/HelpDocs/formatting")
+local text={}
+table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
+table.insert(text, {text="Asin(x) or Arcsin(x) is the inverse of Sin(theta)", color=colors["text"]})
+table.insert(text, {text="In other words, sin(theta) takes an angle and gives a ratio,", color=colors["text"]})
+table.insert(text, {text="while asin(x) takes that ratio and gives an angle.", color=colors["text"]})
+table.insert(text, {text="They are not perfect inverses, however, since sine is multi-valued.", color=colors["text"]})
+table.insert(text, {text="Asin(x) only gives answers from -π/2 to π/2", color=colors["text"]})
+table.insert(text, {text="Asin(x) can also only accept values from -1 to 1.", color=colors["text"]})
+table.insert(text, {text="If you want the original angle from a pair of points, see atan(x)", color=colors["text"]})
+table.insert(text, {text="E.G. =asin(sqrt(3)/2) -> 1.0471976=pi/3, =arcsin(-1) -> -1.5707964 = -pi/2", color=colors["footnote"]})
+return text

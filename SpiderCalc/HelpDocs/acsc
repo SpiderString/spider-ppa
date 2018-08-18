@@ -1,0 +1,12 @@
+local colors=run("SpiderCalc/HelpDocs/formatting")
+local text={}
+table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
+table.insert(text, {text="Acsc(x) or Arccsc(x) is the inverse of Csc(theta)", color=colors["text"]})
+table.insert(text, {text="In other words, csc(theta) takes an angle and gives a ratio,", color=colors["text"]})
+table.insert(text, {text="while acsc(x) takes that ratio and gives an angle.", color=colors["text"]})
+table.insert(text, {text="They are not perfect inverses, however, since cosecant is multi-valued.", color=colors["text"]})
+table.insert(text, {text="Acsc(x) only gives answers from -π/2 to π/2, not including 0", color=colors["text"]})
+table.insert(text, {text="Acsc(x) only accepts values for x≤-1 or 1≤x", color=colors["text"]})
+table.insert(text, {text="If you want the original angle from a pair of points, see atan(x)", color=colors["text"]})
+table.insert(text, {text="E.G. =acsc(-2) -> -5235988=-pi/6, =arccsc(5) -> 0.20135792=11.536959°", color=colors["footnote"]})
+return text

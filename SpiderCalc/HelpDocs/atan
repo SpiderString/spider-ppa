@@ -1,0 +1,15 @@
+local colors=run("SpiderCalc/HelpDocs/formatting")
+local text={}
+table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
+table.insert(text, {text="This is a variable argument function.", color=colors["text"]})
+table.insert(text, {text="arctan(x)", color=colors["subheader"]})
+table.insert(text, {text="arctan(x) or atan(x) is the inverse of tan(x)", color=colors["text"]})
+table.insert(text, {text="They are not perfect inverses, however, because tangent is multi-valued.", color=colors["text"]})
+table.insert(text, {text="Like all inverse trig functions, atan(x) takes a ratio and gives an angle.", color=colors["text"]})
+table.insert(text, {text="atan(x) is defined for all values of x and has a range from -π/2 to π/2.", color=colors["text"]})
+table.insert(text, {text="arctan(x, y)", color=colors["subheader"]})
+table.insert(text, {text="arctan(x, y) takes an x and y coordinate and determines the exact central angle.", color=colors["text"]})
+table.insert(text, {text="This is not the same as the angle given by any of the other inverse trig functions.", color=colors["text"]})
+table.insert(text, {text="arctan(x, y) gives answers from -π to π", color=colors["text"]})
+table.insert(text, {text="E.G. =arctan(25) -> 1.5308176=87.70939°, =atan(sqrt(3)/2, -1/2) -> -0.5235988=-pi/6", color=colors["footnote"]})
+return text

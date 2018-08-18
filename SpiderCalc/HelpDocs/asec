@@ -1,0 +1,12 @@
+local colors=run("SpiderCalc/HelpDocs/formatting")
+local text={}
+table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
+table.insert(text, {text="Asec(x) or Arcsec(x) is the inverse of Sec(theta)", color=colors["text"]})
+table.insert(text, {text="In other words, sec(theta) takes an angle and gives a ratio,", color=colors["text"]})
+table.insert(text, {text="while asec(x) takes that ratio and gives an angle.", color=colors["text"]})
+table.insert(text, {text="They are not perfect inverses, however, since secant is multi-valued.", color=colors["text"]})
+table.insert(text, {text="Asec(x) only gives answers from 0 to π, not including π/2", color=colors["text"]})
+table.insert(text, {text="Asec(x) only accepts values for x≤-1 or 1≤x", color=colors["text"]})
+table.insert(text, {text="If you want the original angle from a pair of points, see atan(x)", color=colors["text"]})
+table.insert(text, {text="E.G. =asec(-2) -> 2.0943952=2pi/3, =arcsec(5) -> 1.3694384=78.46304°", color=colors["footnote"]})
+return text
