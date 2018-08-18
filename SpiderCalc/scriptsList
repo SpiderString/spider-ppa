@@ -1,4 +1,4 @@
-Version: 2.11
+Version: 2.12
 spiderCalc:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/spiderCalc
 spiderLib:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/spiderLib
 shuntYard:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/shuntYard
@@ -6,3 +6,25 @@ postfixInterpreter:https://raw.githubusercontent.com/SpiderString/spider-ppa/mas
 helpLib:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/helpLib
 calcLib:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/calcLib
 make:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/make
+HelpDocs/add:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/add
+HelpDocs/sub:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/sub
+HelpDocs/cbrt:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/cbrt
+HelpDocs/ceil:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/ceil
+HelpDocs/cos:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/cos
+HelpDocs/cot:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/cot
+HelpDocs/csc:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/csc
+HelpDocs/divide:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/divide
+HelpDocs/exponent:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/exponent
+HelpDocs/factorial:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/factorial
+HelpDocs/floor:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/floor
+HelpDocs/formatting:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/formatting
+HelpDocs/help:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/help
+HelpDocs/ln:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/ln
+HelpDocs/log:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/log
+HelpDocs/modulo:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/modulo
+HelpDocs/multiply:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/multiply
+HelpDocs/sec:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/sec
+HelpDocs/sin:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/sin
+HelpDocs/sqrt:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/sqrt
+HelpDocs/sto:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/sto
+HelpDocs/tan:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/tan
