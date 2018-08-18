@@ -1,11 +1,11 @@
 local colors=run("SpiderCalc/HelpDocs/formatting")
 local text={}
 table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
-table.insert(text, {text="Exponent is an operator used to raise one input to the power of another.", color=colors["text"})
-table.insert(text, {text="The first input is called the base, the second the degree or power.", color=colors["text"})
-table.insert(text, {text="For integer degrees greater than 0, exponentiation can be thought of as repeated multiplication.", color=colors["text"})
-table.insert(text, {text="Anything to the power of 0 is 1, including 0.", color=colors["text"})
-table.insert(text, {text="b^(-n) = 1/(b^n)", color=colors["text"})
-table.insert(text, {text="Exponent uses the symbol '^'", color=colors["text"})
+table.insert(text, {text="Exponent is an operator used to raise one input to the power of another.", color=colors["text"]})
+table.insert(text, {text="The first input is called the base, the second the degree or power.", color=colors["text"]})
+table.insert(text, {text="For integer degrees greater than 0, exponentiation can be thought of as repeated multiplication.", color=colors["text"]})
+table.insert(text, {text="Anything to the power of 0 is 1, including 0.", color=colors["text"]})
+table.insert(text, {text="b^(-n) = 1/(b^n)", color=colors["text"]})
+table.insert(text, {text="Exponent uses the symbol '^'", color=colors["text"]})
 table.insert(text, {text="E.G. =3^3 -> 27, =2^-1 -> 0.5", color=colors["footnote"]})
 return text
