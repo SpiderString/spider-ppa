@@ -1,0 +1,8 @@
+local colors=run("SpiderCalc/HelpDocs/formatting")
+local text={}
+table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
+table.insert(text, {text="Cbrt(x) is a function used to find the cube root of its input.", color=colors["text"]})
+table.insert(text, {text="The cube root of x is the number y such that y^3=x", color=colors["text"]})
+table.insert(text, {text="Cbrt(x) can also be defined as x^(1/3)", color=colors["text"]})
+table.insert(text, {text="E.G. =cbrt(8) -> 2, =cbrt(9(5-2)) -> 3", color=colors["footnote"]})
+return text

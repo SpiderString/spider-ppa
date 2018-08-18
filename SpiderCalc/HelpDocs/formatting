@@ -1,0 +1,6 @@
+--&0 | black      | |  &4 | Dark Red    | |  &8 | Dark Grey | |  &c | Red
+--&1 | Dark Blue  | |  &5 | Dark Purple | |  &9 | Blue      | |  &d | Light Purple
+--&2 | Dark Green | |  &6 | Gold        | |  &a | Green     | |  &e | Yellow
+--&3 | Dark Aqua  | |  &7 | Grey        | |  &b | Aqua      | |  &f | White
+local colors={header="&6", subheader="&b", text="&8", list="&9", footnote="&e"}
+return colors

@@ -1,0 +1,7 @@
+local colors=run("SpiderCalc/HelpDocs/formatting")
+local text={}
+table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
+table.insert(text, {text="Modulo is an operator used to return the remainder after dividing.", color=colors["text"})
+table.insert(text, {text="Modulo uses the symbol '%'", color=colors["text"]})
+table.insert(text, {text="E.G. =9 % 3 -> 0, =23 % 5 -> 3", color=colors["footnote"]})
+return text

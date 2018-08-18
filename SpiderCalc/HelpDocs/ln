@@ -1,0 +1,8 @@
+local colors=run("SpiderCalc/HelpDocs/formatting")
+local text={}
+table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
+table.insert(text, {text="Ln(x) is a function used to find the natural log of its input.", color=colors["text"]})
+table.insert(text, {text="The natural log of x is the number y such that e^y=x, where e is approximately "..e, color=colors["text"]})
+table.insert(text, {text="Ln(x) cannot accept numbers less than or equal to 0.", color=colors["text"]})
+table.insert(text, {text="E.G. =ln(e^5) -> 5, =ln(9-3e) -> -0.16823524", color=colors["footnote"]})
+return text

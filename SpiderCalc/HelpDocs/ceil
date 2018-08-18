@@ -1,0 +1,7 @@
+local colors=run("SpiderCalc/HelpDocs/formatting")
+local text={}
+table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
+table.insert(text, {text="Ceil(x) returns the least integer greater than or equal to x.", color=colors["text"]})
+table.insert(text, {text="Closely related to floor(x) and modulo, the ceiling function is used mostly in computer science.", color=colors["text"]})
+table.insert(text, {text="E.G. =ceil(8/9) -> 1, =ceil(-6.8) -> -6", color=colors["footnote"]})
+return text

@@ -1,0 +1,10 @@
+local colors=run("SpiderCalc/HelpDocs/formatting")
+local text={}
+table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
+table.insert(text, {text="Sqrt(x) is a function used to find the square root of its input.", color=colors["text]})
+table.insert(text, {text="The square root of x is the number y such that y^2=x", color=colors["text]})
+table.insert(text, {text="The square root returns positive numbers, so is technically a principle root.", color=colors["text]})
+table.insert(text, {text="Sqrt(x) is undefined for negative inputs as they are imaginary.", color=colors["text]})
+table.insert(text, {text="Sqrt(x) can also be defined as x^(1/2)", color=colors["text]})
+table.insert(text, {text="E.G. =sqrt(9) -> 3, =sqrt(-16) -> nan", color=colors["footnote"]})
+return text

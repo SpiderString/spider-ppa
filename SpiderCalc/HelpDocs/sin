@@ -1,0 +1,9 @@
+local colors=run("SpiderCalc/HelpDocs/formatting")
+local text={}
+table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
+table.insert(text, {text="Sin(x) is a trigonometric function.", color=colors["text"]})
+table.insert(text, {text="Like all trig functions, sine takes an angle in radians and outputs a ratio.", color=colors["text"]})
+table.insert(text, {text="Sine is equal to the side length opposite the angle over the hypotenuse of a right triangle.", color=colors["text"]})
+table.insert(text, {text="Radians are a measure for angles in terms of a circle's radius. a=x°π/180", color=colors["text"]})
+table.insert(text, {text="E.G. =sin(60pi/180) -> 0.86602545, =sin(-pi/6) -> -0.5", color=colors["footnote"]})
+return text

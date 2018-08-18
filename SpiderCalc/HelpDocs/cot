@@ -1,0 +1,10 @@
+local colors=run("SpiderCalc/HelpDocs/formatting")
+local text={}
+table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
+table.insert(text, {text="Cot(x) is a trigonometric function.", color=colors["text"]})
+table.insert(text, {text="Like all trig functions, cotangent takes an angle in radians and outputs a ratio.", color=colors["text"]})
+table.insert(text, {text="Cotangent is equal to the side adjacent to the angle over the side opposite it in a right triangle.", color=colors["text"]})
+table.insert(text, {text="Cotangent can also be defined as cot(x)=1/tan(x)", color=colors["text"]})
+table.insert(text, {text="Radians are a measure for angles in terms of a circle's radius. a=x°π/180", color=colors["text"]})
+table.insert(text, {text="E.G. =cot(pi/4) -> 1, =cot(pi/3) -> 0.57735026", color=colors["footnote"]})
+return text

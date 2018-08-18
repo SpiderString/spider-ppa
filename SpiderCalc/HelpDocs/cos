@@ -1,0 +1,9 @@
+local colors=run("SpiderCalc/HelpDocs/formatting")
+local text={}
+table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
+table.insert(text, {text="Cos(x) is a trigonometric function.", color=colors["text"]})
+table.insert(text, {text="Like all trig functions, cosine takes an angle in radians and outputs a ratio.", color=colors["text"]})
+table.insert(text, {text="Cosine is equal to the side adjacent to the angle over the hypotenuse of a right triangle.", color=colors["text"]})
+table.insert(text, {text="Radians are a measure for angles in terms of a circle's radius. a=x°π/180", color=colors["text"]})
+table.insert(text, {text="E.G. =cos(60pi/180) -> 0.5, =cos(2pi-pi/6) -> 0.8660258", color=colors["footnote"]})
+return text

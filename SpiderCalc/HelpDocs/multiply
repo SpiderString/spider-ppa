@@ -1,0 +1,8 @@
+local colors=run("SpiderCalc/HelpDocs/formatting")
+local text={}
+table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
+table.insert(text, {text="Multiply is an operator used to give the product of two inputs.", color=colors["text"]})
+table.insert(text, {text="Multiply uses the symbol '*'", color=colors["text"]})
+table.insert(text, {text="Multiplication can also be implied by putting two terms next to each other", color=colors["text"]})
+table.insert(text, {text="E.G. =5*9 -> 45, =2(5sin(3pi)) -> -10", color=colors["footnote"]})
+return text

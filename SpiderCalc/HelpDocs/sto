@@ -1,0 +1,8 @@
+local colors=run("SpiderCalc/HelpDocs/formatting")
+local text={}
+table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
+table.insert(text, {text="Sto(x, var) is a function which evaluates x and stores the value to the variable.", color=colors["text"]})
+table.insert(text, {text="The variable can then be called later in the expression or in another equation.", color=colors["text"]})
+table.insert(text, {text="Supported variables by default include x, y, z, theta, and phi", color=colors["text"]})
+table.insert(text, {text="E.G. =sto(5+pi/3, theta) -> 6.0471973", color=colors["footnote"]})
+return text

@@ -1,0 +1,9 @@
+local colors=run("SpiderCalc/HelpDocs/formatting")
+local text={}
+table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
+table.insert(text, {text="Sub is an operator used to subtract two inputs.", color=colors["text"]})
+table.insert(text, {text="Sub is also used to denote negative numbers.", color=colors["text"]})
+table.insert(text, {text="It should be noted that subtraction is not associative mathematically, 1-5 does not equal 5-1", color=colors["text"]})
+table.insert(text, {text="Sub uses the symbol '-'", color=colors["text"]})
+table.insert(text, {text="E.G. =3-1 -> 2, =5-(2*3) -> -1", color=colors["footnote"]})
+return text

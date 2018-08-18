@@ -1,0 +1,7 @@
+local colors=run("SpiderCalc/HelpDocs/formatting")
+local text={}
+table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
+table.insert(text, {text="Add is an operator used to give the sum of two inputs.", color=colors["text"]})
+table.insert(text, {text="Add uses the symbol '+'", color=colors["text"]})
+table.insert(text, {text="E.G. =1+2 -> 3, =1+(4*5) -> 21", color=colors["footnote"]})
+return text

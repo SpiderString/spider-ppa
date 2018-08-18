@@ -1,0 +1,10 @@
+local colors=run("SpiderCalc/HelpDocs/formatting")
+local text={}
+table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
+table.insert(text, {text="Log(x, [base]) is a function used to find the logarithm of its input.", color=colors["text"]})
+table.insert(text, {text="The log of x base b is the number y such that b^y=x.", color=colors["text"]})
+table.insert(text, {text="The default base is 10. This is called the common log.", color=colors["text"]})
+table.insert(text, {text="Log(x) cannot accept numbers less than or equal to 0.", color=colors["text"]})
+table.insert(text, {text="Log(x, base) must have a base greater than 0 and it cannot be 1.", color=colors["text"]})
+table.insert(text, {text="E.G. =log(1000) -> 3, =log(32, 2) -> 5", color=colors["footnote"]})
+return text

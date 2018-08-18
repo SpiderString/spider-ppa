@@ -1,0 +1,8 @@
+local colors=run("SpiderCalc/HelpDocs/formatting")
+local text={}
+table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
+table.insert(text, {text="Floor(x) returns the greatest integer less than or equal to x.", color=colors["text"]})
+table.insert(text, {text="Also known as the greatest integer function, the step function, or the integer part function.", color=colors["text"]})
+table.insert(text, {text="Floor can also be defined in terms of the modulo operation by first converting x to a fraction.", color=colors["text"]})
+table.insert(text, {text="E.G. =floor(1.5) -> 1, =floor(-1.7) -> -2", color=colors["footnote"]})
+return text

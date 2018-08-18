@@ -1,0 +1,9 @@
+local colors=run("SpiderCalc/HelpDocs/formatting")
+local text={}
+table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
+table.insert(text, {text="Factorial is an operator used in combinatronics and statistics.", color=colors["text"]})
+table.insert(text, {text="It only accepts non-negative integers.", color=colors["text"]})
+table.insert(text, {text="Factorial can be defined as n!=n*(n-1)*(n-2)*...*2*1", color=colors["text"]})
+table.insert(text, {text="Factorial uses the symbol '!'", color=colors["text"]})
+table.insert(text, {text="E.G. =5! -> 120, =(6-3)! -> 6", color=colors["footnote"]})
+return text

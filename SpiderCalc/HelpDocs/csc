@@ -1,0 +1,10 @@
+local colors=run("SpiderCalc/HelpDocs/formatting")
+local text={}
+table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
+table.insert(text, {text="Csc(x) is a trigonometric function.", color=colors["text"]})
+table.insert(text, {text="Like all trig functions, cosecant takes an angle in radians and outputs a ratio.", color=colors["text"]})
+table.insert(text, {text="Cosecant is equal to the hypotenuse over the side opposite the angle in a right triangle.", color=colors["text"]})
+table.insert(text, {text="Cosecant can also be defined as csc(x)=1/sin(x)", color=colors["text"]})
+table.insert(text, {text="Radians are a measure for angles in terms of a circle's radius. a=x°π/180", color=colors["text"]})
+table.insert(text, {text="E.G. =csc(pi/6) -> 2, =csc(pi/4) -> 1.4142135", color=colors["footnote"]})
+return text
