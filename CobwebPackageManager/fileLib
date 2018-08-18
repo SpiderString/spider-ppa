@@ -32,7 +32,9 @@ function writeFile(fileTable, fileName)
 end
 --gets a file from a url and puts it in a table
 function getFile(url)
-  local file=httpRequest({url=url}, {url=url, requestMethod="GET", timeout=httpTimeout})["input"]
+  local http=httpRequest({url=url}, {url=url, requestMethod="GET", timeout=httpTimeout})
+  local file=http["input"]
+  local err=http.getResponseCode()
   local line=file:readLine()
   local output={}
   while line~=nil do
@@ -276,6 +278,7 @@ function getPackage(packageName, silent)
       if not silent then
         advLog({text="Installation Complete", color=statusColor, tooltip="Successfully installed "..packageId})
       end
+      return packageId
     end
   end
 end
