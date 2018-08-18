@@ -1,4 +1,4 @@
-Version: 2.13
+Version: 2.2
 spiderCalc:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/spiderCalc
 spiderLib:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/spiderLib
 shuntYard:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/shuntYard
@@ -28,3 +28,9 @@ HelpDocs/sin:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/Sp
 HelpDocs/sqrt:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/sqrt
 HelpDocs/sto:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/sto
 HelpDocs/tan:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/tan
+HelpDocs/asin:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/asin
+HelpDocs/acos:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/acos
+HelpDocs/atan:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/atan
+HelpDocs/asec:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/asec
+HelpDocs/acsc:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/acsc
+HelpDocs/acot:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/acot
