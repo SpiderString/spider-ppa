@@ -1,26 +1,28 @@
 local binaryOperators="[%+%-%*/%^%%,]"
 local unaryOperators="[!]"
 
+
+local variableDef={}
 function setVariables()
+  run("SpiderCalc/calcLib")
+  local variables=getVariables()
   if SPIDERCALCLASTANS==nil then SPIDERCALCLASTANS=0 end
   if SPIDERCALCVARIABLES==nil then SPIDERCALCVARIABLES={} end
+  for id, var in pairs(variables) do
+    if SPIDERCALCVARIABLES[var]==nil then SPIDERCALCVARIABLES[var]=0 end
+  end
   for id, var in pairs(SPIDERCALCVARIABLES) do
     if var==nil then SPIDERCALCVARIABLES[id]=0 end
+    variableDef[id]=SPIDERCALCVARIABLES[id]
   end
+  --constant definition
+  variableDef["pi"]=math.pi
+  variableDef["e"]=math.e
+  variableDef["tau"]=2*math.pi
+  variableDef["ans"]=SPIDERCALCLASTANS
 end
 setVariables()
-local variableDef={
-  ["pi"]=math.pi,
-  ["e"]=math.e,
-  ["tau"]=2*math.pi,
-  ["ans"]=SPIDERCALCLASTANS,
-  ["x"]=SPIDERCALCVARIABLES["x"],
-  ["y"]=SPIDERCALCVARIABLES["y"],
-  ["z"]=SPIDERCALCVARIABLES["z"],
-  ["theta"]=SPIDERCALCVARIABLES["theta"],
-  ["phi"]=SPIDERCALCVARIABLES["phi"]
-}
-local multiVariableFunc={"log", "sto"} --table of functions which can accept variable amounts of arguments
+local multiVariableFunc={"log", "sto", "atan", "arctan"} --table of functions which can accept variable amounts of arguments
 local variableHandlingFunc={"sto"} --table of functions which handle variables as strings
 
 run("SpiderCalc/calcLib")
@@ -251,6 +253,26 @@ function evaluate(eq)
           else
             push(outputStack, 1/math.tan(op[1]))
           end
+        --inverse trig functions
+        elseif token=="asin" or token=="arcsin" then
+          push(outputStack, math.asin(op[1]))
+        elseif token=="acos" or token=="arccos" then
+          push(outputStack, math.acos(op[1]))
+        elseif token=="atan" or token=="arctan" then
+          if op[2]~=nil then
+            --atan(x,y)
+            push(outputStack, math.atan2(op[2], op[1]))
+          else
+            push(outputStack, math.atan(op[1]))
+          end
+        elseif token=="asec" or token=="arcsec" then
+          --arcsec(x)=arccos(1/x)
+          push(outputStack, math.acos(1/op[1]))
+        elseif token=="acsc" or token=="arccsc" then
+          --arccsc(x)=pi/2-arcsec(x) = pi/2 - arccos(1/x)
+          push(outputStack, math.pi/2 - math.acos(1/op[1]))
+        elseif token=="acot" or token=="arccot" then
+          push(outputStack, math.pi/2 - math.atan(op[1]))  
         elseif token=="sto" then
           SPIDERCALCVARIABLES[op[2]]=op[1]
           push(outputStack, op[1])
