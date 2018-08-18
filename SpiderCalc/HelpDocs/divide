@@ -1,8 +1,8 @@
 local colors=run("SpiderCalc/HelpDocs/formatting")
 local text={}
-table.insert(divide, {text="<-----SpiderCalc Help----->", color=colors["header"]})
-table.insert(divide, {text="Divide is an operator used to divide two inputs.", color=colors["text"]})
-table.insert(divide, {text="Division can be thought of as multiplying by the reciprocal.", color=colors["text"]})
-table.insert(divide, {text="Divide uses the symbol '/'", color=colors["text"]})
-table.insert(divide, {text="E.G. =1/2 -> 0.5, =20/(2*5) -> 2", color=colors["footnote"]})
+table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
+table.insert(text, {text="Divide is an operator used to divide two inputs.", color=colors["text"]})
+table.insert(text, {text="Division can be thought of as multiplying by the reciprocal.", color=colors["text"]})
+table.insert(text, {text="Divide uses the symbol '/'", color=colors["text"]})
+table.insert(text, {text="E.G. =1/2 -> 0.5, =20/(2*5) -> 2", color=colors["footnote"]})
 return text
