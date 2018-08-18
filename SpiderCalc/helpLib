@@ -1,11 +1,12 @@
 local chatDelay=800
 local pi=math.pi
 local e=math.e
+local errorColor="&4"
 
 --Lists Functions and usage in pm
 function helpPage(player, arg)
   local selfPlayer=getPlayer()["name"]
-  if filesystem.exists("macros/SpiderCalc/HelpDocs/"..arg) then
+  if filesystem.exists("macros/SpiderCalc/HelpDocs/"..arg) and arg~="formatting" then
     local helpDoc=run("SpiderCalc/HelpDocs/"..arg)
     if player == selfPlayer then
       for id, textTable in pairs(helpDoc) do
@@ -20,7 +21,7 @@ function helpPage(player, arg)
     end
   else
     if player == selfPlayer then
-      log("Help for '"..arg.."' doesn't exist or has not been made yet.")
+      advLog({text="Help for '"..arg.."' doesn't exist or has not been made yet.", color=errorColor})
     else
       say("/msg "..player.." Help for '"..arg.."' doesn't exist or has not been made yet.")
     end
@@ -45,6 +46,6 @@ function help(player, command, commandArgs)
     end
   --args
   else
-    helpPage(player, commandArgs[1])
+    helpPage(player, commandArgs[1]:lower())
   end
 end
