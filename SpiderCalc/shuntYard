@@ -58,7 +58,11 @@ function convertToPostfix(eq)
     elseif token:match(operatorReg) then
       --Negative numbers handling
       --adds a 0 operand for negative numbers
-      if token=="-" and not isNumber(lastToken) and not matchVariable(lastToken) then
+      if token=="-" and lastToken==nil then
+        push(output, 0)
+      elseif token=="-" and lastToken:match(leftGroupingReg) then
+        push(output, 0)
+      elseif token=="-" and not isNumber(lastToken) and not matchVariable(lastToken) then
         push(output, 0)
         --puts 0 - x in parenthesis to give precedance
         push(opStack, "(")
