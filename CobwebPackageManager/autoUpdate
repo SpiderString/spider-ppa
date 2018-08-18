@@ -1,6 +1,7 @@
 local doUpdate=true
 local packageVersionsPath="macros/CobwebPackageManager/packageVersions"
 local packageListPath="macros/CobwebPackageManager/packageList"
+local autoUpdateColor="&6" --gold
 
 function getInstalledPackages()
   run("CobwebPackageManager/spiderLib")
@@ -15,10 +16,19 @@ end
 
 if doUpdate then
   run("CobwebPackageManager/fileLib")
-  log("Checking for updates")
-  log("Found "..getRepositories(true).." new packages")
+  advLog({text="Checking for updates", color=autoUpdateColor})
+  advLog({text="Found "..getRepositories(true).." new packages", color=autoUpdateColor})
+  local newPackages={}
   for id, package in pairs(getInstalledPackages()) do
-    getPackage(package, true)
+    local newPackage=getPackage(package,true)
+    if newPackage~=nil then
+      table.insert(newPackages, newPackage)
+    end
   end
-  log("Updates Complete")
+  local newPackageString=""
+  for id, package in pairs(newPackages) do
+    newPackageString=newPackageString..", "..package
+  end
+  newPackageString=newPackageString:gsub("^, ", "")
+  advLog({text="Updates Complete", color=autoUpdateColor, tooltip=newPackageString})
 end
