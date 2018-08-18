@@ -1,142 +1,284 @@
-local debug=false
---same regexes exist in shuntYard
-local operatorReg="[%+%-%*/%^%%!,]" --comma is an operator used to tell it to get another token for function args
-local groupingReg="[%(%)%[%]{}]"
-local leftGroupingReg="[%(%[{]"
-local rightGroupingReg="[%)%]}]"
-local functions={"sqrt", "cbrt", "ln", "log", "floor", "ceil", "sin", "cos", "tan", "sec", "csc", "cot", "sto"}
-local variables={"pi", "e", "tau", "ans", "x", "y", "z", "theta", "phi"}
-run("SpiderCalc/spiderLib")
+local binaryOperators="[%+%-%*/%^%%,]"
+local unaryOperators="[!]"
 
---formatting functions
-function removeSpaces(eq)
-  eq=eq:gsub("[%s]", "")
-  return eq
-end
 
-function isOperator(token)
-  local matchOp=false
-  if token~=nil then
-    token=tostring(token)
-    if token:match(operatorReg) then
-      matchOp=true
-    end
+local variableDef={}
+function setVariables()
+  run("SpiderCalc/calcLib")
+  local variables=getVariables()
+  if SPIDERCALCLASTANS==nil then SPIDERCALCLASTANS=0 end
+  if SPIDERCALCVARIABLES==nil then SPIDERCALCVARIABLES={} end
+  for id, var in pairs(variables) do
+    if SPIDERCALCVARIABLES[var]==nil then SPIDERCALCVARIABLES[var]=0 end
   end
-  return matchOp
+  for id, var in pairs(SPIDERCALCVARIABLES) do
+    if var==nil then SPIDERCALCVARIABLES[id]=0 end
+    variableDef[id]=SPIDERCALCVARIABLES[id]
+  end
+  --constant definition
+  variableDef["pi"]=math.pi
+  variableDef["e"]=math.e
+  variableDef["tau"]=2*math.pi
+  variableDef["ans"]=SPIDERCALCLASTANS
+end
+setVariables()
+local multiVariableFunc={"log", "sto", "atan", "arctan"} --table of functions which can accept variable amounts of arguments
+local variableHandlingFunc={"sto"} --table of functions which handle variables as strings
+
+run("SpiderCalc/calcLib")
+function push(stack, token)
+  table.insert(stack, 1, token)
+end
+function pop(stack)
+  return table.remove(stack, 1)
+end
+function reverseStack(stack)
+  local outputStack={}
+  while stack[1]~=nil do
+    push(outputStack, pop(stack))
+  end
+  return outputStack
 end
 
---matches a token to a function
---returns true if matched and the function or false if not
-function matchFunction(token)
+function matchMultiVarFunc(token)
   local foundMatch=false
   local matchFunc=nil
   if token~=nil then
-    for id, _function in pairs(functions) do
-      if token==_function then
+    for id, func in pairs(multiVariableFunc) do
+      if token:match(func) then
         foundMatch=true
-        matchFunc=_function
+        matchFunc=func
       end
     end
   end
   return foundMatch, matchFunc
 end
---matches a token to a variable
---returns true if matched and the variable or false if not
-function matchVariable(token)
+
+function matchVariableHandlingFunc(token)
   local foundMatch=false
-  local matchVar=nil
+  local matchFunc=nil
   if token~=nil then
-    for id, variable in pairs(variables) do
-      if token==variable then
+    for id, func in pairs(variableHandlingFunc) do
+      if token:match(func) then
         foundMatch=true
-        matchVar=variable
+        matchFunc=func
       end
     end
   end
-  return foundMatch, matchVar
+  return foundMatch, matchFunc
 end
 
---takes a token and returns if it is a number
-function isNumber(token)
-  token=tostring(token)
-  if token:match("[%d]+[%.%d]*") then
-    return true
-  else
-    return false
-  end
-end
-
---breaks an equation up into tokens in a table
-function tokenize(eq)
-  eq=tostring(eq) --should be a string but just to be safe.
-  local char=1
-  local tokens={}
-  while char <= eq:len() do
-    local foundMatch=false
-    --character is a digit
-    if eq:sub(char, char):match("[%d]+[%.%d]*") then
-      foundMatch=true
-      local a, b = eq:find("[%d]+[%.%d]*", char)
-      char=b+1
-      table.insert(tokens, eq:sub(a, b))
-      --eq=eq:sub(char)
-    --character is an operator, only supports single-character operators or parenthetical
-    elseif eq:sub(char, char):match(operatorReg) or eq:sub(char, char):match(groupingReg) then
-      foundMatch=true
-      table.insert(tokens, eq:sub(char, char))
-      char=char+1
-      --eq=eq:sub(char)
-    --character is the beginning of a function or variable
-    else
-      --function matching
-      for id, _function in pairs(functions) do
-        if eq:sub(char, char+_function:len()-1):match(_function) then
-          foundMatch=true
-          table.insert(tokens, eq:sub(char, char+_function:len()-1))
-          char=char+_function:len()
-          --eq=eq:sub(char)
-        end
-      end
-      --variable matching
-      for id, variable in pairs(variables) do
-        if eq:sub(char, char+variable:len()-1):match(variable) then
-          foundMatch=true
-          table.insert(tokens, eq:sub(char, char+variable:len()-1))
-          char=char+variable:len()
-          --eq=eq:sub(char)
-        end
-      end
-    end
-    --Couldn't find a token definition
-    if not foundMatch then
-      error("Syntax error: Unhandled token at "..char..": '"..eq:sub(char).."'")
-    end
-  end
-  return tokens
-end
---inserts astericks between implied multiplication
---eq should be tokenized already
---e.g. 5(3), pi(7), 5ln(7), (1+2)(3-2), 
-function insertAstericks(eq)
-  --insert astericks before opening parentheticals without left parentheticals or operators before them
-  --insert astericks before functions without left parentheticals or operators before them
-  --insert astericks before variables without left parentheticals or operators before them
-  for id, token in pairs(eq) do
-    if id~=1 and not eq[id-1]:match(leftGroupingReg) and not eq[id-1]:match(operatorReg) and not matchFunction(eq[id-1]) then
-      --parentheticals
-      if token:match(leftGroupingReg) then
-        table.insert(eq, id, "*")
+--grabs next non-comma operator after a comma or function
+function getNextOperator(stack)
+  local counter=1
+  local token=stack[counter]
+  local foundOp=false
+  local foundComma=false
+  while token~=nil and not foundOp do
+    run("SpiderCalc/calcLib")
+    if foundComma then
+      if (matchFunction(token) or isOperator(token)) and token~="," then
+        foundOp=true
       else
-        local foundMatch, matchFunc=matchFunction(token)
-        if foundMatch then
-          table.insert(eq, id, "*")
+        counter=counter+1
+        token=stack[counter]
+      end
+    else
+      if token=="," then
+        foundComma=true
+      else
+        counter=counter+1
+        token=stack[counter]
+      end
+    end
+  end
+  return foundOp, token
+end   
+
+function factorial(int)
+  if math.floor(int) ~= int then
+    --error("factorial: argument must be an integer")
+    return 0/0
+  end
+  if int < 0 then
+    --error("factorial: argument must be non-negative")
+    return 0/0
+  end
+  if int == 0 then
+    return 1
+  else
+    return int*factorial(int-1)
+  end
+end
+
+function convertVariables(token)
+  local output=token
+  if matchVariable(token) then
+    output=variableDef[token]
+  end
+  return output
+end
+
+
+--takes a postfix expression and evaluates it
+function evaluate(eq)
+  local op={} --operand table
+  eq=reverseStack(eq)
+  local outputStack={}
+  while eq[1]~=nil do
+    local token=pop(eq)
+    local foundOp, nextOp = getNextOperator(eq)
+    if isNumber(token) then
+      push(outputStack, tonumber(token))
+    --is a variable
+    elseif matchVariable(token) then
+      --pushes variable value for numerical purposes
+      if not matchVariableHandlingFunc(nextOp) then
+        push(outputStack, variableDef[token])
+      --pushes variable identifier for functions
+      else
+        push(outputStack, token)
+      end
+    --token is an operator or function
+    else
+      --doesn't reset operands if it's a multivariable function or it's a comma
+      if not (matchMultiVarFunc(token) or token==",") then
+        op={}
+      end
+      if token:match(binaryOperators) then
+        --use insert for the "," operator
+        local op_2=pop(outputStack)
+        local op_1=pop(outputStack)
+        if token~="," then
+          op_2=convertVariables(op_2)
+          op_1=convertVariables(op_1)
         end
-        local foundMatch, matchVar=matchVariable(token)
-        if foundMatch then
-          table.insert(eq, id, "*")
+        table.insert(op, op_1)
+        table.insert(op, op_2)
+
+        if token:match("[%+]") then
+          push(outputStack, op[1]+op[2])
+        elseif token:match("[%-]") then
+          if op[2]~=nil then
+            push(outputStack, op[1]-op[2])
+          else
+            --negative numbers should be handled, but it doesn't hurt.
+            push(outputStack, -op[1])
+          end
+        elseif token:match("[%*]") then
+          push(outputStack, op[1]*op[2])
+        elseif token:match("[/]") then
+          push(outputStack, op[1]/op[2])
+        elseif token:match("[%^]") then
+          push(outputStack, math.pow(op[1], op[2]))
+        elseif token:match("[%%]") then
+          push(outputStack, math.fmod(op[1], op[2]))
+        end
+        --prevents issues with commas not reseting operands
+        if token~="," then
+          op={}
+        end
+      elseif token:match(unaryOperators) then
+        op[1]=pop(outputStack)
+        op[1]=convertVariables(op[1])
+        if token:match("[!]") then
+          push(outputStack, factorial(op[1]))
+        end
+      elseif matchFunction(token) then
+        --doesn't run if it isn't nil, in the case of multivariable functions
+        if op[1]==nil then op[1]=pop(outputStack) end
+
+        if not matchVariableHandlingFunc(token) then
+          op[1]=convertVariables(op[1])
+        end
+        if token=="sqrt" then
+          push(outputStack, math.sqrt(op[1]))
+        elseif token=="cbrt" then
+          push(outputStack, math.pow(op[1], 1/3))
+        elseif token=="ln" then
+          push(outputStack, math.ln(op[1]))
+        --one or two variable function
+        elseif token=="log" then
+          if op[2]~=nil then
+            --base is the first argument for whatever reason.
+            push(outputStack, math.log(convertVariables(op[2]), convertVariables(op[1])))
+          else
+            push(outputStack, math.log(op[1]))
+          end
+        elseif token=="floor" then
+          push(outputStack, math.floor(op[1]))
+        elseif token=="ceil" then
+          push(outputStack, math.ceil(op[1]))
+        --Trig Functions
+        elseif token=="sin" then
+          --sin(pi) is inaccurate 
+          if math.abs(math.fmod(op[1], math.pi)) < 0.001 then 
+            push(outputStack, 0)
+          else
+            push(outputStack, math.sin(op[1]))
+          end
+        elseif token=="cos" then
+          --cos(pi/2) is inaccurate
+          if math.abs(math.fmod(op[1]-math.pi/2, math.pi)) < 0.001 then 
+            push(outputStack, 0)
+          else
+            push(outputStack, math.cos(op[1]))
+          end
+        elseif token=="tan" then
+          if math.abs(math.fmod(op[1], math.pi)) < 0.001 then 
+            push(outputStack, 0)
+          elseif math.abs(math.fmod(op[1]-math.pi/2, math.pi)) < 0.001 then
+            push(outputStack, 1/0)
+          else
+            push(outputStack, math.tan(op[1]))
+          end
+        --secondary trig functions
+        elseif token=="sec" then
+          if math.abs(math.fmod(op[1]-math.pi/2, math.pi)) < 0.001 then 
+            push(outputStack, 1/0)
+          else
+            push(outputStack, 1/math.cos(op[1]))
+          end
+        elseif token=="csc" then
+          if math.abs(math.fmod(op[1]-math.pi/2, math.pi)) < 0.001 then 
+            push(outputStack, 1/0)
+          else
+            push(outputStack, 1/math.cos(op[1]))
+          end
+        elseif token=="cot" then
+          if math.abs(math.fmod(op[1], math.pi)) < 0.001 then 
+            push(outputStack, 1/0)
+          elseif math.abs(math.fmod(op[1]-math.pi/2, math.pi)) < 0.001 then
+            push(outputStack, 0)
+          else
+            push(outputStack, 1/math.tan(op[1]))
+          end
+        --inverse trig functions
+        elseif token=="asin" or token=="arcsin" then
+          push(outputStack, math.asin(op[1]))
+        elseif token=="acos" or token=="arccos" then
+          push(outputStack, math.acos(op[1]))
+        elseif token=="atan" or token=="arctan" then
+          if op[2]~=nil then
+            --atan(x,y)
+            push(outputStack, math.atan2(op[2], op[1]))
+          else
+            push(outputStack, math.atan(op[1]))
+          end
+        elseif token=="asec" or token=="arcsec" then
+          --arcsec(x)=arccos(1/x)
+          push(outputStack, math.acos(1/op[1]))
+        elseif token=="acsc" or token=="arccsc" then
+          --arccsc(x)=pi/2-arcsec(x) = pi/2 - arccos(1/x)
+          push(outputStack, math.pi/2 - math.acos(1/op[1]))
+        elseif token=="acot" or token=="arccot" then
+          push(outputStack, math.pi/2 - math.atan(op[1]))  
+        elseif token=="sto" then
+          SPIDERCALCVARIABLES[op[2]]=op[1]
+          push(outputStack, op[1])
         end
       end
     end
   end
-  return eq
+  return pop(outputStack)
 end
