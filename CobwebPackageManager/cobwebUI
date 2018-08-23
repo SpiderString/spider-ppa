@@ -17,6 +17,8 @@ elseif args[1]:lower()=="event" and args[2]:lower()=="chat" then
     if command=="update" then
       run("CobwebPackageManager/fileLib")
       getRepositories(commandArgs[1])
+    elseif command=="upgrade" then
+      run("CobwebPackageManager/autoUpdate", true)
     elseif command=="install" and commandArgs[1]~=nil then
       run("CobwebPackageManager/fileLib")
       if autoUpdatePackages then
