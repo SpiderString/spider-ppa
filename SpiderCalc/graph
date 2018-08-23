@@ -1,0 +1,223 @@
+--takes an equation solved for one variable and graphs it
+local minVal=-10
+local maxVal=10
+local step=1 --buffer between points, also affects block size
+local xray=true
+local tex="block:minecraft:blocks/glass_lime"
+local direction=0
+if SPIDERCALCGRAPHPOINTS==nil then SPIDERCALCGRAPHPOINTS={} end --matrix containing points for transformation, each index is a column
+SPIDERCALCGRAPHORIGIN={}
+
+
+function drawPoint(point, origin, pointId, noOrigin)
+  if origin==nil then origin=SPIDERCALCGRAPHORIGIN end
+  if noOrigin==nil then noOrigin=false end
+  local x=point[1]
+  local y=point[2]
+  local z=point[3]
+  local sin=math.sin(direction/180*math.pi)
+  local cos=math.cos(direction/180*math.pi)
+  local twoVar=false
+  if z==nil then
+    z = 0
+    twoVar=true
+  end
+  if twoVar then
+    z=x*cos
+    x=x*sin
+  end
+  if not noOrigin then
+    x=x+origin[1]
+    y=y+origin[2]
+    z=z+origin[3]
+  end
+  if pointId~=nil then
+    SPIDERCALCGRAPHPOINTS[pointId]={x, y, z}
+  end
+  local block=hud3D.newBlock()
+  block.setPos(x, y, z)
+  block.xray(xray)
+  block.setWidth(step)
+  block.changeTexture(tex)
+  block.enableDraw()
+end
+
+function doesPointExist(point)
+  local doesExist=false
+  for id, storedPoint in pairs(SPIDERCALCGRAPHPOINTS) do
+    if point[1]==storedPoint[1] and point[2]==storedPoint[2] and point[3]==storedPoint[3] then doesExist=true end
+  end
+  return doesExist
+end
+function graph(command, args, silent, zCoord, suppressGlobals)
+  if silent==nil then silent=false end
+  if suppressGlobals==nil then suppressGlobals=false end
+
+  local points={}
+  local origin={}
+  local doGraph=true
+  if args[1]==nil or not args[1]:match("=") then
+    doGraph=false
+  end
+  local solvedVar=args[1]:sub(1, args[1]:find("=")-1):lower()
+  if solvedVar==nil then doGraph=false end
+  if doGraph then
+    if solvedVar:match("[%A]") then doGraph=false end
+  end
+  if doGraph then
+    run("SpiderCalc/calcLib")
+    while args[2]~=nil do
+      args[1]=args[1]..args[2]
+      table.remove(args, 2)
+    end
+    local eq=args[1]:sub(args[1]:find("=")+1)
+    eq=removeSpaces(eq)
+    eq=eq:lower()
+    eq=tokenize(eq)
+    eq=insertAstericks(eq)
+    local variables, userVars, constants=getVariables()
+    local variable=nil
+    --find the independent variable
+    for id, token in pairs(eq) do  
+      if token:match("^[%a]+$") then
+        local isVariable=false
+        for id, var in pairs(variables) do
+          if token==var then isVariable=true end
+        end
+        local isConstant=false
+        if isVariable then
+          for id, constant in pairs(constants) do
+            if token==constant then isConstant=true end
+          end
+        end
+        if isVariable and not isConstant then 
+          variable=token
+        end
+      end
+    end
+    local secondVar=nil
+    --check for a second variable
+    if variable~=nil then
+      for id, token in pairs(eq) do
+        if token:match("^[%a]+$") then
+          local isVariable=false
+          for id, var in pairs(variables) do
+            if token==var then isVariable=true end
+          end
+          local isConstant=false
+          if isVariable then
+            for id, constant in pairs(constants) do
+              if token==constant then isConstant=true end
+            end
+          end
+          if isVariable and not isConstant and token~=variable then 
+            secondVar=token
+          end
+        end
+      end
+    end
+
+    local point=minVal
+    local secondPoint=minVal --value for second variable
+    if secondVar~=nil then
+      log("Graphing...")
+      while secondPoint<=maxVal do
+        --replace second variable with secondPoint
+        local currentEq={}
+        for id, token in pairs(eq) do
+          currentEq[id]=token
+        end
+        for id, token in pairs(currentEq) do
+          if token==secondVar then currentEq[id]=secondPoint end
+        end
+        local eqString=""
+        while next(currentEq) do eqString=eqString..tostring(table.remove(currentEq, 1)) end
+        runThread(graph, "graph", {solvedVar.."="..eqString}, true, secondPoint, true)
+        sleep(100)
+        secondPoint=secondPoint+step
+      end
+      doGraph=false
+    end
+    if doGraph then
+      local x, y, z=getPlayerBlockPos()
+      if not suppressGlobals then
+        SPIDERCALCGRAPHORIGIN={x, y, z}
+      else
+        origin={x, y, z}
+      end
+      if not silent then
+        log("Graphing...")
+      end
+    end
+    while point<=maxVal and doGraph do
+      --copy eq to a working table
+      local currentEq={}
+      for id, token in pairs(eq) do
+        currentEq[id]=token
+      end
+      --replace variable with point
+      if variable~=nil then
+        for id, token in pairs(currentEq) do
+          if token==variable then currentEq[id]=point end
+        end
+      end
+      --continue evaluating
+      run("SpiderCalc/shuntYard")
+      currentEq=convertToPostfix(currentEq)
+      run("SpiderCalc/postfixInterpreter")
+      currentEq=evaluate(currentEq)
+      --add point to matrix
+      if suppressGlobals then
+        table.insert(points, {point, currentEq, zCoord})
+      else
+        if not doesPointExist({point, currentEq, zCoord}) then
+          table.insert(SPIDERCALCGRAPHPOINTS, {point, currentEq, zCoord})
+        end
+      end
+      if variable==nil then
+        while point<maxVal do
+          point=point+step
+          if suppressGlobals then
+            table.insert(points, {point, currentEq})
+          else
+            if not doesPointExist({point, currentEq}) then
+              table.insert(SPIDERCALCGRAPHPOINTS, {point, currentEq})
+            end
+          end
+        end
+      end
+      point=point+step
+    end
+  end
+  if suppressGlobals then
+    for id, point in pairs(points) do
+      drawPoint(point, origin)
+    end
+  else
+    for id, point in pairs(SPIDERCALCGRAPHPOINTS) do
+      drawPoint(point, nil, id)
+    end
+  end
+  if not silent then
+    log("Done Graphing")
+  end
+end
+
+--transformations
+--translates the graphing space
+function translate(dx, dy, dz)
+  if dx==nil then dx=0 end
+  if dy==nil then dy=0 end
+  if dz==nil then dz=0 end
+  dx=tonumber(dx)
+  dy=tonumber(dy)
+  dz=tonumber(dz)
+  hud3D.clearAll()
+  for id, point in pairs(SPIDERCALCGRAPHPOINTS) do
+    if point[3]==nil then point[3]=0 end
+    SPIDERCALCGRAPHPOINTS[id][1]=point[1]+dx
+    SPIDERCALCGRAPHPOINTS[id][2]=point[2]+dy
+    SPIDERCALCGRAPHPOINTS[id][3]=point[3]+dz
+    drawPoint(SPIDERCALCGRAPHPOINTS[id], nil, nil, true)
+  end
+end
