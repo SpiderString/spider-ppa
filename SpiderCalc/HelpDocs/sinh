@@ -1,0 +1,10 @@
+local colors=run("SpiderCalc/HelpDocs/formatting")
+local text={}
+table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
+table.insert(text, {text="Sinh(x) is the hyperbolic sine function.", color=colors["text"]})
+table.insert(text, {text="Given a hyperbolic angle, it gives the height of a hyperbolic sector on the unit hyperbola.", color=colors["text"]})
+table.insert(text, {text="sinh(x)=(e^x - e^(-x))/2, while sin(x) = (e^(ix) - e^(-ix))/2i", color=colors["text"]})
+table.insert(text, {text="sinh(x) has a domain and range of all real numbers", color=colors["text"]})
+table.insert(text, {text="See Also: sin, cosh", color=colors["text"]})
+table.insert(text, {text="E.G. =sinh(pi) -> 11.548739, =sinh(25(4)/10) -> 11013.232", color=colors["footnote"]})
+return text

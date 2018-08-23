@@ -1,0 +1,10 @@
+local colors=run("SpiderCalc/HelpDocs/formatting")
+local text={}
+table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
+table.insert(text, {text="Tanh(x) is the hyperbolic tangent function.", color=colors["text"]})
+table.insert(text, {text="Given an angle, it gives the ratio of the height over the length of the hyperbolic sector.", color=colors["text"]})
+table.insert(text, {text="tanh(x)=sinh(x)/cosh(x), while tan(x)=sin(x)/cos(x)", color=colors["text"]})
+table.insert(text, {text="tanh(x) is defined for all real x and has a range from -1 to 1", color=colors["text"]})
+table.insert(text, {text="See Also: tan, coth", color=colors["text"]})
+table.insert(text, {text="E.G. =tanh(pi) -> 0.9962721, =tanh(25(4)/10) -> 1", color=colors["footnote"]})
+return text

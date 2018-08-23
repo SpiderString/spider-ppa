@@ -1,0 +1,10 @@
+local colors=run("SpiderCalc/HelpDocs/formatting")
+local text={}
+table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
+table.insert(text, {text="Cosh(x) is the hyperbolic cosine function.", color=colors["text"]})
+table.insert(text, {text="Given a hyperbolic angle, it gives the length of a hyperbolic sector on the unit hyperbola.", color=colors["text"]})
+table.insert(text, {text="cosh(x)=(e^x + e^(-x))/2, while cos(x) = (e^(ix) + e^(-ix))/2", color=colors["text"]})
+table.insert(text, {text="cosh(x) is defined for all real x and has a range from 1 to infinity", color=colors["text"]})
+table.insert(text, {text="See Also: cos, sinh", color=colors["text"]})
+table.insert(text, {text="E.G. =cosh(pi) -> 11.591953, =cosh(25(4)/10) -> 11013.233", color=colors["footnote"]})
+return text

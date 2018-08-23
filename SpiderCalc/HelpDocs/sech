@@ -1,0 +1,10 @@
+local colors=run("SpiderCalc/HelpDocs/formatting")
+local text={}
+table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
+table.insert(text, {text="Sech(x) is the hyperbolic secant function.", color=colors["text"]})
+table.insert(text, {text="Given an angle, it gives the 1 over the length of the hyperbolic sector.", color=colors["text"]})
+table.insert(text, {text="sech(x)=1/cosh(x), while sec(x)=1/cos(x)", color=colors["text"]})
+table.insert(text, {text="sech(x) is defined for all real x and has a range from 0 to 1", color=colors["text"]})
+table.insert(text, {text="See Also: sec, cosh", color=colors["text"]})
+table.insert(text, {text="E.G. =sech(pi) -> 0.08626674, =sech(10^(-3)) -> 0.9999995", color=colors["footnote"]})
+return text
