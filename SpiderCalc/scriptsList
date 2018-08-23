@@ -1,4 +1,4 @@
-Version: 2.4
+Version: 2.41
 spiderCalc:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/spiderCalc
 spiderLib:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/spiderLib
 shuntYard:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/shuntYard
@@ -34,4 +34,11 @@ HelpDocs/atan:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/S
 HelpDocs/asec:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/asec
 HelpDocs/acsc:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/acsc
 HelpDocs/acot:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/acot
+HelpDocs/abs:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/abs
+HelpDocs/lcm:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/lcm
+HelpDocs/gcd:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/gcd
+HelpDocs/sinh:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/sinh
+HelpDocs/cosh:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/cosh
+HelpDocs/tanh:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/tanh
+HelpDocs/sech:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/sech
 graph:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/graph
