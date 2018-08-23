@@ -1,8 +1,11 @@
-local doUpdate=true
+local args={...}
+local forceUpgrade=args[1]
+local doUpdate=false
 local packageVersionsPath="macros/CobwebPackageManager/packageVersions"
 local packageListPath="macros/CobwebPackageManager/packageList"
 local autoUpdateColor="&6" --gold
 
+doUpdate=doUpdate or forceUpgrade
 function getInstalledPackages()
   run("CobwebPackageManager/spiderLib")
   local versionsFile=catRel(packageVersionsPath)
@@ -14,7 +17,7 @@ function getInstalledPackages()
   return packages
 end
 
-if doUpdate then
+function upgrade()
   run("CobwebPackageManager/fileLib")
   advLog({text="Checking for updates", color=autoUpdateColor})
   advLog({text="Found "..getRepositories(true).." new packages", color=autoUpdateColor})
@@ -30,5 +33,10 @@ if doUpdate then
     newPackageString=newPackageString..", "..package
   end
   newPackageString=newPackageString:gsub("^, ", "")
-  advLog({text="Updates Complete", color=autoUpdateColor, tooltip=newPackageString})
+  advLog({text="Upgrades Complete", color=autoUpdateColor, tooltip=newPackageString})
+
+end
+
+if doUpdate then
+  upgrade()
 end
