@@ -62,7 +62,7 @@ function convertToPostfix(eq)
         push(output, 0)
       elseif token=="-" and lastToken:match(leftGroupingReg) then
         push(output, 0)
-      elseif token=="-" and not isNumber(lastToken) and not matchVariable(lastToken) then
+      elseif token=="-" and not isNumber(lastToken) and not matchVariable(lastToken) and not lastToken:match(rightGroupingReg) then
         push(output, 0)
         --puts 0 - x in parenthesis to give precedance
         push(opStack, "(")
