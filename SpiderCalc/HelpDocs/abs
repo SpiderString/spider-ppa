@@ -1,0 +1,10 @@
+local colors=run("SpiderCalc/HelpDocs/formatting")
+local text={}
+table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
+table.insert(text, {text="Abs(x) is a function which returns the absolute value of x", color=colors["text"]})
+table.insert(text, {text="This is to say it returns the positive value of x", color=colors["text"]})
+table.insert(text, {text="abs(x) can also be written as |x|, though this is unsupported at this time.", color=colors["text"]})
+table.insert(text, {text="|x| = x, x≥0 or -x, x<0.", color=colors["text"]})
+table.insert(text, {text="|x| = sqrt(x^2), where sqrt(x) is the principal root.", color=colors["text"]})
+table.insert(text, {text="E.G. =abs(7-3) -> 4, =abs(8.25(-2)) -> 16.5", color=colors["footnote"]})
+return text

@@ -1,0 +1,10 @@
+local colors=run("SpiderCalc/HelpDocs/formatting")
+local text={}
+table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
+table.insert(text, {text="gcd(a, b, c...) is a function which returns the greatest common denominator of a series.", color=colors["text"]})
+table.insert(text, {text="In other words, gcd(a, b) is the largest positive integer which is a factor of and b.", color=colors["text"]})
+table.insert(text, {text="gcd(a, b, c)=gcd(gcd(a,b), c). gcd(a, b) = |a*b|/lcm(a,b)", color=colors["text"]})
+table.insert(text, {text="Internally, the gcd is calculated using Euclid's algorithm.", color=colors["text"]})
+table.insert(text, {text="See also: lcm", color=colors["text"]})
+table.insert(text, {text="E.G. =gcd(12, 48) -> 12, =gcd(86, 4, 16) -> 2", color=colors["footnote"]}) 
+return text

@@ -1,0 +1,10 @@
+local colors=run("SpiderCalc/HelpDocs/formatting")
+local text={}
+table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
+table.insert(text, {text="lcm(a, b, c...) is a function which returns the least common multiple of a series.", color=colors["text"]})
+table.insert(text, {text="In other words, lcm(a, b) is the smallest positive integer which has a and b as a factor.", color=colors["text"]})
+table.insert(text, {text="lcm(a, b, c)=lcm(lcm(a,b), c). lcm(a, b) = |a*b|/gcd(a,b)", color=colors["text"]})
+table.insert(text, {text="Internally, the lcm is calculated in pairs of numbers using the gcd.", color=colors["text"]})
+table.insert(text, {text="See also: gcd", color=colors["text"]})
+table.insert(text, {text="E.G. =lcm(3, 4) -> 12, =lcm(3, 4, 7) -> 84", color=colors["footnote"]}) 
+return text
