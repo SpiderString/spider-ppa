@@ -22,7 +22,7 @@ function setVariables()
   variableDef["ans"]=SPIDERCALCLASTANS
 end
 setVariables()
-local multiVariableFunc={"log", "sto", "atan", "arctan"} --table of functions which can accept variable amounts of arguments
+local multiVariableFunc={"log", "sto", "atan", "arctan", "lcm", "gcd"} --table of functions which can accept variable amounts of arguments
 local variableHandlingFunc={"sto"} --table of functions which handle variables as strings
 
 run("SpiderCalc/calcLib")
@@ -120,6 +120,41 @@ function convertVariables(token)
 end
 
 
+
+--Euclid's Algorithm to get the GCD of two numbers
+function euclid(a, b)
+  local output
+  if b==0 then output=a 
+  else output=euclid(b, a % b) end
+  return output
+end
+--gets the GCD of a series
+function gcd(args)
+  local output
+  if args[2]==nil then
+    return args[1]
+  elseif args[3]==nil then
+    output=euclid(args[1], args[2])
+  else
+    local lastArg=table.remove(args)
+    output=euclid(gcd(args), lastArg)
+  end
+  return output
+end
+--gets the LCM of a series by the GCD
+function lcm(args)
+  local output
+  if args[2]==nil then
+    return args[1]
+  elseif args[3]==nil then
+    output=math.abs(args[1]*args[2])/euclid(args[1], args[2])
+  else
+    local lastArg=table.remove(args)
+    output=lcm({lcm(args), lastArg})
+  end
+  return output
+end
+
 --takes a postfix expression and evaluates it
 function evaluate(eq)
   local op={} --operand table
@@ -146,13 +181,13 @@ function evaluate(eq)
         op={}
       end
       if token:match(binaryOperators) then
-        --use insert for the "," operator
         local op_2=pop(outputStack)
         local op_1=pop(outputStack)
         if token~="," then
           op_2=convertVariables(op_2)
           op_1=convertVariables(op_1)
         end
+        --use insert for the "," operator
         table.insert(op, op_1)
         table.insert(op, op_2)
 
@@ -272,7 +307,39 @@ function evaluate(eq)
           --arccsc(x)=pi/2-arcsec(x) = pi/2 - arccos(1/x)
           push(outputStack, math.pi/2 - math.acos(1/op[1]))
         elseif token=="acot" or token=="arccot" then
-          push(outputStack, math.pi/2 - math.atan(op[1]))  
+          push(outputStack, math.pi/2 - math.atan(op[1]))
+        --hyperbolic functions
+        elseif token=="sinh" then
+          push(outputStack, (math.e^op[1] - math.e^(-op[1]))/2)
+        elseif token=="cosh" then
+          push(outputStack, (math.e^op[1] + math.e^(-op[1]))/2)
+        elseif token=="tanh" then
+          push(outputStack, (math.e^op[1] - math.e^(-op[1]))/(math.e^op[1]+math.e^(-op[1])))
+        elseif token=="sech" then
+          push(outputStack, 2/(math.e^op[1] + math.e^(-op[1])))
+        elseif token=="csch" then
+          push(outputStack, 2/(math.e^op[1] - math.e^(-op[1])))
+        elseif token=="coth" then
+          push(outputStack, (math.e^op[1] + math.e^(-op[1]))/(math.e^op[1] - math.e^(-op[1])))
+        --inverse hyperbolic functions
+        elseif token=="arsinh" then
+          push(outputStack, math.ln(op[1] + math.sqrt(op[1]^2 + 1)))
+        elseif token=="arcosh" then
+          push(outputStack, math.ln(op[1] + math.sqrt(op[1]^2 - 1)))
+        elseif token=="artanh" then
+          push(outputStack, 0.5*math.ln((1+op[1])/(1-op[1])))
+        elseif token=="arsech" then
+          push(outputStack, math.ln((1+math.sqrt(1-op[1]^2))/op[1]))
+        elseif token=="arcsch" then
+          push(outputStack, math.ln((1+math.sqrt(1+op[1]^2))/op[1]))
+        elseif token=="arcoth" then
+          push(outputStack, 0.5*math.ln((x+1)/(x-1)))
+        elseif token=="abs" then
+          push(outputStack, math.abs(op[1]))
+        elseif token=="lcm" then
+          push(outputStack, lcm(op))
+        elseif token=="gcd" then
+          push(outputStack, gcd(op))
         elseif token=="sto" then
           SPIDERCALCVARIABLES[op[2]]=op[1]
           push(outputStack, op[1])
