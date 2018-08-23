@@ -4,8 +4,8 @@ local operatorReg="[%+%-%*/%^%%!,]" --comma is an operator used to tell it to ge
 local groupingReg="[%(%)%[%]{}]"
 local leftGroupingReg="[%(%[{]"
 local rightGroupingReg="[%)%]}]"
-local functions={"sqrt", "cbrt", "ln", "log", "floor", "ceil", "sin", "cos", "tan", "sec", "csc", "cot", "sto", "asin", "arcsin", "acos", "arccos", "atan", "arctan", "asec", "arcsec", "acsc", "arccsc", "acot", "arccot"}
-local userVariables={"x", "y", "z", "theta", "phi"} --variables user can sto. add here.
+local functions={"sqrt", "cbrt", "ln", "log", "floor", "ceil", "arsinh", "arcosh", "artanh", "arsech", "arcsch", "arcoth", "sinh", "cosh", "tanh", "sech", "csch", "coth", "sin", "cos", "tan", "sec", "csc", "cot", "sto", "asin", "arcsin", "acos", "arccos", "atan", "arctan", "asec", "arcsec", "acsc", "arccsc", "acot", "arccot", "lcm", "gcd", "abs"}
+local userVariables={"x", "y", "z", "theta", "phi", "r", "n"} --variables user can sto. add here.
 local constants={"pi", "e", "tau", "ans"} --table of variables with un-sto-able definitions
 
 local variables={} --table of all variables used for type checking
