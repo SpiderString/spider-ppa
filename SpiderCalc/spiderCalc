@@ -15,11 +15,24 @@ local commandArgs
 local command
 local self=getPlayer()["name"]
 command, commandArgs=getCommand(commandPrefix, equation)
---check if the help command was run
 if equation ~= false then
+  --check if the help command was run
   if command=="help" and (caller==self or acceptCommandsFromOthers) then
     run("SpiderCalc/helpLib")
     help(caller, command, commandArgs)
+    equation=false
+  --graph command
+  elseif command=="graph" and (caller==self or acceptCommandsFromOthers) then
+    run("SpiderCalc/graph")
+    graph(command, commandArgs)
+    equation=false
+  elseif command=="clear" and (caller==self or acceptCommandsFromOthers) then
+    hud3D.clearAll()
+    SPIDERCALCGRAPHPOINTS={}
+    equation=false
+  elseif command=="translate" and (caller==self or acceptCommandsFromOthers) then
+    run("SpiderCalc/graph")
+    translate(unpack(commandArgs))
     equation=false
   end
 end
