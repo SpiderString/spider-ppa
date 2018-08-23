@@ -1,4 +1,4 @@
-Version: 2.2
+Version: 2.4
 spiderCalc:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/spiderCalc
 spiderLib:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/spiderLib
 shuntYard:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/shuntYard
@@ -34,3 +34,4 @@ HelpDocs/atan:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/S
 HelpDocs/asec:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/asec
 HelpDocs/acsc:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/acsc
 HelpDocs/acot:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/acot
+graph:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/graph
