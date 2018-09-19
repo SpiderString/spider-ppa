@@ -220,7 +220,7 @@ function evaluate(eq)
           push(outputStack, factorial(op[1]))
         end
       elseif matchFunction(token) then
-        --doesn't run if it isn't nil, in the case of multivariable functions
+        --doesn't override operands for multi-arg functions
         if op[1]==nil then op[1]=pop(outputStack) end
 
         if not matchVariableHandlingFunc(token) then
@@ -333,7 +333,7 @@ function evaluate(eq)
         elseif token=="arcsch" then
           push(outputStack, math.ln((1+math.sqrt(1+op[1]^2))/op[1]))
         elseif token=="arcoth" then
-          push(outputStack, 0.5*math.ln((x+1)/(x-1)))
+          push(outputStack, 0.5*math.ln((op[1]+1)/(op[1]-1)))
         elseif token=="abs" then
           push(outputStack, math.abs(op[1]))
         elseif token=="lcm" then
