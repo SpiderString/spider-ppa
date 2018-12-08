@@ -1,11 +1,11 @@
-local args={...}
+local args={...} --should be bound to ChatSendFilter
 local commandPrefix="!rt"
 local routeRegDir="common"
 local routeRegPath=routeRegDir.."/routeRegistry"
 if not filesystem.exists(routeRegDir) then filesystem.mkDir(routeRegDir) end
 if not filesystem.exists(routeRegPath) then filesystem.open(routeRegPath, "w"):close() end
 
-local routeReg=catRel(routeRegPath, true)
+local routeReg
 local blockTex="block:minecraft:blocks/glass_lime"
 local xray=true
 run("RailTracer/railTracerLib")
@@ -81,13 +81,18 @@ function deleteRoute(routes, routeName)
   end
 end
 
-function parseCommands(chatLine, unformattedChatLine)
-  local command, caller=stripUsername(chatLine, unformattedChatLine)
+function parseCommands(chatLine)
+  --local command, caller=stripUsername(chatLine, unformattedChatLine)
   local commandArgs
-  command, commandArgs=getCommand(commandPrefix, command)
+  command, commandArgs=getCommand(commandPrefix, chatLine)
   local self=getPlayer()["name"]
-  if caller==self and command~=false then
+  --no command
+  if command==false or command==nil then
+    return args[3]
+  --parse command
+  elseif command~=false then
     --Begin command Matching
+    routeReg=catRel(routeRegPath, true)
     --lists info on a route
     if command=="list" then
       local routes=getRoutes()
@@ -142,5 +147,7 @@ function parseCommands(chatLine, unformattedChatLine)
     end
   end
 end
-
-parseCommands(args[3], args[4])
+if args[2]=="ChatSendFilter" then
+  local output=parseCommands(args[3])
+  return output
+end
