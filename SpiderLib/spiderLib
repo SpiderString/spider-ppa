@@ -133,6 +133,8 @@ function roundDig(num, digits)
   return math.floor(num*math.pow(10, digits))/math.pow(10,digits)
 end
 
+--bot functions
+
 --Moves the player by a float number of blocks, dependent on original orientation, can handle angles.
 --Returns the error, positive error means you went further than necessary. Error seems to be within 0-0.05m
 --moveDistance(float:blocks, String:[forward|left|right|back], <Boolean:debug>)
