@@ -22,10 +22,12 @@ function upgrade()
   advLog({text="Checking for updates", color=autoUpdateColor})
   advLog({text="Found "..getRepositories(true).." new packages", color=autoUpdateColor})
   local newPackages={}
+  local upgraded=0
   for id, package in pairs(getInstalledPackages()) do
     local newPackage=getPackage(package,true)
     if newPackage~=nil then
       table.insert(newPackages, newPackage)
+      upgraded=upgraded+1
     end
   end
   local newPackageString=""
@@ -33,7 +35,11 @@ function upgrade()
     newPackageString=newPackageString..", "..package
   end
   newPackageString=newPackageString:gsub("^, ", "")
-  advLog({text="Upgrades Complete", color=autoUpdateColor, tooltip=newPackageString})
+  local suffix="es" --"0 packages", "1 package"
+  if upgraded==1 then
+    suffix="e"
+  end
+  advLog({text="Upgrades Complete. ["..upgraded.."] Packag"..suffix.." Upgraded", color=autoUpdateColor, tooltip=newPackageString})
 
 end
 
