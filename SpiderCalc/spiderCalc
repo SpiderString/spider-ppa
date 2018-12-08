@@ -1,20 +1,35 @@
---Main Method, should be bound to the "Chat" event and nothing else.
+--Main Method, should be bound to the "Chat" event or the "ChatSendFilter" event and nothing else.
 
 --Configurable Variables
 local acceptCommandsFromOthers=false --set to false to ignore commands from other players
 local acceptCommandsFromPM=false --set to true to allow private messages triggering the script
 local commandPrefix="=" --prefix that should be at the start of the line for a calculator command
+local eqColor="&6" --color used for answer output
 
 --Inconfigurable Variables. No Touch.
 local args={...}
 local equation=args[3]
 run("SpiderCalc/spiderLib")
 
-local equation, caller=stripUsername(args[3], args[4])
+local equation, caller
 local commandArgs
 local command
 local self=getPlayer()["name"]
+
+if args[2]=="Chat" then
+  equation, caller=stripUsername(args[3], args[4])
+else
+  equation=args[3]
+  caller=self
+end
 command, commandArgs=getCommand(commandPrefix, equation)
+--no command
+if (equation==false or equation==nil) and args[2]=="ChatSendFilter" then
+  return args[3]
+elseif not equation:match("^"..commandPrefix) and args[2]=="ChatSendFilter" then
+  return args[3]
+end
+
 if equation ~= false then
   --check if the help command was run
   if command=="help" and (caller==self or acceptCommandsFromOthers) then
@@ -42,6 +57,7 @@ if equation ~= false and equation:match("^"..commandPrefix) and (caller==self or
   equation=equation:gsub("^"..commandPrefix, "")
   equation=removeSpaces(equation)
   equation=equation:lower()
+  local origEquation=equation
   equation=tokenize(equation)
   equation=insertAstericks(equation)
   run("SpiderCalc/shuntYard")
@@ -49,5 +65,11 @@ if equation ~= false and equation:match("^"..commandPrefix) and (caller==self or
   run("SpiderCalc/postfixInterpreter")
   equation=evaluate(equation)
   SPIDERCALCLASTANS=equation
-  say(equation)
+
+  --output
+  if caller==self then
+    advLog({text="<SpiderCalc>: "..origEquation.."="..equation, color=eqColor, tooltip=equation})
+  else
+    say(<SpiderCalc>: "..origEquation.."="..equation)
+  end
 end
