@@ -1,5 +1,10 @@
 spiderCalc:{
   ["mode"]="EVENT"
+  ["event"]="ChatSendFilter"
+  ["script"]="SpiderCalc/spiderCalc"
+}
+spiderCalc:{
+  ["mode"]="EVENT"
   ["event"]="Chat"
   ["script"]="SpiderCalc/spiderCalc"
 }
