@@ -1,18 +1,35 @@
---Can be bound to chat or to a key
-local commandPrefix="!cpm" --prefix to be put before all commands for this. Configurable.
-local autoUpdatePackages=true --updates package list before trying to install
+--Can be bound to ChatSendFilter or to a key
 local args={...}
+
+--These are all default values, these are overwritten by (valid) values stored in the config file
+local autoUpdatePackages=true
+local commandPrefix="!cpm"
+local httpTimeout=15
+local repositoryListPath="macros/CobwebPackageManager/repositoryList"
+local packageListPath="macros/CobwebPackageManager/packageList"
+local packageVersionsPath="macros/CobwebPackageManager/packageVersions"
+local httpColor="&5"
+local statusColor="&b"
+local autoUpdateColor="&6"
+
 run("CobwebPackageManager/spiderLib")
+function getVars()
+  run("CobwebPackageManager/fileLib")  
+
+end
+function help()
+  
+end
 --trigger ui
 if args[1]:lower()=="key" then
-  
+  --ui code goes here
 
 --parse commands
-elseif args[1]:lower()=="event" and args[2]:lower()=="chat" then
-  local command, caller=stripUsername(args[3], args[4])
-  local commandArgs
-  command, commandArgs=getCommand(commandPrefix, command)
-  if command~=false and caller==getPlayer()["name"] then
+elseif args[1]:lower()=="event" and args[2]:lower()=="chatsendfilter" then
+  --local command, caller=stripUsername(args[3], args[4])
+  --local commandArgs
+  command, commandArgs=getCommand(commandPrefix, args[3])
+  if command~=false then
     --begin command matching
     if command=="update" then
       run("CobwebPackageManager/fileLib")
@@ -25,6 +42,10 @@ elseif args[1]:lower()=="event" and args[2]:lower()=="chat" then
         getRepositories(commandArgs[2])
       end
       getPackage(commandArgs[1], commandArgs[2])
+    elseif command=="help" then
+      help()
     end
+  else
+    return args[3]
   end
 end
