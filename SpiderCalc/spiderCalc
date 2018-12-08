@@ -70,6 +70,6 @@ if equation ~= false and equation:match("^"..commandPrefix) and (caller==self or
   if caller==self then
     advLog({text="<SpiderCalc>: "..origEquation.."="..equation, color=eqColor, tooltip=equation})
   else
-    say(<SpiderCalc>: "..origEquation.."="..equation)
+    say("<SpiderCalc>: "..origEquation.."="..equation)
   end
 end
