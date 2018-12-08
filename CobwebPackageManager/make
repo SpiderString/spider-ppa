@@ -1,6 +1,6 @@
 CLI{
   ["mode"]="EVENT"
-  ["event"]="Chat"
+  ["event"]="ChatSendFilter"
   ["script"]="CobwebPackageManager/cobwebUI"
 }
 GUI{
