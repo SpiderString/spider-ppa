@@ -282,3 +282,31 @@ function getPackage(packageName, silent)
     end
   end
 end
+function listPackages()
+  --fetch repositories
+  local repoList=catRel(repositoryListPath)
+  for id, line in pairs(repoList) do
+    if line:match("^htt[ps]+://") then
+      local repo=line:match("[%S]+")
+      --output repo
+      local a,b=repo:find(".com")
+      local c=repo:find("/", b+2)
+      local user=repo:sub(b+2, c-1)
+      local branch=repo:sub(c+1)
+      advLog({text=user.."/"..branch, color=httpColor, tooltip=line})
+
+      --check each repository for packages
+      local packages={}
+      local packageList=httpRequest({url=repo}, {url=repo, requestMethod="GET", timeout=httpTimeout})["input"]
+      local line=packageList:readLine()
+      while line~=nil do
+        if line:match(":htt[ps]+://") then
+          line=line:gsub("^[%s]*", "")
+          advLog({text="      -"..line:sub(1, line:find(":")-1), color=statusColor, tooltip=line:sub(line:find(":")+1)})
+          table.insert(packages, line:match("[%S]+"))
+        end
+        line=packageList:readLine()
+      end
+    end
+  end
+end
