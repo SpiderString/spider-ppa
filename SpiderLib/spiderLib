@@ -134,6 +134,7 @@ function roundDig(num, digits)
 end
 
 --Moves the player by a float number of blocks, dependent on original orientation, can handle angles.
+--Returns the error, positive error means you went further than necessary. Error seems to be within 0-0.05m
 --moveDistance(float:blocks, String:[forward|left|right|back], <Boolean:debug>)
 function moveDistance(blocks, dir, doCrouch, debug)
   if debug == nil then debug=false end
@@ -168,11 +169,13 @@ function moveDistance(blocks, dir, doCrouch, debug)
     if debug then
       log("Distance From Target: "..distance)
     end
-    look(yaw, pitch)
+    --There seems to be a bug in which after running a certain number of times,
+    --it will stop and start and lag significantly if look(yaw, pitch) isn't commented out
+    --look(yaw, pitch)
     if distance < 2 and doCrouch then
       sneak(-1)
     end
-    local moveTime = 50
+    local moveTime = 1
     if dir == "left" then
         left(moveTime)
     elseif dir == "right" then
@@ -183,8 +186,8 @@ function moveDistance(blocks, dir, doCrouch, debug)
         forward(moveTime)
     end
   end
+  sneak(100)
   sneak(0)
-  sleep(300)
   --returns error amount
   x,y,z = getPlayerPos()
   distance=math.sqrt(math.pow(targetX-x, 2) + math.pow(targetZ-z, 2))
