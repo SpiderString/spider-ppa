@@ -1,6 +1,6 @@
 routeRegistryInterface{
   ["mode"]="EVENT"
-  ["event"]="Chat"
+  ["event"]="ChatSendFilter"
   ["script"]="RailTracer/routeRegistryInterface"
 }
 railTracerMain{
