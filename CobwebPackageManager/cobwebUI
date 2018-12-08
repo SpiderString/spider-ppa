@@ -26,6 +26,7 @@ if args[1]:lower()=="key" then
 
 --parse commands
 elseif args[1]:lower()=="event" and args[2]:lower()=="chatsendfilter" then
+  getVars()
   --local command, caller=stripUsername(args[3], args[4])
   --local commandArgs
   command, commandArgs=getCommand(commandPrefix, args[3])
@@ -44,6 +45,8 @@ elseif args[1]:lower()=="event" and args[2]:lower()=="chatsendfilter" then
       getPackage(commandArgs[1], commandArgs[2])
     elseif command=="help" then
       help()
+    elseif command=="list" then
+      listPackages()
     end
   else
     return args[3]
