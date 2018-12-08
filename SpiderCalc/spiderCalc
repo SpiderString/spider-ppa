@@ -24,10 +24,12 @@ else
 end
 command, commandArgs=getCommand(commandPrefix, equation)
 --no command
-if (equation==false or equation==nil) and args[2]=="ChatSendFilter" then
-  return args[3]
-elseif not equation:match("^"..commandPrefix) and args[2]=="ChatSendFilter" then
-  return args[3]
+if args[2]=="ChatSendFilter" then
+  if equation==false or equation==nil then
+    return args[3]
+  elseif not equation:match("^"..commandPrefix) then
+    return args[3]
+  end
 end
 
 if equation ~= false then
