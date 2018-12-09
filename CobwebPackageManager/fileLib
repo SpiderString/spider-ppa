@@ -219,12 +219,13 @@ function getPackage(packageName, silent)
   if next(package)==nil then
     advLog({text="Could not find package '"..packageName.."'", color=statusColor})
   else
-    local packageId=package[1]:sub(1, package[1]:find(":")-1)
+    local packageId=package[1]:sub(1, package[1]:find(":")-1) --the package name in the repository
     local url=package[1]:match(":[%S]+"):gsub("^:", "")
     local scripts={}
     local scriptList=httpRequest({url=url}, {url=url, requestMethod="GET", timeout=httpTimeout})["input"]
     local line=scriptList:readLine()
     local packageVersion
+    local AMVersion=_MOD_VERSION
     --gets script urls and names
     while line~=nil do
       if line:match(":http[ps]+://") then
@@ -234,8 +235,12 @@ function getPackage(packageName, silent)
         local scriptUrl=line:sub(a+1)
         scripts[scriptName]=scriptUrl
       --get version
-      elseif line:lower():match("version:") then
+      elseif line:lower():match("^version:") then
         packageVersion=line:sub(line:find(":")+1):gsub("[%s]+", "")
+      elseif line:lower():match("^am version:") then
+        AMVersion=line:sub(line:find(":")+1):gsub("[%s]+", "")
+        --change version here for simulating discrepancies
+        --AMVersion="5.9.1"
       end
       line=scriptList:readLine()
     end
@@ -248,11 +253,158 @@ function getPackage(packageName, silent)
     if packageVersion==nil then
       packageVersion=0
     end
+    local upgrade=true
+    --package version checking
     if tonumber(installedVersion)>=tonumber(packageVersion) and tonumber(installedVersion)~=0 then
       if not silent then
         advLog({text=packageId.." is already the newest version", color=statusColor})
       end
+      upgrade=false
+    --AM version checking
     else
+      local major, minor, build
+      local a, b, c
+      AMVersion=tostring(AMVersion)
+      a=AMVersion:find(".")+1
+      c=AMVersion:sub(a+1)
+      b=c:find(".")+1+a
+      major=tonumber(AMVersion:sub(1, a-1))
+      minor=tonumber(AMVersion:sub(a+1, b-1))
+      build=tonumber(AMVersion:sub(b+1))
+
+      local AMMajor, AMMinor, AMBuild
+      a=_MOD_VERSION:find(".")+1
+      c=_MOD_VERSION:sub(a+1)
+      b=c:find(".")+1+a
+      AMMajor=tonumber(_MOD_VERSION:sub(1, a-1))
+      AMMinor=tonumber(_MOD_VERSION:sub(a+1, b-1))
+      AMBuild=tonumber(_MOD_VERSION:sub(b+1))
+      
+      if AMMajor < major then
+        upgrade=false
+        
+        local gu=(gui.new or gui.newGui)()
+        local group=gu.newGroup()
+        local guiOpen=true
+        local guiWidth, guiHeight=gu.getSize()
+        local yMargin=20
+        
+        local bg=gu.newRectangle(0, 0, guiWidth, guiHeight)
+        bg.setParent(group)
+        bg.setColor(0x70333333)
+
+        gu.setOnClose(function() guiOpen=false end)
+        local textArea={
+          "&6Your Advanced Macros installation is version &c".._MOD_VERSION..".",
+          "&6while the package '&b"..packageId.."&6' uses version &c"..AMVersion..".",
+          "&6It is &chighly unlikely &6that this package will work with your version.",
+          "",
+          "",
+          "&bInstall anyway?"
+        }
+        for id, text in pairs(textArea) do
+          local t=gu.newText("&f"..text, 5, id*12+yMargin)
+          t.setX((guiWidth-t.getWidth())/2)
+          t.setParent(group)
+        end
+        
+        local noBg=gu.newRectangle(2, (#textArea+1)*12+yMargin, 1, 1)
+        noBg.setParent(group)
+        noBg.setColor(0xe0333333)
+
+        local yesBg=gu.newRectangle(2, (#textArea+2)*12+yMargin, 1, 1)
+        yesBg.setParent(group)
+        yesBg.setColor(0xe0333333)
+
+        local noText=gu.newText("&aNo (Recommended)", 5, (#textArea+1)*12+yMargin)
+        local yesText=gu.newText("&4Yes", 5, (#textArea+2)*12+yMargin)
+        local width=math.max(noText.getWidth(), yesText.getWidth())
+        noText.setX((guiWidth-noText.getWidth())/2)
+        yesText.setX((guiWidth-yesText.getWidth())/2)
+
+        noBg.setHeight(noText.getHeight())
+        noBg.setWidth(width+6)
+        noBg.setX((guiWidth-noBg.getWidth())/2)
+        yesBg.setHeight(yesText.getHeight())
+        yesBg.setWidth(width+6)
+        yesBg.setX((guiWidth-yesBg.getWidth())/2)
+
+        local noButton=gu.newBox(2, (#textArea+1)*12+yMargin, width+6, noText.getHeight())
+        noButton.setOnMouseClick(function() gu.close() end)
+        noButton.setX((guiWidth-noButton.getWidth())/2)       
+
+
+        local yesButton=gu.newBox(2, (#textArea+2)*12+yMargin, width+6, yesText.getHeight())
+        yesButton.setOnMouseClick(function() upgrade=true gu.close() end)
+        yesButton.setX((guiWidth-yesButton.getWidth())/2)
+
+        gu.open()
+        while guiOpen do end
+
+      elseif AMMinor < minor then
+        upgrade=false
+
+        local gu=(gui.new or gui.newGui)()
+        local group=gu.newGroup()
+        local guiOpen=true
+        local guiWidth, guiHeight=gu.getSize()
+        local yMargin=20
+        
+        local bg=gu.newRectangle(0, 0, guiWidth, guiHeight)
+        bg.setParent(group)
+        bg.setColor(0x70333333)
+
+        gu.setOnClose(function() guiOpen=false end)
+        local textArea={
+          "&dYour Advanced Macros installation is version &c".._MOD_VERSION..".",
+          "&dwhile the package '&b"..packageId.."&d' uses version &c"..AMVersion..".",
+          "&dIt is &6possible&d that this package will not work with your version.",
+          "",
+          "",
+          "&bInstall anyway?"
+        }
+        for id, text in pairs(textArea) do
+          local t=gu.newText("&f"..text, 5, id*12+yMargin)
+          t.setX((guiWidth-t.getWidth())/2)
+          t.setParent(group)
+        end
+        
+        local noBg=gu.newRectangle(2, (#textArea+1)*12+yMargin, 1, 1)
+        noBg.setParent(group)
+        noBg.setColor(0xe0333333)
+
+        local yesBg=gu.newRectangle(2, (#textArea+2)*12+yMargin, 1, 1)
+        yesBg.setParent(group)
+        yesBg.setColor(0xe0333333)
+
+        local noText=gu.newText("&aNo (Recommended)", 5, (#textArea+1)*12+yMargin)
+        local yesText=gu.newText("&6Yes", 5, (#textArea+2)*12+yMargin)
+        local width=math.max(noText.getWidth(), yesText.getWidth())
+        noText.setX((guiWidth-noText.getWidth())/2)
+        yesText.setX((guiWidth-yesText.getWidth())/2)
+
+        noBg.setHeight(noText.getHeight())
+        noBg.setWidth(width+6)
+        noBg.setX((guiWidth-noBg.getWidth())/2)
+        yesBg.setHeight(yesText.getHeight())
+        yesBg.setWidth(width+6)
+        yesBg.setX((guiWidth-yesBg.getWidth())/2)
+
+        local noButton=gu.newBox(2, (#textArea+1)*12+yMargin, width+6, noText.getHeight())
+        noButton.setOnMouseClick(function() gu.close() end)
+        noButton.setX((guiWidth-noButton.getWidth())/2)       
+
+
+        local yesButton=gu.newBox(2, (#textArea+2)*12+yMargin, width+6, yesText.getHeight())
+        yesButton.setOnMouseClick(function() upgrade=true gu.close() end)
+        yesButton.setX((guiWidth-yesButton.getWidth())/2)
+
+        gu.open()
+        while guiOpen do end
+
+      end
+    end
+    if upgrade then
       --makes package directory
       if not filesystem.exists("macros/"..packageId) then 
         filesystem.mkDir("macros/"..packageId)
