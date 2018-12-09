@@ -4,7 +4,7 @@ local unaryOperators="[!]"
 
 local variableDef={}
 function setVariables()
-  run("SpiderCalc/calcLib")
+  run("calcLib")
   local variables=getVariables()
   if SPIDERCALCLASTANS==nil then SPIDERCALCLASTANS=0 end
   if SPIDERCALCVARIABLES==nil then SPIDERCALCVARIABLES={} end
@@ -25,7 +25,7 @@ setVariables()
 local multiVariableFunc={"log", "sto", "atan", "arctan", "lcm", "gcd"} --table of functions which can accept variable amounts of arguments
 local variableHandlingFunc={"sto"} --table of functions which handle variables as strings
 
-run("SpiderCalc/calcLib")
+run("calcLib")
 function push(stack, token)
   table.insert(stack, 1, token)
 end
@@ -75,7 +75,7 @@ function getNextOperator(stack)
   local foundOp=false
   local foundComma=false
   while token~=nil and not foundOp do
-    run("SpiderCalc/calcLib")
+    run("calcLib")
     if foundComma then
       if (matchFunction(token) or isOperator(token)) and token~="," then
         foundOp=true
