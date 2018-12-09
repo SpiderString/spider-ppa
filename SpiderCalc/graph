@@ -65,7 +65,7 @@ function graph(command, args, silent, zCoord, suppressGlobals)
     if solvedVar:match("[%A]") then doGraph=false end
   end
   if doGraph then
-    run("SpiderCalc/calcLib")
+    run("calcLib")
     while args[2]~=nil do
       args[1]=args[1]..args[2]
       table.remove(args, 2)
@@ -162,9 +162,9 @@ function graph(command, args, silent, zCoord, suppressGlobals)
         end
       end
       --continue evaluating
-      run("SpiderCalc/shuntYard")
+      run("shuntYard")
       currentEq=convertToPostfix(currentEq)
-      run("SpiderCalc/postfixInterpreter")
+      run("postfixInterpreter")
       currentEq=evaluate(currentEq)
       --add point to matrix
       if suppressGlobals then
