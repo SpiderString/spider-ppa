@@ -1,12 +1,107 @@
+local configPath="macros/CobwebPackageManager/config"
+--These are default values which are rewritten by (valid) config entries
+--System Config
+local httpTimeout=15 --time in seconds before a request is cancelled
 local repositoryListPath="macros/CobwebPackageManager/repositoryList" --path to repo list from .minecraft/advancedMacros
 local packageListPath="macros/CobwebPackageManager/packageList" --path to package list from .minecraft/advancedMacros
 local packageVersionsPath="macros/CobwebPackageManager/packageVersions"
-local httpTimeout=15 --time in seconds before a request is cancelled
+local commandPrefix="!cpm"
+local autoUpdatePackages=true
+
+--theme
 local httpColor="&5" --dark purple, color for http requests
 local statusColor="&b" --aqua, color for status reports
-
+local autoUpdateColor="&6" --gold
 
 run("CobwebPackageManager/spiderLib")
+
+--return if the argument is an integer
+function isInt(num)
+  if tonumber(num) then
+    return math.floor(tonumber(num))==tonumber(num)
+  else
+    return false
+  end
+end
+--return if the argument is a valid file
+function isFile(path)
+  path=tostring(path)
+  return filesystem.exists(path) and not filesystem.isDir(path)
+end
+--return if the argument is a boolean
+function isBool(val)
+  val=tostring(val)
+  return val:lower()=="true" or val:lower()=="false"
+end
+--return if the argument is a valid color code
+function isColorCode(str)
+  str=tostring(str)
+  if str:len()%2~=0 then
+    return false
+  else
+    while str:len()>0 do
+      local code=str:sub(1, 2)
+      if str:len() > 2 then
+        str=str:sub(3)
+      else
+        str=""
+      end
+      if code=="&0" or code=="&1" or code=="&2" or code=="&3" or code=="&4" or code=="&5" or code=="&6" or code=="&7" or code=="&8" or code=="&9" or code=="&a" or code=="&b" or code=="&c" or code=="&d" or code=="&e" or code=="&f" or code=="&k" or code=="&l" or code=="&m" or code=="&n" or code=="&o" or code=="&r" then
+        return true
+      else
+        return false
+      end
+    end
+  end
+end
+
+--gets settings from the config file
+function readConfig()
+  local config=catRel(configPath)
+  local settings={}
+  for id, line in pairs(config) do
+    if line:match(":") then
+      local var=line:sub(1, line:find(":")-1):lower()
+      local val=line:sub(line:find(":")+1)
+      val=val:gsub("^[%s]+", ""):match("[%S]+"):gsub('"', "")
+
+      if var=="httptimeout" and isInt(val) then
+        httpTimeout=val
+      elseif var=="repositorylistpath" and isFile(val) then
+        repositoryListPath=val
+      elseif var=="packagelistpath" and isFile(val) then
+        packageListPath=val
+      elseif var=="packageversionspath" and isFile(val) then
+        packageVersionsPath=val
+      elseif var=="commandprefix" and val~="" and val~=nil then
+        commandPrefix=val
+      elseif var=="autoupdatepackages" and isBool(val) then
+        autoUpdatePackages=val
+      elseif var=="httpcolor" and isColorCode(val) then
+        httpColor=val
+      elseif var=="statuscolor" and isColorCode(val) then
+        statusColor=val
+      elseif var=="autoupdatecolor" and isColorCode(val) then
+        autoUpdateColor=val
+      end
+    end
+  end
+
+  --add settings
+  settings["httpTimeout"]=httpTimeout
+  settings["repositoryListPath"]=repositoryListPath
+  settings["packageListPath"]=packageListPath
+  settings["packageVersionsPath"]=packageVersionsPath
+  settings["commandPrefix"]=commandPrefix
+  settings["autoUpdatePackages"]=autoUpdatePackages
+  settings["httpColor"]=httpColor
+  settings["statusColor"]=statusColor
+  settings["autoUpdateColor"]=autoUpdateColor
+
+  return settings
+end
+
+readConfig(configPath)
 
 --writes a line to a file leaving all other lines untouched
 function writeLine(line, lineNum, fileName)
@@ -114,6 +209,8 @@ end
 
 --grabs package lists from repositories and writes to the package list
 function getRepositories(silent)
+  readConfig()
+
   if silent=="true" or silent then silent=true
   else silent=false end
   local repoList=catRel(repositoryListPath)
@@ -181,6 +278,8 @@ function searchPackage(packageList, packageName)
 end
 --searches the packageVersions file for the package and returns the version, nil if not found
 function getPackageVersion(packageName)
+  readConfig()
+
   local packageVersion=nil
   local foundMatch=false
   if not filesystem.exists(packageVersionsPath) then filesystem.open(packageVersionsPath, "w"):close() end
@@ -195,6 +294,8 @@ function getPackageVersion(packageName)
 end
 --updates version list for a given package
 function writePackageVersion(packageName, version)
+  readConfig()
+
   local versionsFile=catRel(packageVersionsPath)
   local foundMatch=false
   for id, line in pairs(versionsFile) do
@@ -211,6 +312,8 @@ function writePackageVersion(packageName, version)
 end
 --grabs scripts for a package
 function getPackage(packageName, silent)
+  readConfig()
+
   if silent=="true" or silent then silent=true
   else silent=false end
 
@@ -435,6 +538,8 @@ function getPackage(packageName, silent)
   end
 end
 function listPackages()
+  readConfig()
+
   --fetch repositories
   local repoList=catRel(repositoryListPath)
   for id, line in pairs(repoList) do
