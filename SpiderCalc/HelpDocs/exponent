@@ -1,4 +1,4 @@
-local colors=run("SpiderCalc/HelpDocs/formatting")
+local colors=run("formatting")
 local text={}
 table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
 table.insert(text, {text="Exponent is an operator used to raise one input to the power of another.", color=colors["text"]})

@@ -1,4 +1,4 @@
-local colors=run("SpiderCalc/HelpDocs/formatting")
+local colors=run("formatting")
 local text={}
 table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
 table.insert(text, {text="Asec(x) or Arcsec(x) is the inverse of Sec(theta)", color=colors["text"]})

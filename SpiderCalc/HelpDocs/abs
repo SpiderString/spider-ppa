@@ -1,4 +1,4 @@
-local colors=run("SpiderCalc/HelpDocs/formatting")
+local colors=run("formatting")
 local text={}
 table.insert(text, {text="<-----SpiderCalc Help----->", color=colors["header"]})
 table.insert(text, {text="Abs(x) is a function which returns the absolute value of x", color=colors["text"]})
