@@ -16,7 +16,7 @@ for id, var in pairs(constants) do
   table.insert(variables, var)
 end
 
-run("SpiderCalc/spiderLib")
+run("spiderLib")
 
 --formatting functions
 function removeSpaces(eq)
