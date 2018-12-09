@@ -4,18 +4,14 @@ local args={...}
 --These are all default values, these are overwritten by (valid) values stored in the config file
 local autoUpdatePackages=true
 local commandPrefix="!cpm"
-local httpTimeout=15
-local repositoryListPath="macros/CobwebPackageManager/repositoryList"
-local packageListPath="macros/CobwebPackageManager/packageList"
-local packageVersionsPath="macros/CobwebPackageManager/packageVersions"
-local httpColor="&5"
-local statusColor="&b"
-local autoUpdateColor="&6"
 
 run("CobwebPackageManager/spiderLib")
-function getVars()
-  run("CobwebPackageManager/fileLib")  
 
+function updateSettings()
+  run("CobwebPackageManager/fileLib")
+  local settings=readConfig()
+  autoUpdatePackages=settings["autoUpdatePackages"]
+  commandPrefix=settings["commandPrefix"]
 end
 function help()
   
@@ -26,9 +22,8 @@ if args[1]:lower()=="key" then
 
 --parse commands
 elseif args[1]:lower()=="event" and args[2]:lower()=="chatsendfilter" then
-  getVars()
-  --local command, caller=stripUsername(args[3], args[4])
-  --local commandArgs
+  updateSettings()
+
   command, commandArgs=getCommand(commandPrefix, args[3])
   if command~=false then
     --begin command matching
