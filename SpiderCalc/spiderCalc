@@ -9,7 +9,7 @@ local eqColor="&6" --color used for answer output
 --Inconfigurable Variables. No Touch.
 local args={...}
 local equation=args[3]
-run("SpiderCalc/spiderLib")
+run("spiderLib")
 
 local equation, caller
 local commandArgs
@@ -35,12 +35,12 @@ end
 if equation ~= false then
   --check if the help command was run
   if command=="help" and (caller==self or acceptCommandsFromOthers) then
-    run("SpiderCalc/helpLib")
+    run("helpLib")
     help(caller, command, commandArgs)
     equation=false
   --graph command
   elseif command=="graph" and (caller==self or acceptCommandsFromOthers) then
-    run("SpiderCalc/graph")
+    run("graph")
     graph(command, commandArgs)
     equation=false
   elseif command=="clear" and (caller==self or acceptCommandsFromOthers) then
@@ -48,23 +48,23 @@ if equation ~= false then
     SPIDERCALCGRAPHPOINTS={}
     equation=false
   elseif command=="translate" and (caller==self or acceptCommandsFromOthers) then
-    run("SpiderCalc/graph")
+    run("graph")
     translate(unpack(commandArgs))
     equation=false
   end
 end
 --Begin evalutation
 if equation ~= false and equation:match("^"..commandPrefix) and (caller==self or acceptCommandsFromOthers) then
-  run("SpiderCalc/calcLib")
+  run("calcLib")
   equation=equation:gsub("^"..commandPrefix, "")
   equation=removeSpaces(equation)
   equation=equation:lower()
   local origEquation=equation
   equation=tokenize(equation)
   equation=insertAstericks(equation)
-  run("SpiderCalc/shuntYard")
+  run("shuntYard")
   equation=convertToPostfix(equation)
-  run("SpiderCalc/postfixInterpreter")
+  run("postfixInterpreter")
   equation=evaluate(equation)
   SPIDERCALCLASTANS=equation
 
