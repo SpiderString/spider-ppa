@@ -36,7 +36,7 @@ end
 function convertToPostfix(eq)
   local output={}
   local opStack={}
-  run("SpiderCalc/calcLib")
+  run("calcLib")
   local lastToken=nil
   while eq[1]~=nil do
     local token=pop(eq)
