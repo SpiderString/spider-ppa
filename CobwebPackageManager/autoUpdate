@@ -4,6 +4,7 @@ local doUpdate=false
 local packageVersionsPath="macros/CobwebPackageManager/packageVersions"
 local packageListPath="macros/CobwebPackageManager/packageList"
 local autoUpdateColor="&6" --gold
+local statusColor="&b" --aqua
 
 doUpdate=doUpdate or forceUpgrade
 function getInstalledPackages()
@@ -39,7 +40,7 @@ function upgrade()
   if upgraded==1 then
     suffix="e"
   end
-  advLog({text="Upgrades Complete. ["..upgraded.."] Packag"..suffix.." Upgraded", color=autoUpdateColor, tooltip=newPackageString})
+  log(autoUpdateColor.."Upgrades Complete. [&N"..statusColor..upgraded..autoUpdateColor.."] Packag"..suffix.." Upgraded", newPackageString)
 
 end
 
