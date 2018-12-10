@@ -8,8 +8,8 @@ if not filesystem.exists(routeRegPath) then filesystem.open(routeRegPath, "w"):c
 local routeReg
 local blockTex="block:minecraft:blocks/glass_lime"
 local xray=true
-run("RailTracer/railTracerLib")
-run("RailTracer/spiderLib")
+run("railTracerLib")
+run("spiderLib")
 
 function getRoutes()
   local currentLine=1
@@ -143,7 +143,7 @@ function parseCommands(chatLine)
         end
       end
     elseif command=="record" then
-      run("RailTracer/railTracerMain")
+      run("railTracerMain")
     end
   end
 end

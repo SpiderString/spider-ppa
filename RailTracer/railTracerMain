@@ -1,12 +1,12 @@
 if RAILTRACKERRUNNING==nil then RAILTRACKERRUNNING=false end
 RAILTRACKERRUNNING=not RAILTRACKERRUNNING
 if RAILTRACKERRUNNING then log("Rail Tracer running") end
-local routeRegDir="common"
+local routeRegDir="~/common"
 local routeRegPath=routeRegDir.."/routeRegistry"
 if not filesystem.exists(routeRegDir) then filesystem.mkDir(routeRegDir) end
 if not filesystem.exists(routeRegPath) then filesystem.open(routeRegPath, "w"):close() end
 local routeReg=catRel(routeRegPath, true)
-run("RailTracer/railTracerLib")
+run("railTracerLib")
 --Example route entry
 --name{
 --	{x:-404;y:55;z:1591}
