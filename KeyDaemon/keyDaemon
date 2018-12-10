@@ -1,6 +1,6 @@
 --Allows you to make complex keybinds
 --Runs scripts in a separate thread
-run("KeyDaemon/spiderLib")
+run("spiderLib")
 local keybinds={}
 local args={...}
 function unpackKeycode(keybind)
@@ -8,12 +8,17 @@ function unpackKeycode(keybind)
 end
 function addHotKey(keycode, action)
   if type(keycode) == "string" and type(action) == "string" then
-    table.insert(keybinds, {keycode, false, action})
+    table.insert(keybinds, {keycode, false, "~/macros/"..action})
   end
 end
 --Add Hot Keys Here
 --E.G. addHotKey("LCONTROL+C", "folder/myscript")
-
+addHotKey("LCONTROL+C", "mainBrewMacro")
+addHotKey("LCONTROL+LMENU+A", "orderCalculator")
+addHotKey("LCONTROL+UP", "torchMiner")
+addHotKey("LCONTROL+TAB", "brewUnlabel")
+addHotKey("LCONTROL+LMENU+R", "KeyDaemon/keyDaemon")
+addHotKey("LCONTROL+K", "treeFarm")
 
 
 if KEYDAEMONRUNNING==nil then KEYDAEMONRUNNING=false end
