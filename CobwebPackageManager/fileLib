@@ -383,7 +383,7 @@ function getPackage(packageName, silent)
       AMMinor=tonumber(_MOD_VERSION:sub(a+1, b-1))
       AMBuild=tonumber(_MOD_VERSION:sub(b+1))
       
-      if AMMajor < major then
+      if AMMajor ~= major then
         upgrade=false
         
         local gu=(gui.new or gui.newGui)()
