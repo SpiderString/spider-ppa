@@ -1,10 +1,10 @@
-local configPath="macros/CobwebPackageManager/config"
+local configPath="~/macros/CobwebPackageManager/config"
 --These are default values which are rewritten by (valid) config entries
 --System Config
 local httpTimeout=15 --time in seconds before a request is cancelled
-local repositoryListPath="macros/CobwebPackageManager/repositoryList" --path to repo list from .minecraft/advancedMacros
-local packageListPath="macros/CobwebPackageManager/packageList" --path to package list from .minecraft/advancedMacros
-local packageVersionsPath="macros/CobwebPackageManager/packageVersions"
+local repositoryListPath="~/macros/CobwebPackageManager/repositoryList" --path to repo list from .minecraft/advancedMacros
+local packageListPath="~/macros/CobwebPackageManager/packageList" --path to package list from .minecraft/advancedMacros
+local packageVersionsPath="~/macros/CobwebPackageManager/packageVersions"
 local commandPrefix="!cpm"
 local autoUpdatePackages=true
 
@@ -13,7 +13,7 @@ local httpColor="&5" --dark purple, color for http requests
 local statusColor="&b" --aqua, color for status reports
 local autoUpdateColor="&6" --gold
 
-run("CobwebPackageManager/spiderLib")
+run("spiderLib")
 
 --return if the argument is an integer
 function isInt(num)
@@ -509,8 +509,8 @@ function getPackage(packageName, silent)
     end
     if upgrade then
       --makes package directory
-      if not filesystem.exists("macros/"..packageId) then 
-        filesystem.mkDir("macros/"..packageId)
+      if not filesystem.exists("~/macros/"..packageId) then 
+        filesystem.mkDir("~/macros/"..packageId)
       end
       --downloads scripts
       for name, url in pairs(scripts) do
@@ -520,13 +520,13 @@ function getPackage(packageName, silent)
           local scriptName=fields[fields["length"]]
           advLog({text="GET: ".."..."..packageName.."/"..scriptName.."...", color=httpColor, tooltip=url})
         end
-        writeFile(getFile(url), "macros/"..packageId.."/"..name)
+        writeFile(getFile(url), "~/macros/"..packageId.."/"..name)
       end
       --get make instructions
-      if filesystem.exists("macros/"..packageId.."/make") then
-        local makeFile=catRel("macros/"..packageId.."/make")
+      if filesystem.exists("~/macros/"..packageId.."/make") then
+        local makeFile=catRel("~/macros/"..packageId.."/make")
         make(makeFile)
-        filesystem.delete("macros/"..packageId.."/make")
+        filesystem.delete("~/macros/"..packageId.."/make")
       end
       --write new version
       writePackageVersion(packageId, packageVersion)

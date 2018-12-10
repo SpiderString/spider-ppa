@@ -2,7 +2,7 @@ local args={...}
 local forceUpgrade=args[1]
 
 --config options, these are defaults and will be overwritten by (valid) options in the config
-local packageVersionsPath="macros/CobwebPackageManager/packageVersions"
+local packageVersionsPath="~/macros/CobwebPackageManager/packageVersions"
 local autoUpdateColor="&6" --gold
 local statusColor="&b" --aqua
 
@@ -10,7 +10,7 @@ local doUpdate=false
 doUpdate=doUpdate or forceUpgrade
 
 function updateSettings()
-  run("CobwebPackageManager/fileLib")
+  run("fileLib")
   local settings=readConfig()
   packageVersionsPath=settings["packageVersionsPath"]
   autoUpdateColor=settings["autoUpdateColor"]
@@ -19,7 +19,7 @@ end
 function getInstalledPackages()
   updateSettings()
 
-  run("CobwebPackageManager/spiderLib")
+  run("spiderLib")
   local versionsFile=catRel(packageVersionsPath)
   local packages={}
   for id, line in pairs(versionsFile) do

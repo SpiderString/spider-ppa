@@ -5,10 +5,11 @@ local args={...}
 local autoUpdatePackages=true
 local commandPrefix="!cpm"
 
-run("CobwebPackageManager/spiderLib")
+
+run("spiderLib")
 
 function updateSettings()
-  run("CobwebPackageManager/fileLib")
+  run("fileLib")
   local settings=readConfig()
   autoUpdatePackages=settings["autoUpdatePackages"]
   commandPrefix=settings["commandPrefix"]
@@ -28,12 +29,12 @@ elseif args[1]:lower()=="event" and args[2]:lower()=="chatsendfilter" then
   if command~=false then
     --begin command matching
     if command=="update" then
-      run("CobwebPackageManager/fileLib")
+      run("fileLib")
       getRepositories(commandArgs[1])
     elseif command=="upgrade" then
-      run("CobwebPackageManager/autoUpdate", true)
+      run("autoUpdate", true)
     elseif command=="install" and commandArgs[1]~=nil then
-      run("CobwebPackageManager/fileLib")
+      run("fileLib")
       if autoUpdatePackages then
         getRepositories(commandArgs[2])
       end
