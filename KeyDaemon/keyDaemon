@@ -13,12 +13,7 @@ function addHotKey(keycode, action)
 end
 --Add Hot Keys Here
 --E.G. addHotKey("LCONTROL+C", "folder/myscript")
-addHotKey("LCONTROL+C", "mainBrewMacro")
-addHotKey("LCONTROL+LMENU+A", "orderCalculator")
-addHotKey("LCONTROL+UP", "torchMiner")
-addHotKey("LCONTROL+TAB", "brewUnlabel")
-addHotKey("LCONTROL+LMENU+R", "KeyDaemon/keyDaemon")
-addHotKey("LCONTROL+K", "treeFarm")
+
 
 
 if KEYDAEMONRUNNING==nil then KEYDAEMONRUNNING=false end
