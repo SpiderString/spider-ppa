@@ -1,5 +1,5 @@
 Version: 2.5
-AM Version: 6.1.0
+AM Version: 6.2.0
 spiderCalc:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/spiderCalc
 spiderLib:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/spiderLib
 shuntYard:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/shuntYard
