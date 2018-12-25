@@ -1,5 +1,5 @@
 Version:0.66
-AM Version:6.1.0
+AM Version:6.2.0
 cobwebUI:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/CobwebPackageManager/cobwebUI
 fileLib:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/CobwebPackageManager/fileLib
 repositoryList:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/CobwebPackageManager/repositoryList
