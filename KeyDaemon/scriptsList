@@ -1,5 +1,5 @@
 Version: 1.2
-AM Version: 6.2.0
+AM Version: 6.1.0
 keyDaemon:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/KeyDaemon/keyDaemon
 spiderLib:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/spiderLib
 make:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/KeyDaemon/make
