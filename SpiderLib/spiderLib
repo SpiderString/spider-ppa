@@ -318,7 +318,7 @@ function getCommand(commandPrefix, chatline)
     command=false
   end
   local commandArgs
-  if command ~= false then
+  if command ~= false and command:match(" ") then
     local line=command
     command=split(command, " ")[1]
     line=line:gsub("%%", "%%%%")
