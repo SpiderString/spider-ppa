@@ -216,11 +216,9 @@ function lookRel(u, v, w)
   --+u, +v, +w correspond to forward, right, and up respectively
   --w axis is always perpendicular to the horizon
   --so w is only perpendicular to the uv plane when pitch = 0
-  
-  if u == 0 and v == 0 then
-    log("ERROR: Cannot look inside yourself.")
-    u = 1
-  end
+  --if u and v are 0, makes you look up if w>1.62, look down if w<=1.62
+  --For reference, 1.62 is the eye position of your player
+
   local yaw = getPlayer().yaw
   local pitch = getPlayer().pitch
 
@@ -240,11 +238,18 @@ function lookRel(u, v, w)
   elseif u < 0 and v >= 0 then
     yawAddend = math.pi/2 - math.asin(u/r)
   end
+
   local targetYaw = ((yaw*math.pi/180) + yawAddend)
   --log(targetYaw*180/math.pi%360)
   local targetX = x - r*math.sin(targetYaw)
   local targetY = y + w
   local targetZ = z + r*math.cos(targetYaw)
+  
+  if r==0 then
+    targetX=x
+    targetZ=z
+  end
+
   lookAt(targetX, targetY, targetZ)
 end
 
