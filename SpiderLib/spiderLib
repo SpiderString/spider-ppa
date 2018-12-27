@@ -216,8 +216,9 @@ function lookRel(u, v, w)
   --+u, +v, +w correspond to forward, right, and up respectively
   --w axis is always perpendicular to the horizon
   --so w is only perpendicular to the uv plane when pitch = 0
-  --if u and v are 0, makes you look up if w>1.62, look down if w<=1.62
+  --if u and v are 0, makes you look up if w>0, look down if w<=0
   --For reference, 1.62 is the eye position of your player
+  w=w+1.62
 
   local yaw = getPlayer().yaw
   local pitch = getPlayer().pitch
