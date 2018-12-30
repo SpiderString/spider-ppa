@@ -32,15 +32,15 @@ end
 
 
 --Returns table of fields from a string with given delimeter
-function split (_str, _del)
-  local _output={}
-  local _index=1
-  for _word in _str:gsub(";;","; ;"):gmatch("[^".._del.."]+") do 
-    _output[_index]=_word
-    _index=_index+1
+function split (str, del)
+  local output={}
+  local index=1
+  for word in str:gsub(del..del, del.." "..del):gmatch("[^"..del.."]+") do 
+    output[index]=word
+    index=index+1
   end
-  _output["length"]=_index-1
-  return _output
+  output["length"]=index-1
+  return output
 end
 
 --Returns all numerically indexed elements from a table
