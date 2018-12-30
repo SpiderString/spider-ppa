@@ -1,6 +1,6 @@
 local args={...} --should be bound to ChatSendFilter
 local commandPrefix="!rt"
-local routeRegDir="common"
+local routeRegDir="~/common"
 local routeRegPath=routeRegDir.."/routeRegistry"
 if not filesystem.exists(routeRegDir) then filesystem.mkDir(routeRegDir) end
 if not filesystem.exists(routeRegPath) then filesystem.open(routeRegPath, "w"):close() end
@@ -47,8 +47,17 @@ end
 
 function getDistance(route)
   local distance=0
+  local oldX, oldZ
   for id, point in pairs(route["path"]) do
-    distance=distance+1
+    if not (point.x==oldX and point.z==oldZ) then
+      if not oldX or not oldZ then
+        oldX=point.x
+        oldZ=point.z
+      end
+      distance=distance+math.sqrt(math.pow(point.x-oldX, 2)+math.pow(point.z-oldZ, 2))
+      oldX=point.x
+      oldZ=point.z
+    end
   end
   return distance
 end
