@@ -39,8 +39,10 @@ local note=prompt("Pick a note", "choice", table.unpack(notes))
 
 if note then
   for i=0, pitches[note], 1 do
-    use()
-    sleep(50)
+    if i~=pitches[note] then
+      use()
+      sleep(50)
+    end
   end
   log("Tuned to "..note)
 end
