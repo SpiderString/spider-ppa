@@ -1,0 +1,3 @@
+Version: 1.0
+make:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/NoteblockTuner/make
+noteblockTuner.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/NoteblockTuner/noteblockTuner.lua
