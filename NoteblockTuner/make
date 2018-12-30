@@ -1,0 +1,5 @@
+KEY{
+  ["mode"]="KEY_DOWN"
+  ["event"]="NUMPAD3"
+  ["script"]="NoteblockTuner/noteblockTuner.lua"
+}
