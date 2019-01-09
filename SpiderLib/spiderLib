@@ -203,7 +203,7 @@ function selectItem(itemId)
   for id, item in pairs(inv) do
     if id < 10 then
       if item ~= false then
-        if item["id"] == "minecraft:"..tostring(itemId) then
+        if item["id"]:match(":"..tostring(itemId).."$") then
           setHotbar(id)
         end
       end
@@ -211,6 +211,34 @@ function selectItem(itemId)
   end
 end
 
+--gets an item from *ANY* slot in whatever inventory is passed to it
+--Item id is the same as with selectItem(), inv is an optional inventory, defaults to player
+function getItem(itemId, inv)
+  local inv=inv or openInventory()
+  local foundItem=false
+  for i=1, inv.getTotalSlots(), 1 do
+    if inv.getSlot(i) and not foundItem then
+      if inv.getSlot(i).id:lower():match(":"..tostring(itemId):lower().."$") then
+        local invType=inv.getType()
+        if inv.mapping[invType] then
+          --inv.swap() was behaving like split
+          inv.click(i)
+          inv.click(inv.mapping[invType].hotbar[1])
+          inv.click(i) --drops item back in case it picked something up
+        else
+          --no mapping found, fallback
+          inv.click(i)
+          inv.click(inv.getTotalSlots()-8)
+          inv.click(i)
+        end
+        foundItem=true
+      end
+    end
+  end
+  inv.close()
+  selectItem(itemId)
+  return foundItem
+end
 --Looks at a block relative to facing
 function lookRel(u, v, w)
   --+u, +v, +w correspond to forward, right, and up respectively
