@@ -180,7 +180,14 @@ end
 function lib.replace(tableID, obj, filePath)
   local data=lib.read(filePath)
   data[tableID]=obj
-  lib.write(data, filePath)
+  filesystem.open(filePath, "w"):close()
+  for id, object in pairs(data) do
+    if type(id)=="string" then
+      lib.append(object, filePath, id)
+    else
+      lib.append(object, filePath)
+    end
+  end
 end
 function lib.delete(filePath, tableID)
   local data=lib.read(filePath)
