@@ -1,0 +1,219 @@
+TetrisTheme{
+  {note:10;length:500} --E4
+  {note:5;length:250} --B3
+  {note:6;length:250} --C4
+  {note:8;length:500} --D4
+  {note:6;length:250}
+  {note:5;length:250}
+  {note:3;length:500} --A3
+  {note:3;length:250}
+  {note:6;length:250}
+  {note:10;length:500}
+  {note:8;length:250}
+  {note:6;length:250}
+  {note:5;length:750}
+  {note:6;length:250}
+  {note:8;length:500}
+  {note:10;length:500}
+  {note:6;length:500}
+  {note:3;length:500}
+  {note:3;length:1250}
+  {note:8;length:500}
+  {note:11;length:250} --F4
+  {note:15;length:500} --A4
+  {note:13;length:250} --G4
+  {note:11;length:250}
+  {note:10;length:750}
+  --At this point the sheet music ran out, going by ear
+  {note:6;length:250}
+  {note:10;length:500}
+  {note:8;length:250}
+  {note:6;length:250}
+  {note:5;length:500}
+  --back up
+  {note:5;length:250}
+  {note:6;length:250}
+  {note:8;length:500}
+  {note:10;length:500}
+  --Down
+  {note:6;length:500}
+  --Dun dunnnn
+  {note:3;length:500}
+  {note:3;length:1000}
+  --here come the rolls
+  --Each roll lasts 500ms, quarter note
+  {note:10;length:62.5}
+  {note:10;length:62.5}
+  {note:10;length:62.5}
+  {note:10;length:62.5}
+  {note:10;length:62.5}
+  {note:10;length:62.5}
+  {note:10;length:62.5}
+  {note:10;length:62.5}
+
+  {note:6;length:62.5}
+  {note:6;length:62.5}
+  {note:6;length:62.5}
+  {note:6;length:62.5}
+  {note:6;length:62.5}
+  {note:6;length:62.5}
+  {note:6;length:62.5}
+  {note:6;length:62.5}
+
+  {note:8;length:62.5}
+  {note:8;length:62.5}
+  {note:8;length:62.5}
+  {note:8;length:62.5}
+  {note:8;length:62.5}
+  {note:8;length:62.5}
+  {note:8;length:62.5}
+  {note:8;length:62.5}
+
+  {note:5;length:62.5}
+  {note:5;length:62.5}
+  {note:5;length:62.5}
+  {note:5;length:62.5}
+  {note:5;length:62.5}
+  {note:5;length:62.5}
+  {note:5;length:62.5}
+  {note:5;length:62.5}
+
+  {note:6;length:62.5}
+  {note:6;length:62.5}
+  {note:6;length:62.5}
+  {note:6;length:62.5}
+  {note:6;length:62.5}
+  {note:6;length:62.5}
+  {note:6;length:62.5}
+  {note:6;length:62.5}
+
+  {note:3;length:62.5}
+  {note:3;length:62.5}
+  {note:3;length:62.5}
+  {note:3;length:62.5}
+  {note:3;length:62.5}
+  {note:3;length:62.5}
+  {note:3;length:62.5}
+  {note:3;length:62.5}
+
+  {note:2;length:62.5}
+  {note:2;length:62.5}
+  {note:2;length:62.5}
+  {note:2;length:62.5}
+  {note:2;length:62.5}
+  {note:2;length:62.5}
+  {note:2;length:62.5}
+  {note:2;length:62.5}
+  {note:2;length:500}
+  --rolls 2: Electric Boogaloo
+  {note:10;length:62.5}
+  {note:10;length:62.5}
+  {note:10;length:62.5}
+  {note:10;length:62.5}
+  {note:10;length:62.5}
+  {note:10;length:62.5}
+  {note:10;length:62.5}
+  {note:10;length:62.5}
+
+  {note:6;length:62.5}
+  {note:6;length:62.5}
+  {note:6;length:62.5}
+  {note:6;length:62.5}
+  {note:6;length:62.5}
+  {note:6;length:62.5}
+  {note:6;length:62.5}
+  {note:6;length:62.5}
+
+  {note:8;length:62.5}
+  {note:8;length:62.5}
+  {note:8;length:62.5}
+  {note:8;length:62.5}
+  {note:8;length:62.5}
+  {note:8;length:62.5}
+  {note:8;length:62.5}
+  {note:8;length:62.5}
+
+  {note:5;length:62.5}
+  {note:5;length:62.5}
+  {note:5;length:62.5}
+  {note:5;length:62.5}
+  {note:5;length:62.5}
+  {note:5;length:62.5}
+  {note:5;length:62.5}
+  {note:5;length:62.5}
+
+  --rolls are half as long now
+  {note:6;length:62.5}
+  {note:6;length:62.5}
+  {note:6;length:62.5}
+  {note:6;length:62.5}
+
+  {note:10;length:62.5}
+  {note:10;length:62.5}
+  {note:10;length:62.5}
+  {note:10;length:62.5}
+
+  --twice as long, 500ms
+  {note:15;length:62.5}
+  {note:15;length:62.5}
+  {note:15;length:62.5}
+  {note:15;length:62.5}
+  {note:15;length:62.5}
+  {note:15;length:62.5}
+  {note:15;length:62.5}
+  {note:15;length:62.5}
+
+  {note:14;length:62.5} --A♭4
+  {note:14;length:62.5}
+  {note:14;length:62.5}
+  {note:14;length:62.5}
+  {note:14;length:62.5}
+  {note:14;length:62.5}
+  {note:14;length:62.5}
+  {note:14;length:62.5}
+  {note:14;length:500}
+  --repeat until rolls
+
+  --tempo change 120 BPM to 150
+  {tempo:0.6;note:10;length:500} --E4
+  {note:5;length:250} --B3
+  {note:6;length:250} --C4
+  {note:8;length:500} --D4
+  {note:6;length:250}
+  {note:5;length:250}
+  {note:3;length:500} --A3
+  {note:3;length:250}
+  {note:6;length:250}
+  {note:10;length:500}
+  {note:8;length:250}
+  {note:6;length:250}
+  {note:5;length:750}
+  {note:6;length:250}
+  {note:8;length:500}
+  {note:10;length:500}
+  {note:6;length:500}
+  {note:3;length:500}
+  {note:3;length:1250}
+  {note:8;length:500}
+  {note:11;length:250} --F4
+  {note:15;length:500} --A4
+  {note:13;length:250} --G4
+  {note:11;length:250}
+  {note:10;length:750}
+  --At this point the sheet music ran out, going by ear
+  {note:6;length:250}
+  {note:10;length:500}
+  {note:8;length:250}
+  {note:6;length:250}
+  {note:5;length:500}
+  --back up
+  {note:5;length:250}
+  {note:6;length:250}
+  {note:8;length:500}
+  {note:10;length:500}
+  --Down
+  {note:6;length:500}
+  --Dun dunnnn
+  {note:3;length:500}
+  {note:3;length:1000}
+}
