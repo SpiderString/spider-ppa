@@ -1,0 +1,5 @@
+KEY{
+  ["mode"]="KEY_DOWN"
+  ["event"]="NUMPAD4"
+  ["script"]="NoteblockDJ/noteblockDJ.lua"
+}
