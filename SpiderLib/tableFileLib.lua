@@ -180,12 +180,12 @@ end
 function lib.replace(tableID, obj, filePath)
   local data=lib.read(filePath)
   data[tableID]=obj
-  lib.write(filePath, data)
+  lib.write(data, filePath)
 end
 function lib.delete(filePath, tableID)
   local data=lib.read(filePath)
   data[tableID]=nil
-  lib.write(filePath, data)
+  lib.write(data, filePath)
 end
 --renames a table/object and returns a status code
 --0: successful; 1:new table ID already used, 2:old ID nonexistant 3:both 1 and 2
@@ -194,7 +194,7 @@ function lib.rename(oldID, newID, filePath)
     local data=lib.read(filePath)
     data[newID]=data[oldID]
     data[oldID]=nil
-    lib.write(filePath, data)
+    lib.write(data, filePath)
     return 0
   elseif lib.doesTableExist(oldID) and lib.doesTableExist(newID) then
     return 1
