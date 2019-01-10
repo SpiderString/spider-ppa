@@ -11,6 +11,7 @@
 --lib.replace(String:tableID, Table:obj, String:filePath) --replaces a given table with another in the file
 --lib.delete(String:filePath, String:tableID) --removes a given table from the file
 --lib.rename(String:oldID, String:newID, String:filePath) --renames a table in the file, returns 0, 1, 2, 3 as status codes
+--lib.copy(String:sourceID, String:destinationID, String:filePath) --produces a copy of the table. returns 0, 1, 2, 3 as status codes
 
 --lib.doesObjExist(String:filePath, String:tableID) --alias for lib.doesTableExist()
 --lib.insert(Table:obj, String:filePath, <String:tableID>) --alias for lib.append()
@@ -215,7 +216,21 @@ function lib.rename(oldID, newID, filePath)
     return 3
   end
 end
-
+--produces a copy of the source table with the id "dest"
+--status codes are identical to lib.rename()
+function lib.copy(source, dest, filePath)
+  if lib.doesTableExist(source) and not lib.doesTableExist(dest) then
+    local data=lib.search(filePath, source)
+    lib.append(data, filePath, dest)
+    return 0
+  elseif lib.doesTableExist(source) and lib.doesTableExist(dest) then
+    return 1
+  elseif not lib.doesTableExist(source) and not lib.doesTableExist(dest) then
+    return 2
+  else
+    return 3
+  end
+end
 --aliases
 function lib.doesObjExist(filePath, tableID)
   return lib.doesTableExist(filePath, tableID)
