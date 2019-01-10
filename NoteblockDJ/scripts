@@ -1,4 +1,5 @@
 Version: 0.1
+AM Version: 6.2.0
 make:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/NoteblockDJ/make
 noteblockDJ.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/NoteblockDJ/noteblockDJ.lua
 songs:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/NoteblockDJ/songs
