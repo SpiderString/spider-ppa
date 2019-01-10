@@ -176,23 +176,27 @@ function lib.doesTableExist(filePath, tableID)
   file:close()
   return foundTable
 end
+
+local function writeFile(fileData, filePath)
+  filesystem.open(filePath, "w"):close()
+  for id, obj in pairs(fileData) do
+    if type(id)=="string" then
+      lib.append(obj, filePath, id)
+    else
+      lib.append(obj, filePath)
+    end
+  end
+end
 --could also technically be used as an "insert", though append works just as well and faster
 function lib.replace(tableID, obj, filePath)
   local data=lib.read(filePath)
   data[tableID]=obj
-  filesystem.open(filePath, "w"):close()
-  for id, object in pairs(data) do
-    if type(id)=="string" then
-      lib.append(object, filePath, id)
-    else
-      lib.append(object, filePath)
-    end
-  end
+  writeFile(data, filePath)
 end
 function lib.delete(filePath, tableID)
   local data=lib.read(filePath)
   data[tableID]=nil
-  lib.write(data, filePath)
+  writeFile(data, filePath)
 end
 --renames a table/object and returns a status code
 --0: successful; 1:new table ID already used, 2:old ID nonexistant 3:both 1 and 2
@@ -201,7 +205,7 @@ function lib.rename(oldID, newID, filePath)
     local data=lib.read(filePath)
     data[newID]=data[oldID]
     data[oldID]=nil
-    lib.write(data, filePath)
+    writeFile(data, filePath)
     return 0
   elseif lib.doesTableExist(oldID) and lib.doesTableExist(newID) then
     return 1
