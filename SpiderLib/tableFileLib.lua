@@ -202,15 +202,15 @@ end
 --renames a table/object and returns a status code
 --0: successful; 1:new table ID already used, 2:old ID nonexistant 3:both 1 and 2
 function lib.rename(oldID, newID, filePath)
-  if lib.doesTableExist(oldID) and not lib.doesTableExist(newID) then
+  if lib.doesTableExist(filePath, oldID) and not lib.doesTableExist(filePath, newID) then
     local data=lib.read(filePath)
     data[newID]=data[oldID]
     data[oldID]=nil
     writeFile(data, filePath)
     return 0
-  elseif lib.doesTableExist(oldID) and lib.doesTableExist(newID) then
+  elseif lib.doesTableExist(filePath, oldID) and lib.doesTableExist(filePath, newID) then
     return 1
-  elseif not lib.doesTableExist(oldID) and not lib.doesTableExist(newID) then
+  elseif not lib.doesTableExist(filePath, oldID) and not lib.doesTableExist(filePath, newID) then
     return 2
   else
     return 3
@@ -219,13 +219,13 @@ end
 --produces a copy of the source table with the id "dest"
 --status codes are identical to lib.rename()
 function lib.copy(source, dest, filePath)
-  if lib.doesTableExist(source) and not lib.doesTableExist(dest) then
+  if lib.doesTableExist(filePath, source) and not lib.doesTableExist(filePath, dest) then
     local data=lib.search(filePath, source)
     lib.append(data, filePath, dest)
     return 0
-  elseif lib.doesTableExist(source) and lib.doesTableExist(dest) then
+  elseif lib.doesTableExist(filePath, source) and lib.doesTableExist(filePath, dest) then
     return 1
-  elseif not lib.doesTableExist(source) and not lib.doesTableExist(dest) then
+  elseif not lib.doesTableExist(filePath, source) and not lib.doesTableExist(filePath, dest) then
     return 2
   else
     return 3
