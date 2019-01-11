@@ -221,15 +221,19 @@ function getItem(itemId, inv)
       if inv.getSlot(i).id:lower():match(":"..tostring(itemId):lower().."$") then
         local invType=inv.getType()
         if inv.mapping[invType] then
-          --inv.swap() was behaving like split
-          inv.click(i)
-          inv.click(inv.mapping[invType].hotbar[1])
-          inv.click(i) --drops item back in case it picked something up
+          if i~=inv.mapping[invType].hotbar[1] then
+            --inv.swap() was behaving like split
+            inv.click(i)
+            inv.click(inv.mapping[invType].hotbar[1])
+            inv.click(i) --drops item back in case it picked something up
+          end
         else
-          --no mapping found, fallback
-          inv.click(i)
-          inv.click(inv.getTotalSlots()-8)
-          inv.click(i)
+          if i~=inv.getTotalSlots()-8 then
+            --no mapping found, fallback
+            inv.click(i)
+            inv.click(inv.getTotalSlots()-8)
+            inv.click(i)
+          end
         end
         foundItem=true
       end
