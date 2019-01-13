@@ -1,2 +1,3 @@
 spiderLib:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/spiderLib
 tableFileLib.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/tableFileLib.lua
+inventoryLib.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/inventoryLib.lua
