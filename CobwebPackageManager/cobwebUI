@@ -15,7 +15,7 @@ function updateSettings()
   commandPrefix=settings["commandPrefix"]
 end
 function help()
-  
+
 end
 --trigger ui
 if args[1]:lower()=="key" then
@@ -30,7 +30,11 @@ elseif args[1]:lower()=="event" and args[2]:lower()=="chatsendfilter" then
     --begin command matching
     if command=="update" then
       run("fileLib")
-      getRepositories(commandArgs[1])
+      if commandArgs then
+        getRepositories(commandArgs[1])
+      else
+        getRepositories()
+      end
     elseif command=="upgrade" then
       run("autoUpdate", true)
     elseif command=="install" and commandArgs[1]~=nil then
