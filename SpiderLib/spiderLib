@@ -69,8 +69,8 @@ function unpack (t, i, reverse)
   end
 end
 
---Splits a table up and returns the denoted field as a table or 
---a table of the field tables if field is nil
+--Splits each entry of a table up by del and returns a table of split strings or 
+--a table of the given field values if field is specified
 function splitTable(t, del, field)
   field = field or nil
   local output={}
