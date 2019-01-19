@@ -1,0 +1,5 @@
+captchaSolver.lua:{
+  ["mode"]="EVENT"
+  ["event"]="Chat"
+  ["script"]="CaptchaSolver/captchaSolver.lua"
+}
