@@ -1,4 +1,5 @@
 Version: 1.0
 AM Version: 6.0.0
 captchaSolver.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/CaptchaSolver/captchaSolver.lua
+spiderLib:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/spiderLib
 make:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/CaptchaSolver/make
