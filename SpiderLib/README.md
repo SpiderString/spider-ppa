@@ -20,14 +20,13 @@ tableFileLib is a library which returns a table of functions aimed at the intera
   
 A full syntax guide can be found in comments at the top of its file. 
 
-
 inventoryLib is a library which returns a table of functions for inventory manipulation and querying. Currently it has 12 unique functions and 9 aliases, a full syntax guide and description of which can be found in comments at the top of the file.
 To include it, do the same as you would for tableFileLib. Run it, grab the table it returns, and use that table to call its functions.
 
 
-To use spiderLib, simply run() the file in your script with a call such as run("spiderLib"). All its functions may then simply be called by name.
-
 To use tableFileLib, you should catch the table it returns in a variable, e.g. local tfl=run("tableFileLib.lua"). You can then call its functions by prefixing it with "tfl.", e.g. tfl.write(obj, filePath, tableID).
 
+structureLib is a library which returns a table of functions for creating various strictly typed emulated datastructures such as stacks, queues, linked lists, and arrays. For a full list of implemented data structures and syntax guide, view the comments at the top of the file.
 
-I am currently looking at the possibility of deprecating spiderLib and rewriting it as a several different, newer, and better modules. tableFileLib would be one such example. If I do, of course, spiderLib will still be available to prevent older packages and scripts from breaking, but would not be under active development.
+
+Please note that spiderLib.lua is deprecated. Instead, its functions are being swapped over to various modules with expanded functionality, more efficiency, and more stable design. The file will be kept to avoid breaking existing projects, but use it at your own risk. To use spiderLib, simply run() the file in your script with a call such as run("spiderLib"). All its functions may then simply be called by name.
