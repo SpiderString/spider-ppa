@@ -25,7 +25,7 @@
 --    "stringKey":numVal
 --  }
 --}
---TableID is optional but is used to decide which table is which. If each table is an option, this could be its name
+--TableID is optional but is used to decide which table is which. If each table is an object, this could be its name
 local lib={}
 local function writeObj(obj, file, tableID)
   file.write(tableID.."{\n")
