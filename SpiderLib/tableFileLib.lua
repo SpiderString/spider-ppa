@@ -41,7 +41,7 @@ local function writeObj(obj, file, tableID)
       --write value
       if type(val)=="string" then
         file.write("\""..val.."\"\n")
-      elseif type(val)=="number" then
+      elseif type(val)=="number"  or type(val)=="boolean" then
         file.write(val.."\n")
       elseif type(val)=="table" then
         file.write("{\n")
@@ -103,7 +103,7 @@ local function readTable(file)
         --fallback if mismatched quotations
         value=line:sub(b+1)
       end
-      --numerical value
+    --numerical value
     elseif line:match(":%-[%d]+") or line:match(":[%d]+") then
       local a, b = line:find(":[%s]*")
       local c = line:find("[%s]", b+1)
@@ -112,7 +112,17 @@ local function readTable(file)
       elseif b then
         value=tonumber(line:sub(b+1))
       end
-      --table
+    elseif line:match(":true") or line:match(":false") then
+      local a = line:find(":")
+      local b = line:find(" ", a+1)
+      if a and b then
+        value=line:sub(a+1, b-1)
+      else
+        value=line:sub(a+1)
+      end
+      if value=="true" then value=true end
+      if value=="false" then value=false end
+    --table
     elseif line:match(":{") then
       value=readTable(file)
     end
