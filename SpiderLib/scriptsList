@@ -2,3 +2,4 @@ spiderLib:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/Spide
 tableFileLib.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/tableFileLib.lua
 inventoryLib.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/inventoryLib.lua
 structureLib.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/structureLib.lua
+commandLib.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/commandLib.lua
