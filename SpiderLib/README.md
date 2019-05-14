@@ -28,5 +28,7 @@ To use tableFileLib, you should catch the table it returns in a variable, e.g. l
 
 structureLib is a library which returns a table of functions for creating various strictly typed emulated datastructures such as stacks, queues, linked lists, and arrays. For a full list of implemented data structures and syntax guide, view the comments at the top of the file.
 
+commandLib is a library which returns a table of functions for creating command line interfaces(CLI's). This is based around the concept of "command prefixes"(think "!" or "/") and "fields", or different parts(arguments) of the command based on space seperation. Though this library is aimed mostly towards ingame chat CLI's, it should be usable for any text source.
+
 
 Please note that spiderLib.lua is deprecated. Instead, its functions are being swapped over to various modules with expanded functionality, more efficiency, and more stable design. The file will be kept to avoid breaking existing projects, but use it at your own risk. To use spiderLib, simply run() the file in your script with a call such as run("spiderLib"). All its functions may then simply be called by name.
