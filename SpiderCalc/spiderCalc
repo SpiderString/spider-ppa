@@ -26,7 +26,7 @@ if args[2]=="ChatSendFilter" and not commandArgs then
   return args[3]
 end
 
-if equation then
+if equation and commandArgs then
   --check if the help command was run
   if commandArgs[1]=="help" and (caller==self or acceptCommandsFromOthers) then
     run("helpLib")
