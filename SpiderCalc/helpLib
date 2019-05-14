@@ -6,8 +6,8 @@ local errorColor="&4"
 --Lists Functions and usage in pm
 function helpPage(player, arg)
   local selfPlayer=getPlayer()["name"]
-  if filesystem.exists("macros/SpiderCalc/HelpDocs/"..arg) and arg~="formatting" then
-    local helpDoc=run("SpiderCalc/HelpDocs/"..arg)
+  if filesystem.exists("HelpDocs/"..arg) and arg~="formatting" then
+    local helpDoc=run("HelpDocs/"..arg)
     if player == selfPlayer then
       for id, textTable in pairs(helpDoc) do
         advLog(textTable)
@@ -27,11 +27,11 @@ function helpPage(player, arg)
     end
   end
 end
-function help(player, command, commandArgs)
+function help(player, command, page)
   --no args, standard help
-  if commandArgs[1]==nil then
+  if page==nil then
     local selfPlayer=getPlayer()["name"]
-    local helpText=run("SpiderCalc/HelpDocs/help")
+    local helpText=run("HelpDocs/help")
     --logs instead of /msg'ing
     if player == selfPlayer then
       for id, textTable in pairs(helpText) do
@@ -46,6 +46,6 @@ function help(player, command, commandArgs)
     end
   --args
   else
-    helpPage(player, commandArgs[1]:lower())
+    helpPage(player, page:lower())
   end
 end

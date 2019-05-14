@@ -50,6 +50,7 @@ function doesPointExist(point)
   return doesExist
 end
 function graph(command, args, silent, zCoord, suppressGlobals)
+  table.remove(args, 1)
   if silent==nil then silent=false end
   if suppressGlobals==nil then suppressGlobals=false end
 
@@ -78,7 +79,7 @@ function graph(command, args, silent, zCoord, suppressGlobals)
     local variables, userVars, constants=getVariables()
     local variable=nil
     --find the independent variable
-    for id, token in pairs(eq) do  
+    for id, token in pairs(eq) do
       if token:match("^[%a]+$") then
         local isVariable=false
         for id, var in pairs(variables) do
@@ -90,7 +91,7 @@ function graph(command, args, silent, zCoord, suppressGlobals)
             if token==constant then isConstant=true end
           end
         end
-        if isVariable and not isConstant then 
+        if isVariable and not isConstant then
           variable=token
         end
       end
@@ -110,7 +111,7 @@ function graph(command, args, silent, zCoord, suppressGlobals)
               if token==constant then isConstant=true end
             end
           end
-          if isVariable and not isConstant and token~=variable then 
+          if isVariable and not isConstant and token~=variable then
             secondVar=token
           end
         end

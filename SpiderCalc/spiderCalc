@@ -8,53 +8,49 @@ local eqColor="&6" --color used for answer output
 
 --Inconfigurable Variables. No Touch.
 local args={...}
-local equation=args[3]
-run("spiderLib")
 
-local equation, caller
-local commandArgs
-local command
+local cli=run("commandLib.lua")
+local caller, equation
 local self=getPlayer()["name"]
 
 if args[2]=="Chat" then
-  equation, caller=stripUsername(args[3], args[4])
+  caller=cli.getUsername(args[4], commandPrefix)
+  equation=cli.stripUsername(args[4])
 else
   equation=args[3]
   caller=self
 end
-command, commandArgs=getCommand(commandPrefix, equation)
+commandArgs=cli.getArguments(equation, commandPrefix)
 --no command
-if args[2]=="ChatSendFilter" then
-  if equation==false or equation==nil then
-    return args[3]
-  elseif not equation:match("^"..commandPrefix) then
-    return args[3]
-  end
+if args[2]=="ChatSendFilter" and not commandArgs then
+  return args[3]
 end
 
-if equation ~= false then
+if equation then
   --check if the help command was run
-  if command=="help" and (caller==self or acceptCommandsFromOthers) then
+  if commandArgs[1]=="help" and (caller==self or acceptCommandsFromOthers) then
     run("helpLib")
-    help(caller, command, commandArgs)
+    help(caller, commandArgs[1], commandArgs)
     equation=false
   --graph command
-  elseif command=="graph" and (caller==self or acceptCommandsFromOthers) then
+  elseif commandArgs[1]=="graph" and (caller==self or acceptCommandsFromOthers) then
     run("graph")
-    graph(command, commandArgs)
+    graph(commandArgs[1], commandArgs)
     equation=false
-  elseif command=="clear" and (caller==self or acceptCommandsFromOthers) then
+  elseif commandArgs[1]=="clear" and (caller==self or acceptCommandsFromOthers) then
     hud3D.clearAll()
     SPIDERCALCGRAPHPOINTS={}
     equation=false
-  elseif command=="translate" and (caller==self or acceptCommandsFromOthers) then
+  elseif commandArgs[1]=="translate" and (caller==self or acceptCommandsFromOthers) then
     run("graph")
-    translate(unpack(commandArgs))
+    local vector=commandArgs
+    table.remove(vector, 1)
+    translate(unpack(vector))
     equation=false
   end
 end
---Begin evalutation
-if equation ~= false and equation:match("^"..commandPrefix) and (caller==self or acceptCommandsFromOthers) then
+--Begin evaluation
+if equation and equation:match("^"..commandPrefix) and (caller==self or acceptCommandsFromOthers) then
   run("calcLib")
   equation=equation:gsub("^"..commandPrefix, "")
   equation=removeSpaces(equation)

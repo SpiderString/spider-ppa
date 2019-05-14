@@ -16,8 +16,6 @@ for id, var in pairs(constants) do
   table.insert(variables, var)
 end
 
-run("spiderLib")
-
 --formatting functions
 function removeSpaces(eq)
   eq=eq:gsub("[%s]", "")
@@ -130,7 +128,7 @@ function tokenize(eq)
 end
 --inserts astericks between implied multiplication
 --eq should be tokenized already
---e.g. 5(3), pi(7), 5ln(7), (1+2)(3-2), 
+--e.g. 5(3), pi(7), 5ln(7), (1+2)(3-2),
 function insertAstericks(eq)
   --insert astericks before opening parentheticals without left parentheticals or operators before them
   --insert astericks before functions without left parentheticals or operators before them
