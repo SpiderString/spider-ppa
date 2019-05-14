@@ -1,11 +1,11 @@
 Version: 2.51
 AM Version: 6.2.0
 spiderCalc:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/spiderCalc
-spiderLib:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/spiderLib
 shuntYard:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/shuntYard
 postfixInterpreter:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/postfixInterpreter
 helpLib:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/helpLib
 calcLib:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/calcLib
+commandLib.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/commandLib.lua
 make:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/make
 HelpDocs/add:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/add
 HelpDocs/sub:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderCalc/HelpDocs/sub
