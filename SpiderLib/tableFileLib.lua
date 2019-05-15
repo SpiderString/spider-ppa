@@ -28,7 +28,11 @@
 --TableID is optional but is used to decide which table is which. If each table is an object, this could be its name
 local lib={}
 local function writeObj(obj, file, tableID)
-  file.write(tableID.."{\n")
+  if tableID then
+    file.write(tableID.."{\n")
+  else
+    file.write("{\n")
+  end
   local tabs=1 --a "tab" technically is just two spaces in this format since that's what the in-game editor uses
   local function writeTable(table)
     for id, val in pairs(table) do
@@ -55,7 +59,11 @@ local function writeObj(obj, file, tableID)
   writeTable(obj)
 end
 function lib.write(obj, filePath, tableID)
-  local tableID=tostring(tableID) or ""
+  if tableID and tableID~="" then
+    tableID=tostring(tableID)
+  else
+    tableID=nil
+  end
   local file=filesystem.open(filePath, "w")
   writeObj(obj, file, tableID)
   file:close()
