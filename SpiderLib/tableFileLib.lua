@@ -46,7 +46,7 @@ local function writeObj(obj, file, tableID)
       if type(val)=="string" then
         file.write("\""..val.."\"\n")
       elseif type(val)=="number"  or type(val)=="boolean" then
-        file.write(val.."\n")
+        file.write(tostring(val).."\n")
       elseif type(val)=="table" then
         file.write("{\n")
         tabs=tabs+1
@@ -134,7 +134,7 @@ local function readTable(file)
     elseif line:match(":{") then
       value=readTable(file)
     end
-    if key and value then
+    if key and value~=nil then
       data[key]=value
     end
   --while loop end
