@@ -6,7 +6,7 @@ local autoUpdatePackages=true
 local commandPrefix="!cpm"
 
 
-run("spiderLib")
+local cli=run("commandLib.lua")
 
 function updateSettings()
   run("fileLib")
@@ -25,27 +25,27 @@ if args[1]:lower()=="key" then
 elseif args[1]:lower()=="event" and args[2]:lower()=="chatsendfilter" then
   updateSettings()
 
-  command, commandArgs=getCommand(commandPrefix, args[3])
-  if command~=false then
+  local command=cli.getArguments(args[3], commandPrefix)
+  if command then
     --begin command matching
-    if command=="update" then
+    if command[1]=="update" then
       run("fileLib")
-      if commandArgs then
-        getRepositories(commandArgs[1])
+      if command[2] then
+        getRepositories(command[2])
       else
         getRepositories()
       end
-    elseif command=="upgrade" then
+    elseif command[1]=="upgrade" then
       run("autoUpdate", true)
-    elseif command=="install" and commandArgs[1]~=nil then
+    elseif command[1]=="install" and command[2] then
       run("fileLib")
       if autoUpdatePackages then
-        getRepositories(commandArgs[2])
+        getRepositories(commandArgs[3])
       end
-      getPackage(commandArgs[1], commandArgs[2])
-    elseif command=="help" then
+      getPackage(commandArgs[2], commandArgs[3])
+    elseif command[1]=="help" then
       help()
-    elseif command=="list" then
+    elseif command[1]=="list" then
       listPackages()
     end
   else
