@@ -2,7 +2,6 @@
 --will harvest and replant automatically as well as store/retrieve from registered chests
 --pathfinding is very rudimentary, however, so don't expect it to be able to find chests around corners
 --can be bound to ChatSendFilter(CLI) or a key(GUI)
-local commandPrefix="!farm"
 local args={...}
 local ul=run("utilsLib.lua")
 local cli=run("commandLib.lua")
@@ -66,7 +65,7 @@ end
 
 if args[2]=="ChatSendFilter" then
   --CLI
-  local commandArgs=cli.getArguments(args[3], commandPrefix)
+  local commandArgs=cli.getArguments(args[3], settings.commandPrefix)
   if commandArgs then
     --command matching
     if commandArgs[1]:lower()=="register" then
@@ -260,6 +259,9 @@ if args[2]=="ChatSendFilter" then
               break
             end
             settings.regLibPath=newVal
+          elseif choice=="commandPrefix" then
+            if newVal=="" then break end
+            settings.commandPrefix=newVal
           elseif choice=="ofColor" or choice=="warnColor" or choice=="errColor" then
             if not isColorCode(newVal) then
               log(settings.errColor.."Failed to change setting '"..choice.."'. Invalid color code.")
