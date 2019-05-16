@@ -40,9 +40,9 @@ elseif args[1]:lower()=="event" and args[2]:lower()=="chatsendfilter" then
     elseif command[1]=="install" and command[2] then
       run("fileLib")
       if autoUpdatePackages then
-        getRepositories(commandArgs[3])
+        getRepositories(command[3])
       end
-      getPackage(commandArgs[2], commandArgs[3])
+      getPackage(command[2], command[3])
     elseif command[1]=="help" then
       help()
     elseif command[1]=="list" then
