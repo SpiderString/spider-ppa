@@ -8,9 +8,33 @@ local ul=run("utilsLib.lua")
 local cli=run("commandLib.lua")
 
 local tfl=run("tableFileLib.lua")
-local regLib=run("registryLib.lua")
 local cfgPath="~/common/OmniFarm.cfg"
+local defaultCfgURL="https://raw.githubusercontent.com/SpiderString/spider-ppa/master/OmniFarm/OmniFarm.cfg"
+
+--gets a file from a url and puts it in a table
+--used to grab the default config if necessary
+function getFile(url)
+  local http=httpRequest({url=url}, {url=url, requestMethod="GET", timeout=15})
+  local file=http["input"]
+  local err=http.getResponseCode()
+  local line=file:readLine()
+  local output={}
+  while line~=nil do
+    table.insert(output, line)
+    line=file:readLine()
+  end
+  return output
+end
+if not filesystem.exists(cfgPath) then
+  local cfg=getFile(defaultCfgURL)
+  local file=filesystem.open(cfgPath, "w")
+  for id, line in pairs(cfg) do
+    file.write(line.."\n")
+  end
+  file:close()
+end
 local settings=tfl.read(cfgPath)[1]
+local regLib=run("registryLib.lua")
 
 --type checking functions
 --return if the argument is a valid color code
