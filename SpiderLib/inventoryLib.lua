@@ -177,7 +177,7 @@ function lib.getItem(inv, itemID, dmg, slot)
       if inv.getSlot(i).id==itemID and (inv.getSlot(i).dmg==dmg or dmg==nil) and i~=slot then
         inv.click(i)
         inv.click(slot)
-        sleep(80)
+        sleep(300)  --Somewhere between 250-300ms is necessary to prevent occassional bugs with items getting stuck in the cursor
         inv.click(i) --drops item back in case it picked something up
         foundItem=true
       end
