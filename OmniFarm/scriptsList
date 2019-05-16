@@ -1,2 +1,11 @@
 Version: 0.4
 AM Version: 7.7.2
+main.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/OmniFarm/main.lua
+plantFarm.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/OmniFarm/plantFarm.lua
+registerFarm.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/OmniFarm/registerFarm.lua
+registryLib.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/OmniFarm/registryLib.lua
+commandLib.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/commandLib.lua
+inventoryLib.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/inventoryLib.lua
+movementLib.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/movementLib.lua
+tableFileLib.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/tableFileLib.lua
+utilsLib.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/utilsLib.lua
