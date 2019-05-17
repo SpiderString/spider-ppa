@@ -42,7 +42,7 @@ local function moveTo(x, y, z, dx, dz)
   x=x-px; y=y-py; z=z-pz
   move.lookDir("east")
   move.lookRel(x, z, 0)
-  err=move.moveDistance(math.sqrt((x*x-dx*dx)+(z*z-dz*dz)), "forward")
+  err=move.moveDistance(math.sqrt((x*x-dx*dx)+(z*z-dz*dz)), "forward", settings.doCrouch)
   angle=math.atan2(x, z)
   dx=err*math.cos(angle)
   dy=err*math.sin(angle)
@@ -80,7 +80,7 @@ local function plantBlock(blocks, x, y, z, dx, dz)
   local inventory=openInventory()
   --till land
   local px, py, pz=getPlayerPos()
-  if py==math.floor(py) and settings.seedRegistry[crop]~="minecraft:sugar_cane" then --height is an integer and not planting sugarcane
+  if py==math.floor(py) and crop~="minecraft:reeds" then --height is an integer and not planting sugarcane
     getHoe()
     use()
   end

@@ -280,13 +280,14 @@ if args[2]=="ChatSendFilter" then
               end
             end
             settings[choice]=newVal
-          elseif choice=="xray" then
+          --boolean settings
+          elseif choice=="xray" or choice=="doCrouch" or choice=="drawSoil" then
             if not isBool(newVal) then
-              log(settings.errColor.."Failed to change settings 'xray'. Not a boolean value.")
+              log(settings.errColor.."Failed to change settings '"..choice.."'. Not a boolean value.")
               break
             end
-            if newVal:lower()=="true" then settings.xray=true
-            elseif newVal:lower()=="false" then settings.xray=false end
+            if newVal:lower()=="true" then settings[choice]=true
+            elseif newVal:lower()=="false" then settings[choice]=false end
           end --end simple settings matching
         end --end settings matching
         tfl.write(settings, cfgPath)

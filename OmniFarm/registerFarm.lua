@@ -22,7 +22,7 @@ if editFarm~=nil and type(editFarm)=="table" then
     block.farmland.xray(settings.xray)
     block.farmland.changeTexture(settings.blockTexs["minecraft:farmland"])
     block.farmland.setOpacity(settings.cropOpacity)
-    block.farmland.enableDraw()
+    block.farmland.enableDraw(settings.drawSoil)
     block.cropHolo=hud3D.newBlock()
     block.cropHolo.setPos(block.x, block.y+1, block.z)
     block.cropHolo.xray(settings.xray)
@@ -88,7 +88,7 @@ local function registerFarmland(x, y, z)
     holo.xray(settings.xray)
     holo.changeTexture(settings.blockTexs["minecraft:farmland"])
     holo.setOpacity(settings.cropOpacity)
-    holo.enableDraw()
+    holo.enableDraw(settings.drawSoil)
     block.farmland=holo
 
     holo=hud3D.newBlock()
@@ -116,8 +116,11 @@ while isKeyDown("RETURN") do end --prevents instant registration after inputting
 while not isKeyDown("RETURN") do
   local x, y, z=getPlayerBlockPos()
   local block=getBlock(x, y, z) --farmland puts you slightly below the horizon so it rounds down
+  local fullBlock=getBlock(x, y-1, z) --used for dirt, grass, and sand
   if block.id=="minecraft:farmland" then
     registerFarmland(x, y, z)
+  elseif (fullBlock.id=="minecraft:grass" or fullBlock.id=="minecraft:sand" or fullBlock.id=="minecraft:dirt") and block.id=="minecraft:reeds" then
+    registerFarmland(x, y-1, z)
   end
   --register chests
   if isKeyDown("LMB") then
