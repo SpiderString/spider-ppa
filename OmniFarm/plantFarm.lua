@@ -79,7 +79,8 @@ local function plantBlock(blocks, x, y, z, dx, dz)
   --plant code
   local inventory=openInventory()
   --till land
-  if getBlock(x, y, z).id~="minecraft:farmland" then
+  local px, py, pz=getPlayerPos()
+  if py==math.floor(py) and settings.seedRegistry[crop]~="minecraft:sugar_cane" then --height is an integer and not planting sugarcane
     getHoe()
     use()
   end
