@@ -1,4 +1,4 @@
-Version: 0.43
+Version: 0.44
 AM Version: 7.7.2
 make:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/OmniFarm/make
 main.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/OmniFarm/main.lua
