@@ -6,8 +6,9 @@ local tfl=run("tableFileLib.lua")
 local inv=run("inventoryLib.lua")
 local move=run("movementLib.lua")
 local settings=tfl.read("~/common/OmniFarm.cfg")[1]
+local planting=true
 
-log(settings.ofColor.."<OmniFarm>: Planting farm '"..farm.name.."'...")
+log(settings.ofColor.."<OmniFarm>: Planting farm '"..farm.name.."'... Hold 'Enter' to cancel planting.")
 local function sortBlocks()
   --sorts blocks by y level, then z strip, then x coordinate
   local blocks={}
@@ -86,6 +87,7 @@ local function plantBlock(blocks, x, y, z, dx, dz)
   end
   inv.getItem(inventory, settings.seedRegistry[crop])
   inv.selectItem(settings.seedRegistry[crop])
+  sleep(settings.plantDelay)
   use()
 end
 local function plantStrip(blocks, layer, strip, dx, dz)
@@ -95,11 +97,13 @@ local function plantStrip(blocks, layer, strip, dx, dz)
   end
   xs=sort(xs)
   for id, x in pairs(xs) do
+    if isKeyDown("RETURN") or not planting then planting=false; break end
     plantBlock(blocks, x, layer, strip, dx, dz)
   end
 end
 local function plantLayer(blocks, layer, dx, dz)
   for id, strip in pairs(getStrips(blocks, layer)) do
+    if isKeyDown("RETURN") or not planting then planting=false; break end
     plantStrip(blocks, layer, strip, dx, dz)
   end
 end
@@ -108,8 +112,13 @@ local function plantFarm()
   local dx=0
   local dz=0
   for id, layer in pairs(getLayers(blocks)) do
+    if isKeyDown("RETURN") or not planting then planting=false; break end
     plantLayer(blocks, layer, dx, dz)
   end
 end
 plantFarm()
-log(settings.ofColor.."<OmniFarm>: Finished planting!")
+if planting then
+  log(settings.ofColor.."<OmniFarm>: Finished planting!")
+else
+  log(settings.warnColor.."<OmniFarm>: Planting terminated.")
+end

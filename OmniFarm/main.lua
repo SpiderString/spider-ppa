@@ -262,6 +262,18 @@ if args[2]=="ChatSendFilter" then
           elseif choice=="commandPrefix" then
             if newVal=="" then break end
             settings.commandPrefix=newVal
+          elseif choice=="plantDelay" then
+            if not tonumber(newVal) then
+              log(settings.errColor.."Failed to change setting '"..choice.."'. Not a number.")
+              break
+            else
+              newVal=tonumber(newVal)
+              if newVal<0 then
+                log(settings.errColor.."Failed to change setting '"..choice.."'. New value is less than zero.")
+                break
+              end
+            end
+            settings[choice]=newVal
           elseif choice=="ofColor" or choice=="warnColor" or choice=="errColor" then
             if not isColorCode(newVal) then
               log(settings.errColor.."Failed to change setting '"..choice.."'. Invalid color code.")

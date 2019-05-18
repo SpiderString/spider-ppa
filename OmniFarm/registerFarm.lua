@@ -117,7 +117,7 @@ while not isKeyDown("RETURN") do
   local x, y, z=getPlayerBlockPos()
   local block=getBlock(x, y, z) --farmland puts you slightly below the horizon so it rounds down
   local fullBlock=getBlock(x, y-1, z) --used for dirt, grass, and sand
-  if block.id=="minecraft:farmland" then
+  if block.id=="minecraft:farmland" or block.id=="minecraft:soul_sand" then
     registerFarmland(x, y, z)
   elseif (fullBlock.id=="minecraft:grass" or fullBlock.id=="minecraft:sand" or fullBlock.id=="minecraft:dirt") and block.id=="minecraft:reeds" then
     registerFarmland(x, y-1, z)
