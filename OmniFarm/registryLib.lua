@@ -25,13 +25,16 @@ function regLib.getFarmNames()
   return names
 end
 function regLib.renameFarm(oldName, newName)
-  return run("tableFileLib.lua").rename(oldName, newName, settings.farmRegPath)
+  local farm=tfl.search(settings.farmRegPath, oldName)
+  farm.name=newName
+  tfl.replace(oldName, farm, settings.farmRegPath)
+  tfl.rename(oldName, newName, settings.farmRegPath)
 end
 function regLib.copyFarm(source, dest)
-  run("tableFileLib.lua").copy(source, dest, settings.farmRegPath)
+  tfl.copy(source, dest, settings.farmRegPath)
 end
 function regLib.deleteFarm(name)
-  return run("tableFileLib.lua").delete(settings.farmRegPath, name)
+  tfl.delete(settings.farmRegPath, name)
 end
 function regLib.replaceFarm(name, farmData)
   regLib.deleteFarm(name)
