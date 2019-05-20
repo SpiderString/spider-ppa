@@ -35,7 +35,9 @@ if equation and commandArgs then
   --graph command
   elseif commandArgs[1]=="graph" and (caller==self or acceptCommandsFromOthers) then
     run("graph")
-    graph(commandArgs[1], commandArgs)
+    local args=commandArgs
+    table.remove(args, 1)
+    graph(commandArgs[1], args)
     equation=false
   elseif commandArgs[1]=="clear" and (caller==self or acceptCommandsFromOthers) then
     hud3D.clearAll()

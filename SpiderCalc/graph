@@ -50,7 +50,6 @@ function doesPointExist(point)
   return doesExist
 end
 function graph(command, args, silent, zCoord, suppressGlobals)
-  table.remove(args, 1)
   if silent==nil then silent=false end
   if suppressGlobals==nil then suppressGlobals=false end
 
