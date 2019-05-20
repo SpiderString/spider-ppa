@@ -1,26 +1,13 @@
 local args={...}
 local forceUpgrade=args[1]
 
---config options, these are defaults and will be overwritten by (valid) options in the config
-local packageVersionsPath="~/macros/CobwebPackageManager/packageVersions"
-local autoUpdateColor="&6" --gold
-local statusColor="&b" --aqua
-
 local doUpdate=false
 doUpdate=doUpdate or forceUpgrade
-
-function updateSettings()
+function getInstalledPackages()
   run("fileLib")
   local settings=readConfig()
-  packageVersionsPath=settings["packageVersionsPath"]
-  autoUpdateColor=settings["autoUpdateColor"]
-  statusColor=settings["statusColor"]
-end
-function getInstalledPackages()
-  updateSettings()
 
-  run("spiderLib")
-  local versionsFile=catRel(packageVersionsPath)
+  local versionsFile=catRel(settings.packageVersionsPath)
   local packages={}
   for id, line in pairs(versionsFile) do
     local package=line:sub(1, line:find(":")-1):gsub("[%s]+", "")
@@ -30,10 +17,11 @@ function getInstalledPackages()
 end
 
 function upgrade()
-  updateSettings()
+  run("fileLib")
+  local settings=readConfig()
 
-  advLog({text="Checking for updates", color=autoUpdateColor})
-  advLog({text="Found "..getRepositories(true).." new packages", color=autoUpdateColor})
+  advLog({text="Checking for updates", color=settings.autoUpdateColor})
+  advLog({text="Found "..getRepositories(true).." new packages", color=settings.autoUpdateColor})
   local newPackages={}
   local upgraded=0
   for id, package in pairs(getInstalledPackages()) do
@@ -52,7 +40,7 @@ function upgrade()
   if upgraded==1 then
     suffix="e"
   end
-  log(autoUpdateColor.."Upgrades Complete. [&N"..statusColor..upgraded..autoUpdateColor.."] Packag"..suffix.." Upgraded", newPackageString)
+  log(settings.autoUpdateColor.."Upgrades Complete. [&N"..settings.statusColor..upgraded..settings.autoUpdateColor.."] Packag"..suffix.." Upgraded", newPackageString)
 
 end
 

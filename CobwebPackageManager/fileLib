@@ -1,20 +1,28 @@
-local configPath="~/macros/CobwebPackageManager/config"
---These are default values which are rewritten by (valid) config entries
---System Config
-local httpTimeout=15 --time in seconds before a request is cancelled
-local repositoryListPath="~/macros/CobwebPackageManager/repositoryList" --path to repo list from .minecraft/advancedMacros
-local packageListPath="~/macros/CobwebPackageManager/packageList" --path to package list from .minecraft/advancedMacros
-local packageVersionsPath="~/macros/CobwebPackageManager/packageVersions"
-local commandPrefix="!cpm"
-local autoUpdatePackages=true
+local configPath="~/common/CobwebPackageManager/CPM.cfg"
+local defaultConfigURL="https://raw.githubusercontent.com/SpiderString/spider-ppa/master/CobwebPackageManager/CPM.cfg"
 
---theme
-local httpColor="&5" --dark purple, color for http requests
-local statusColor="&b" --aqua, color for status reports
-local autoUpdateColor="&6" --gold
-
-run("spiderLib")
-
+local tfl=run("tableFileLib.lua")
+local function copyFile(source, dest)
+  if filesystem.exists(source) and not filesystem.isDir(source) then
+    writeFile(catRel(source), dest)
+  end
+end
+local function mv(source, dest)
+  if filesystem.exists(source) and not filesystem.exists(dest) then
+    copyFile(source, dest)
+    filesystem.delete(source)
+  end
+end
+--moves existing config and registry files from older installations to common
+local function upgradeFiles()
+  if not filesystem.isDir("~/common/CobwebPackageManager") then
+    filesystem.mkDir("~/common/CobwebPackageManager")
+  end
+  mv("~/macros/CobwebPackageManager/config", "~/common/CobwebPackageManager/CPM.cfg")
+  mv("~/macros/CobwebPackageManager/repositoryList", "~/common/CobwebPackageManager/CPMRepositoryList")
+  mv("~/macros/CobwebPackageManager/packageList", "~/common/CobwebPackageManager/CPMPackageList")
+  mv("~/macros/CobwebPackageManager/packageVersions", "~/common/CobwebPackageManager/CPMPackageVersions")
+end
 --return if the argument is an integer
 function isInt(num)
   if tonumber(num) then
@@ -57,51 +65,35 @@ end
 
 --gets settings from the config file
 function readConfig()
-  local config=catRel(configPath)
-  local settings={}
-  for id, line in pairs(config) do
-    if line:match(":") then
-      local var=line:sub(1, line:find(":")-1):lower()
-      local val=line:sub(line:find(":")+1)
-      val=val:gsub("^[%s]+", ""):match("[%S]+"):gsub('"', "")
-
-      if var=="httptimeout" and isInt(val) then
-        httpTimeout=val
-      elseif var=="repositorylistpath" and isFile(val) then
-        repositoryListPath=val
-      elseif var=="packagelistpath" and isFile(val) then
-        packageListPath=val
-      elseif var=="packageversionspath" and isFile(val) then
-        packageVersionsPath=val
-      elseif var=="commandprefix" and val~="" and val~=nil then
-        commandPrefix=val
-      elseif var=="autoupdatepackages" and isBool(val) then
-        autoUpdatePackages=val
-      elseif var=="httpcolor" and isColorCode(val) then
-        httpColor=val
-      elseif var=="statuscolor" and isColorCode(val) then
-        statusColor=val
-      elseif var=="autoupdatecolor" and isColorCode(val) then
-        autoUpdateColor=val
-      end
-    end
+  upgradeFiles()
+  if not filesystem.exists(configPath) then
+    writeFile(getFile(defaultConfigURL, 15), configPath)
   end
-
-  --add settings
-  settings["httpTimeout"]=httpTimeout
-  settings["repositoryListPath"]=repositoryListPath
-  settings["packageListPath"]=packageListPath
-  settings["packageVersionsPath"]=packageVersionsPath
-  settings["commandPrefix"]=commandPrefix
-  settings["autoUpdatePackages"]=autoUpdatePackages
-  settings["httpColor"]=httpColor
-  settings["statusColor"]=statusColor
-  settings["autoUpdateColor"]=autoUpdateColor
-
+  if not filesystem.exists(configPath) then
+    error("Unable to download CPM.cfg.")
+  end
+  local settings=tfl.read(configPath)[1]
   return settings
 end
+function writeConfig()
+  tfl.write(settings, configPath)
+end
 
-readConfig(configPath)
+function catRel(file, doStoreLines)
+  if doStoreLines==nil then doStoreLines=false end
+  local index=0
+  local output={}
+  local file=filesystem.open(file, "r")
+  while file:available()>0 do
+    table.insert(output, file:readLine())
+    index=index+1
+  end
+  if doStoreLines then
+    output["lines"]=index
+  end
+  file:close()
+  return output
+end
 
 --writes a line to a file leaving all other lines untouched
 function writeLine(line, lineNum, fileName)
@@ -126,8 +118,14 @@ function writeFile(fileTable, fileName)
   file.close()
 end
 --gets a file from a url and puts it in a table
-function getFile(url)
-  local http=httpRequest({url=url}, {url=url, requestMethod="GET", timeout=httpTimeout})
+function getFile(url, timeout)
+  local settings={}
+  if not timeout then
+    settings=readConfig()
+  else
+    settings.httpTimeout=timeout
+  end
+  local http=httpRequest({url=url}, {url=url, requestMethod="GET", timeout=settings.httpTimeout})
   local file=http["input"]
   local err=http.getResponseCode()
   local line=file:readLine()
@@ -195,6 +193,17 @@ function setBinding(instruction)
   end
   settings.save()
 end
+--removes all bindings of a given script
+function unsetBindings(script)
+  local settings=getSettings()
+  local profile=settings["profiles"][getProfile()]
+  for id, binding in pairs(profile) do
+    if binding.script==script then
+      profile[id]=nil
+    end
+  end
+  settings.save()
+end
 --handles bindings and finishes installation
 function make(makeFile)
   local line=makeFile[1]
@@ -209,11 +218,11 @@ end
 
 --grabs package lists from repositories and writes to the package list
 function getRepositories(silent)
-  readConfig()
+  local settings=readConfig()
 
   if silent=="true" or silent then silent=true
   else silent=false end
-  local repoList=catRel(repositoryListPath)
+  local repoList=catRel(settings.repositoryListPath)
   local repositories={}
   for id, line in pairs(repoList) do
     if line:match("^htt[ps]+://") then
@@ -223,13 +232,13 @@ function getRepositories(silent)
   --fetch package lists from repositories
   local packages={}
   for id, url in pairs(repositories) do
-    local packageList=httpRequest({url=url}, {url=url, requestMethod="GET", timeout=httpTimeout})["input"]
+    local packageList=httpRequest({url=url}, {url=url, requestMethod="GET", timeout=settings.httpTimeout})["input"]
     if not silent then
       local a,b=url:find(".com")
       local c=url:find("/", b+2)
       local user=url:sub(b+2, c-1)
       local branch=url:sub(c+1, url:find("/", c+1)-1)
-      advLog({text="GET:"..id.." ..."..user.."/"..branch.."...", color=httpColor, tooltip=url})
+      advLog({text="GET:"..id.." ..."..user.."/"..branch.."...", color=settings.httpColor, tooltip=url})
     end
     local line=packageList:readLine()
     while line~=nil do
@@ -241,8 +250,8 @@ function getRepositories(silent)
     end
   end
   --Get packages not already on the list
-  if not filesystem.exists(packageListPath) then filesystem.open(packageListPath, "w"):close() end
-  local packageList=catRel(packageListPath)
+  if not filesystem.exists(settings.packageListPath) then filesystem.open(settings.packageListPath, "w"):close() end
+  local packageList=catRel(settings.packageListPath)
   local newPackages=0
   local newPackageList={}
   for id, package in pairs(packages) do
@@ -254,14 +263,14 @@ function getRepositories(silent)
     end
   end
   --write package list to packageList
-  writeFile(packageList, packageListPath)
+  writeFile(packageList, settings.packageListPath)
   if not silent then
     local newPackageString=""
     for id, package in pairs(newPackageList) do
       newPackageString=newPackageString..", "..package:sub(1, package:find(":")-1)
     end
     newPackageString=newPackageString:gsub("^, ", "")
-    advLog({text="Package update complete. Added "..newPackages.." new packages.", color=statusColor, tooltip=newPackageString})
+    advLog({text="Package update complete. Added "..newPackages.." new packages.", color=settings.statusColor, tooltip=newPackageString})
   end
   return newPackages
 end
@@ -278,12 +287,12 @@ function searchPackage(packageList, packageName)
 end
 --searches the packageVersions file for the package and returns the version, nil if not found
 function getPackageVersion(packageName)
-  readConfig()
+  local settings=readConfig()
 
   local packageVersion=nil
   local foundMatch=false
-  if not filesystem.exists(packageVersionsPath) then filesystem.open(packageVersionsPath, "w"):close() end
-  local versionsFile=catRel(packageVersionsPath)
+  if not filesystem.exists(settings.packageVersionsPath) then filesystem.open(settings.packageVersionsPath, "w"):close() end
+  local versionsFile=catRel(settings.packageVersionsPath)
   for id, line in pairs(versionsFile) do
     if line:sub(1, line:find(":")-1):lower()==packageName:lower() and not foundMatch then
       packageVersion=line:sub(line:find(":")+1):match("[%S]+")
@@ -294,9 +303,9 @@ function getPackageVersion(packageName)
 end
 --updates version list for a given package
 function writePackageVersion(packageName, version)
-  readConfig()
+  local settings=readConfig()
 
-  local versionsFile=catRel(packageVersionsPath)
+  local versionsFile=catRel(settings.packageVersionsPath)
   local foundMatch=false
   for id, line in pairs(versionsFile) do
     if line:sub(1, line:find(":")-1):lower()==packageName:lower() and not foundMatch then
@@ -308,30 +317,57 @@ function writePackageVersion(packageName, version)
   if not foundMatch then
     table.insert(versionsFile, packageName..":"..version)
   end
-  writeFile(versionsFile, packageVersionsPath)
+  writeFile(versionsFile, settings.packageVersionsPath)
 end
 --removes scripts for a package from the filesystem, leaves config and files not in the make file
 function removePackage(packageName)
-  readConfig()
-  
-
+  local settings=readConfig()
+  --grab packageName from packageList to match case
+  packageName=searchPackage(catRel(settings.packageListPath), packageName)[1]
+  if packageName~=nil and packageName~="" then
+    local a=packageName:find(":")
+    packageName=packageName:sub(1, a-1)
+  end
+  --unbind scripts
+  if not filesystem.isDir("~/macros/"..packageName) then
+    log(settings.statusColor.."Could not find package '"..packageName.."' for removal.")
+  else
+    log(settings.statusColor.."Removing package '"..packageName.."'...")
+    --unbind scripts
+    for id, file in pairs(filesystem.list("~/macros/"..packageName)) do
+      unsetBindings(packageName.."/"..file)
+      log(settings.statusColor.."Removing file '..."..packageName.."/"..file.."'...")
+      filesystem.delete("~/macros/"..packageName.."/"..file)
+    end
+    filesystem.delete("~/macros/"..packageName)
+    --remove package from packageVersions
+    local versions=catRel(settings.packageVersionsPath)
+    local versionsFile=filesystem.open(settings.packageVersionsPath, "w")
+    for id, line in pairs(versions) do
+      if line:sub(1, line:find(":")-1):lower()~=packageName:lower() then
+        versionsFile.write(line.."\n")
+      end
+    end
+    versionsFile:close()
+    log(settings.statusColor.."Successfully removed package '"..packageName.."'.")
+  end
 end
 --grabs scripts for a package
 function getPackage(packageName, silent)
-  readConfig()
+  local settings=readConfig()
 
   if silent=="true" or silent then silent=true
   else silent=false end
 
-  local packageList=catRel(packageListPath)
+  local packageList=catRel(settings.packageListPath)
   local package=searchPackage(packageList, packageName)
   if next(package)==nil then
-    advLog({text="Could not find package '"..packageName.."'", color=statusColor})
+    advLog({text="Could not find package '"..packageName.."'", color=settings.statusColor})
   else
     local packageId=package[1]:sub(1, package[1]:find(":")-1) --the package name in the repository
     local url=package[1]:match(":[%S]+"):gsub("^:", "")
     local scripts={}
-    local scriptList=httpRequest({url=url}, {url=url, requestMethod="GET", timeout=httpTimeout})["input"]
+    local scriptList=httpRequest({url=url}, {url=url, requestMethod="GET", timeout=settings.httpTimeout})["input"]
     local line=scriptList:readLine()
     local packageVersion
     local AMVersion=_MOD_VERSION
@@ -366,7 +402,7 @@ function getPackage(packageName, silent)
     --package version checking
     if tonumber(installedVersion)>=tonumber(packageVersion) and tonumber(installedVersion)~=0 then
       if not silent then
-        advLog({text=packageId.." is already the newest version", color=statusColor})
+        advLog({text=packageId.." is already the newest version", color=settings.statusColor})
       end
       upgrade=false
     --AM version checking
@@ -524,7 +560,7 @@ function getPackage(packageName, silent)
           local fields=split(url, "/")
           local packageName=fields[fields["length"]-1]
           local scriptName=fields[fields["length"]]
-          advLog({text="GET: ".."..."..packageName.."/"..scriptName.."...", color=httpColor, tooltip=url})
+          advLog({text="GET: ".."..."..packageName.."/"..scriptName.."...", color=settings.httpColor, tooltip=url})
         end
         writeFile(getFile(url), "~/macros/"..packageId.."/"..name)
       end
@@ -537,17 +573,17 @@ function getPackage(packageName, silent)
       --write new version
       writePackageVersion(packageId, packageVersion)
       if not silent then
-        advLog({text="Installation Complete", color=statusColor, tooltip="Successfully installed "..packageId})
+        advLog({text="Installation Complete", color=settings.statusColor, tooltip="Successfully installed "..packageId})
       end
       return packageId
     end
   end
 end
 function listPackages()
-  readConfig()
+  local settings=readConfig()
 
   --fetch repositories
-  local repoList=catRel(repositoryListPath)
+  local repoList=catRel(settings.repositoryListPath)
   for id, line in pairs(repoList) do
     if line:match("^htt[ps]+://") then
       local repo=line:match("[%S]+")
@@ -556,16 +592,16 @@ function listPackages()
       local c=repo:find("/", b+2)
       local user=repo:sub(b+2, c-1)
       local branch=repo:sub(c+1)
-      advLog({text=user.."/"..branch, color=httpColor, tooltip=line})
+      advLog({text=user.."/"..branch, color=settings.httpColor, tooltip=line})
 
       --check each repository for packages
       local packages={}
-      local packageList=httpRequest({url=repo}, {url=repo, requestMethod="GET", timeout=httpTimeout})["input"]
+      local packageList=httpRequest({url=repo}, {url=repo, requestMethod="GET", timeout=settings.httpTimeout})["input"]
       local line=packageList:readLine()
       while line~=nil do
         if line:match(":htt[ps]+://") then
           line=line:gsub("^[%s]*", "")
-          advLog({text="      -"..line:sub(1, line:find(":")-1), color=statusColor, tooltip=line:sub(line:find(":")+1)})
+          advLog({text="      -"..line:sub(1, line:find(":")-1), color=settings.statusColor, tooltip=line:sub(line:find(":")+1)})
           table.insert(packages, line:match("[%S]+"))
         end
         line=packageList:readLine()
