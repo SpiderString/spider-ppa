@@ -2,6 +2,7 @@ local configPath="~/common/CobwebPackageManager/CPM.cfg"
 local defaultConfigURL="https://raw.githubusercontent.com/SpiderString/spider-ppa/master/CobwebPackageManager/CPM.cfg"
 
 local tfl=run("tableFileLib.lua")
+local utils=run("utilsLib.lua")
 local function copyFile(source, dest)
   if filesystem.exists(source) and not filesystem.isDir(source) then
     writeFile(catRel(source), dest)
@@ -255,7 +256,7 @@ function getRepositories(silent)
   local newPackages=0
   local newPackageList={}
   for id, package in pairs(packages) do
-    if package:match(":htt[ps]+://") and not next(search(packageList, package)) then
+    if package:match(":htt[ps]+://") and not next(utils.search(packageList, package)) then
       package=package:gsub("^[%s]*", "")
       table.insert(packageList, package:match("[%S]+"))
       table.insert(newPackageList, package:match("[%S]+"))
