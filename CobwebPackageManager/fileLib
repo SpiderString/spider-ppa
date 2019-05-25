@@ -558,9 +558,9 @@ function getPackage(packageName, silent)
       --downloads scripts
       for name, url in pairs(scripts) do
         if not silent then
-          local fields=split(url, "/")
-          local packageName=fields[fields["length"]-1]
-          local scriptName=fields[fields["length"]]
+          local fields=utils.split(url, "/")
+          local packageName=fields[#fields-1]
+          local scriptName=fields[#fields]
           advLog({text="GET: ".."..."..packageName.."/"..scriptName.."...", color=settings.httpColor, tooltip=url})
         end
         writeFile(getFile(url), "~/macros/"..packageId.."/"..name)
