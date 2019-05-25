@@ -29,15 +29,17 @@ function lib.getLines(filePath)
 end
 function lib.split(str, del)
   local output={}
+  local index=1
   for word in str:gsub(del..del, del.." "..del):gmatch("[^"..del.."]+") do
     output[index]=word
+    index=index+1
   end
   return output
 end
 function lib.search(t, reg)
   local output={}
   for key, value in pairs(t) do
-    for match in value:gmatch(reg) do 
+    for match in value:gmatch(reg:gsub("%-", "%%-")) do
       table.insert(output, value)
     end
   end
