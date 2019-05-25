@@ -30,7 +30,7 @@ end
 function lib.split(str, del)
   local output={}
   local index=1
-  for word in str:gsub(del..del, del.." "..del):gmatch("[^"..del.."]+") do
+  for word in str:gsub("%"..del.."%"..del, "%"..del.." ".."%"..del):gmatch("[^".."%"..del.."]+") do
     output[index]=word
     index=index+1
   end
