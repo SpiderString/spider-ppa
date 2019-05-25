@@ -144,6 +144,7 @@ local function readTable(file)
 end
 
 function lib.read(filePath)
+  if not filesystem.exists(filePath) then return {} end
   local file=filesystem.open(filePath, "r")
   local obj={}
   local tableID
