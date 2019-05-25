@@ -12,3 +12,4 @@ Key{
   ["mode"]="KEY_DOWN"
   ["event"]="NUMPAD0"
   ["script"]="KeyDaemon/editKeyBinds.lua"
+}
