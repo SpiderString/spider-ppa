@@ -1,10 +1,14 @@
 Join{
   ["mode"]="EVENT"
   ["event"]="JoinWorld"
-  ["script"]="KeyDaemon/keyDaemon"
+  ["script"]="KeyDaemon/keyDaemon.lua"
 }
 Leave{
   ["mode"]="EVENT"
   ["event"]="LeaveWorld"
-  ["script"]="KeyDaemon/keyDaemon"
+  ["script"]="KeyDaemon/keyDaemon.lua"
 }
+Key{
+  ["mode"]="KEY_DOWN"
+  ["event"]="NUMPAD0"
+  ["script"]="KeyDaemon/editKeyBinds.lua"
