@@ -1,0 +1,5 @@
+main:{
+  ["mode"]="EVENT"
+  ["event"]="ChatSendFilter"
+  ["script"]="MemeUtils/main.lua"
+}
