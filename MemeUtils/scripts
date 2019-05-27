@@ -1,0 +1,5 @@
+Version: 1.0
+AM Version: 7.7.2
+make:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/MemeUtils/make
+main.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/MemeUtils/main.lua
+commandLib.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/commandLib.lua
