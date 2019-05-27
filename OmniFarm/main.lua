@@ -90,7 +90,9 @@ if args[2]=="ChatSendFilter" then
       end
     elseif commandArgs[1]:lower()=="edit" then
       if commandArgs[2]==nil or not regLib.doesFarmExist(commandArgs[2]) then
-        local name=prompt("Choose a farm to edit", "choice", table.unpack(sort(regLib.getFarmNames())))
+        local names=regLib.getFarmNames()
+        table.sort(names)
+        local name=prompt("Choose a farm to edit", "choice", table.unpack(names))
         if name~=nil then
           run("registerFarm.lua", name, tfl.search(settings.farmRegPath, name))
         end
@@ -99,7 +101,9 @@ if args[2]=="ChatSendFilter" then
       end
     elseif commandArgs[1]:lower()=="remove" or commandArgs[1]:lower()=="delete" then
       if commandArgs[2]==nil or not regLib.doesFarmExist(commandArgs[2]) then
-        local name=prompt("Choose a farm to delete", "choice", table.unpack(sort(regLib.getFarmNames())))
+        local names=regLib.getFarmNames()
+        table.sort(names)
+        local name=prompt("Choose a farm to delete", "choice", table.unpack(names))
         if name~=nil then
           if prompt("Are you sure you want to delete '"..name.."'?", "choice", "No", "Yes")=="Yes" then
             regLib.deleteFarm(name)
@@ -110,7 +114,9 @@ if args[2]=="ChatSendFilter" then
       end
     elseif commandArgs[1]:lower()=="copy" then
       if commandArgs[2]==nil or not regLib.doesFarmExist(commandArgs[2]) then
-        local name=prompt("Choose a farm to copy", "choice", table.unpack(sort(regLib.getFarmNames())))
+        local names=regLib.getFarmNames()
+        table.sort(names)
+        local name=prompt("Choose a farm to copy", "choice", table.unpack(names))
         if name~=nil then
           local dest=prompt("Enter a name for the new farm", "text")
           if dest~=nil and dest~="" then
@@ -119,7 +125,9 @@ if args[2]=="ChatSendFilter" then
         end
       end
     elseif commandArgs[1]:lower()=="rename" then
-      local name=prompt("Choose a farm to rename", "choice", table.unpack(sort(regLib.getFarmNames())))
+      local names=regLib.getFarmNames()
+      table.sort(names)
+      local name=prompt("Choose a farm to rename", "choice", table.unpack(names))
       if name~=nil then
         local newName=prompt("Enter a new name for the farm", "text")
         if newName~=nil and newName~="" then
@@ -133,7 +141,8 @@ if args[2]=="ChatSendFilter" then
       end
       local choice=true
       while choice do
-        local choice=prompt("Choose a setting to modify", "choice", table.unpack(sort(settingsFields)))
+        table.sort(settingsFields)
+        local choice=prompt("Choose a setting to modify", "choice", table.unpack(settingsFields))
         if not choice then break end
         --table settings
         if choice=="blockTexs" then
@@ -141,7 +150,8 @@ if args[2]=="ChatSendFilter" then
           for field, val in pairs(settings.blockTexs) do
             table.insert(blockTexsFields, field)
           end
-          local id=prompt("Choose a block ID to modify", "choice", "Add Block", "Remove Block", table.unpack(sort(blockTexsFields)))
+          table.sort(blockTexsFields)
+          local id=prompt("Choose a block ID to modify", "choice", "Add Block", "Remove Block", table.unpack(blockTexsFields))
           if not id then break end
           if id=="Add Block" then
             --add new block id
@@ -156,7 +166,8 @@ if args[2]=="ChatSendFilter" then
             settings.blockTexs[id]=tex
           elseif id=="Remove Block" then
             --remove existing block id
-            id=prompt("Choose a block ID to remove", "choice", table.unpack(sort(blockTexsFields)))
+            table.sort(blockTexsFields)
+            id=prompt("Choose a block ID to remove", "choice", table.unpack(blockTexsFields))
             if not id then break end
             local confirm=prompt("Are you sure you want to remove '"..id.."' from the texture registry?", "choice", "No", "Yes")
             if confirm=="Yes" then settings.blockTexs[id]=nil end
@@ -171,7 +182,8 @@ if args[2]=="ChatSendFilter" then
           for field, val in pairs(settings.seedRegistry) do
             table.insert(seedRegFields, field)
           end
-          local id=prompt("Choose a crop ID to modify seeds", "choice", "Add crop", "Remove crop", table.unpack(sort(seedRegFields)))
+          table.sort(seedRegFields)
+          local id=prompt("Choose a crop ID to modify seeds", "choice", "Add crop", "Remove crop", table.unpack(seedRegFields))
           if not id then break end
           if id=="Add crop" then
             --add new crop
@@ -186,7 +198,8 @@ if args[2]=="ChatSendFilter" then
             settings.seedRegistry[id]=seed
           elseif id=="Remove crop" then
             --remove existing crop
-            id=prompt("Choose a crop ID to remove", "choice", table.unpack(sort(seedRegFields)))
+            table.sort(seedRegFields)
+            id=prompt("Choose a crop ID to remove", "choice", table.unpack(seedRegFields))
             if not id then break end
             local confirm=prompt("Are you sure you want to remove '"..id.."' from the seed registry?", "choice", "No", "Yes")
             if confirm=="Yes" then settings.seedRegistry[id]=nil end
@@ -201,7 +214,8 @@ if args[2]=="ChatSendFilter" then
           for key, hoe in pairs(settings.hoeRegistry) do
             table.insert(hoeIDs, hoe.id)
           end
-          local id=prompt("Choose a hoe to modify", "choice", "Add hoe", "Remove hoe", table.unpack(sort(hoeIDs)))
+          table.sort(hoeIDs)
+          local id=prompt("Choose a hoe to modify", "choice", "Add hoe", "Remove hoe", table.unpack(hoeIDs))
           if not id then break end
           if id=="Add hoe" then
             --add new hoe
@@ -227,7 +241,8 @@ if args[2]=="ChatSendFilter" then
             table.insert(settings.hoeRegistry, hoe)
           elseif id=="Remove hoe" then
             --remove existing hoe
-            id=prompt("Choose a hoe to remove", "choice", table.unpack(sort(hoeIDs)))
+            table.sort(hoeIDs)
+            id=prompt("Choose a hoe to remove", "choice", table.unpack(hoeIDs))
             if not id then break end
             local regID
             for key, hoe in pairs(settings.hoeRegistry) do
@@ -306,7 +321,9 @@ if args[2]=="ChatSendFilter" then
       end --end command matching
     elseif commandArgs[1]:lower()=="plant" then
       if commandArgs[2]==nil or not regLib.doesFarmExist(commandArgs[2]) then
-        local name=prompt("Choose a farm to plant", "choice", table.unpack(sort(regLib.getFarmNames())))
+        local names=regLib.getFarmNames()
+        table.sort(names)
+        local name=prompt("Choose a farm to plant", "choice", table.unpack(names))
         if name then
           run("plantFarm.lua", tfl.search(settings.farmRegPath, name))
         end

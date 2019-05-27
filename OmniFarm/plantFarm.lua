@@ -56,7 +56,7 @@ local function getLayers(blocks)
     table.insert(layers, id)
   end
   local output={}
-  layers=sort(layers)
+  table.sort(layers)
   for id, layer in pairs(layers) do
     table.insert(output, 1, layer)
   end
@@ -68,7 +68,8 @@ local function getStrips(blocks, layer)
   for id, strip in pairs(blocks[layer]) do
     table.insert(strips, id)
   end
-  return sort(strips)
+  table.sort(strips)
+  return strips
 end
 local function plantBlock(blocks, x, y, z, dx, dz)
   local crop
@@ -95,7 +96,7 @@ local function plantStrip(blocks, layer, strip, dx, dz)
   for id, block in pairs(blocks[layer][strip]) do
     table.insert(xs, block.x)
   end
-  xs=sort(xs)
+  table.sort(xs)
   for id, x in pairs(xs) do
     if isKeyDown("RETURN") or not planting then planting=false; break end
     plantBlock(blocks, x, layer, strip, dx, dz)
