@@ -124,7 +124,7 @@ while not isKeyDown("RETURN") do
   end
   --register chests
   if isKeyDown("LMB") then
-    registerChest(unpack(getPlayer().lookingAt))
+    registerChest(table.unpack(getPlayer().lookingAt))
   end
   while isKeyDown("LMB") do end
 end
