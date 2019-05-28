@@ -294,7 +294,7 @@ function lib.grabAmount(inv, itemID, dmg, amount, slot)
   if inv.getSlot(slot).amount==targetAmount then return true else return false end
 end
 function lib.isEmpty(inv, slot)
-  if inv.getSlot(slot) then return true else return false end
+  if inv.getSlot(slot) then return false else return true end
 end
 local function getTableElements(table)
   local elements=0
