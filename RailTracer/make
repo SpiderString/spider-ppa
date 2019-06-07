@@ -1,10 +1,10 @@
 routeRegistryInterface{
   ["mode"]="EVENT"
   ["event"]="ChatSendFilter"
-  ["script"]="RailTracer/routeRegistryInterface"
+  ["script"]="RailTracer/routeRegistryInterface.lua"
 }
 railTracerMain{
   ["mode"]="KEY_DOWN"
   ["event"]="R"
-  ["script"]="RailTracer/railTracerMain"
+  ["script"]="RailTracer/railTracerMain.lua"
 }
