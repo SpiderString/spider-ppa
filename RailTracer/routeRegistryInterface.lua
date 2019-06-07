@@ -38,17 +38,26 @@ local function findRoute(routes, name)
   end
   return output
 end
-
+local function signum(num)
+  if num==0 then return 0 end
+  return math.abs(num)/num
+end
 local function getDistance(route)
   local distance=0
   local oldX, oldZ
-  for id, point in pairs(route["path"]) do
+  for id, point in pairs(route.path) do
     if not (point.x==oldX and point.z==oldZ) then
       if not oldX or not oldZ then
         oldX=point.x
         oldZ=point.z
       end
-      distance=distance+math.sqrt(math.pow(point.x-oldX, 2)+math.pow(point.z-oldZ, 2))
+      while oldX~=point.x and oldZ~=point.z do
+        oldX=oldX+signum(point.x-oldX)
+        oldZ=oldZ+signum(point.z-oldZ)
+        distance=distance+1
+      end
+        --additional distance should now be an integer
+        distance=distance+math.sqrt(math.pow(point.x-oldX, 2)+math.pow(point.z-oldZ, 2))
       oldX=point.x
       oldZ=point.z
     end
@@ -80,7 +89,6 @@ local function deleteRoute(routes, routeName)
   local newRouteReg=filesystem.open(routeRegPath, "w")
   newRouteReg:close()
   for id, currentRoute in pairs(routes) do
-    log(currentRoute)
     rtLib.logRoute(routeRegPath, currentRoute, true)
   end
 end
@@ -105,8 +113,11 @@ local function parseCommands(chatLine)
     local routeChoice=prompt("Pick a Route", "choice", table.unpack(names))
     if routeChoice~=nil then
       local route=findRoute(routes, routeChoice)
+      local distanceErr=0.0670 --Heuristic from data
+      local distance=getDistance(route)
       log(routeChoice)
-      log("Estimated Length: "..getDistance(route))
+      log("Blocks Registered: "..#routes[routeChoice].path)
+      log("Estimated Length: "..distance.."±"..math.ceil(distanceErr*distance))
     end
   --draws a line of holoblocks
   elseif command=="trace" then

@@ -69,7 +69,7 @@ while RAILTRACKERRUNNING do
   if recordingRoute and isOnRail() then
     tracePath()
   end
-  if not isOnRail() and recordingRoute then
+  if getPlayer().onGround and recordingRoute then
     recordingRoute=false
     rtLib.logRoute(routeRegPath, currentRoute)
     RAILTRACKERRUNNING=false
