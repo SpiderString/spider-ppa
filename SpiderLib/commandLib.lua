@@ -56,6 +56,7 @@ function lib.stripUsername(line)
   local username=lib.getUsername(line)
   if not username then return line end
   local a, b = line:find(username)
+  if not a then return line end
   a=line:find(" ", b+1)
   return line:sub(a+1)
 end
