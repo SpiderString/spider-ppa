@@ -1,7 +1,9 @@
-Version: 1.4
-AM Version: 6.2.0
-routeRegistryInterface:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/RailTracer/routeRegistryInterface
-railTracerMain:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/RailTracer/railTracerMain
-railTracerLib:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/RailTracer/railTracerLib
-spiderLib:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/spiderLib
+Version: 2.0
+AM Version: 7.7.2
+routeRegistryInterface.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/RailTracer/routeRegistryInterface.lua
+railTracerMain.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/RailTracer/railTracerMain.lua
+railTracerLib.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/RailTracer/railTracerLib.lua
+commandLib.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/commandLib.lua
+tableFileLib.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/tableFileLib.lua
+utilsLib.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/utilsLib.lua
 make:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/RailTracer/make
