@@ -9,7 +9,7 @@
 local lib={}
 --Moves the player by a float number of blocks, dependent on original orientation, can handle angles.
 --Returns the error, positive error means you went further than necessary. Error seems to be within 0-0.05m
---moveDistance(float:blocks, String:[forward|left|right|back], <Boolean:debug>)
+--moveDistance(float:blocks, String:[forward|left|right|back], <Boolean:doCrouch=true>, <Boolean:debug=false>)
 function lib.moveDistance(blocks, dir, doCrouch, debug)
   if debug == nil then debug=false end
   if doCrouch == nil then doCrouch=true end
