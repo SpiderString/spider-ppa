@@ -126,7 +126,7 @@ function getFile(url, timeout)
   else
     settings.httpTimeout=timeout
   end
-  local http=httpRequest({url=url}, {url=url, requestMethod="GET", timeout=settings.httpTimeout})
+  local http=httpRequest{url=url, requestMethod="GET", timeout=settings.httpTimeout}
   local file=http["input"]
   local err=http.getResponseCode()
   local line=file:readLine()
@@ -233,7 +233,7 @@ function getRepositories(silent)
   --fetch package lists from repositories
   local packages={}
   for id, url in pairs(repositories) do
-    local packageList=httpRequest({url=url}, {url=url, requestMethod="GET", timeout=settings.httpTimeout})["input"]
+    local packageList=httpRequest{url=url, requestMethod="GET", timeout=settings.httpTimeout}["input"]
     if not silent then
       local a,b=url:find(".com")
       local c=url:find("/", b+2)
@@ -368,7 +368,7 @@ function getPackage(packageName, silent)
     local packageId=package[1]:sub(1, package[1]:find(":")-1) --the package name in the repository
     local url=package[1]:match(":[%S]+"):gsub("^:", "")
     local scripts={}
-    local scriptList=httpRequest({url=url}, {url=url, requestMethod="GET", timeout=settings.httpTimeout})["input"]
+    local scriptList=httpRequest{url=url, requestMethod="GET", timeout=settings.httpTimeout}["input"]
     local line=scriptList:readLine()
     local packageVersion
     local AMVersion=_MOD_VERSION
@@ -597,7 +597,7 @@ function listPackages()
 
       --check each repository for packages
       local packages={}
-      local packageList=httpRequest({url=repo}, {url=repo, requestMethod="GET", timeout=settings.httpTimeout})["input"]
+      local packageList=httpRequest{url=repo, requestMethod="GET", timeout=settings.httpTimeout}["input"]
       local line=packageList:readLine()
       while line~=nil do
         if line:match(":htt[ps]+://") then
