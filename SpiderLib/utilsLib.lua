@@ -10,6 +10,7 @@
 --  E.g. intercalate("\n", {{1, 2}, {3, 4}}) -> {1, 2, "\n", 3, 4}
 --lib.concat(Table:t) -- takes a 2+ dimensional array and removes one layer of nesting.
 --  E.G. concat({{1, 2}, {3, 4}}) -> {1, 2, 3, 4}
+--lib.intersperse(Value:v, Table:t) --takes an array t and places a value v between each entry
 
 local lib={}
 function lib.cat(filePath)
@@ -75,6 +76,15 @@ function lib.concat(t)
       table.insert(output, v2)
     end
   end
+  return output
+end
+function lib.intersperse(v, t)
+  local output={}
+  for _, value in ipairs(t) do
+    table.insert(output, value)
+    table.insert(output, v)
+  end
+  table.remove(output)
   return output
 end
 
