@@ -6,6 +6,8 @@
 --lib.split(String:str, String:delimeter) --breaks up a string into fields based on the regex and returns it as a table
 --lib.search(Table:t, String:regex) --searches a table's values for matches and returns a table of matches
 --lib.map(Function:f, Table:t) --applies a function over every entry in a table, returning a new table.
+--lib.intercalate(Value:v, Table:t) --takes a 2+ dimensional array and a value to place between the each of the first layers. 
+--E.g. intercalate("\n", {{1, 2}, {3, 4}}) -> {1, 2, "\n", 3, 4}
 
 local lib={}
 function lib.cat(filePath)
@@ -51,6 +53,17 @@ function lib.map(f, t)
   for key, value in pairs(t) do
     output[key]=f(value)
   end
+  return output
+end
+function lib.intercalate(v, t)
+  local output={}
+  for _, value in ipairs(t) do
+    for _, v2 in ipairs(value) do
+      table.insert(output, v2)
+    end
+    table.insert(output, v)
+  end
+  table.remove(output)
   return output
 end
 
