@@ -5,6 +5,7 @@
 --lib.getLines(String:filePath) --gets the number of lines in a file
 --lib.split(String:str, String:delimeter) --breaks up a string into fields based on the regex and returns it as a table
 --lib.search(Table:t, String:regex) --searches a table's values for matches and returns a table of matches
+--lib.map(Function:f, Table:t) --applies a function over every entry in a table, returning a new table.
 
 local lib={}
 function lib.cat(filePath)
@@ -42,6 +43,13 @@ function lib.search(t, reg)
     for match in value:gmatch(reg:gsub("%-", "%%-")) do
       table.insert(output, value)
     end
+  end
+  return output
+end
+function lib.map(f, t)
+  local output={}
+  for key, value in pairs(t) do
+    output[key]=f(value)
   end
   return output
 end
