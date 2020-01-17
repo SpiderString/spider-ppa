@@ -4,13 +4,15 @@
 --lib.cat(String:filePath)  --stores each line of a file to a table and returns it
 --lib.getLines(String:filePath) --gets the number of lines in a file
 --lib.split(String:str, String:delimeter) --breaks up a string into fields based on the regex and returns it as a table
---lib.search(Table:t, String:regex) --searches a table's values for matches and returns a table of matches
+--lib.search(Table:t, String:regex) --searches a table's values for matches and returns a table of matches. Requires values be strings.
 --lib.map(Function:f, Table:t) --applies a function over every entry in a table, returning a new table.
---lib.intercalate(Value:v, Table:t) --takes a 2+ dimensional array and a value to place between the each of the first layers. 
---  E.g. intercalate("\n", {{1, 2}, {3, 4}}) -> {1, 2, "\n", 3, 4}
+--lib.intercalate(Value:v, Table:t) --takes a 2+ dimensional array and a value to place between the each of the first layers.
+--  E.G. intercalate("\n", {{1, 2}, {3, 4}}) -> {1, 2, "\n", 3, 4}
 --lib.concat(Table:t) -- takes a 2+ dimensional array and removes one layer of nesting.
 --  E.G. concat({{1, 2}, {3, 4}}) -> {1, 2, 3, 4}
 --lib.intersperse(Value:v, Table:t) --takes an array t and places a value v between each entry
+--lib.nodups(Table:t) --takes an array and removes all duplicates, keeping the first entry. No guaranteed efficiency for larger arrays.
+--lib.contains(Value:v, Table:t) --takes a table and return true/false depending on if it contains a value equal to the value supplied
 
 local lib={}
 function lib.cat(filePath)
@@ -86,6 +88,21 @@ function lib.intersperse(v, t)
   end
   table.remove(output)
   return output
+end
+function lib.nodups(t)
+  local output={}
+  for _, value in ipairs(t) do
+    if not lib.contains(value, output) then
+      table.insert(output, value)
+    end
+  end
+  return output
+end
+function lib.contains(v, t)
+  for _, value in pairs(t) do
+    if value==v then return true end
+  end
+  return false
 end
 
 return lib
