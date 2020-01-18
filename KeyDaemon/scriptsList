@@ -1,5 +1,5 @@
-Version: 2.0
-AM Version: 7.7.2
+Version: 2.1
+AM Version: 7.7.7
 keyDaemon.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/KeyDaemon/keyDaemon.lua
 editKeyBinds.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/KeyDaemon/editKeyBinds.lua
 tableFileLib.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/SpiderLib/tableFileLib.lua
