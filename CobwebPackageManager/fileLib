@@ -25,7 +25,7 @@ local function upgradeFiles()
   mv("~/macros/CobwebPackageManager/packageVersions", "~/common/CobwebPackageManager/CPMPackageVersions")
 end
 --return if the argument is an integer
-function isInt(num)
+local function isInt(num)
   if tonumber(num) then
     return math.floor(tonumber(num))==tonumber(num)
   else
@@ -33,17 +33,17 @@ function isInt(num)
   end
 end
 --return if the argument is a valid file
-function isFile(path)
+local function isFile(path)
   path=tostring(path)
   return filesystem.exists(path) and not filesystem.isDir(path)
 end
 --return if the argument is a boolean
-function isBool(val)
+local function isBool(val)
   val=tostring(val)
   return val:lower()=="true" or val:lower()=="false"
 end
 --return if the argument is a valid color code
-function isColorCode(str)
+local function isColorCode(str)
   str=tostring(str)
   if str:len()%2~=0 then
     return false
@@ -65,7 +65,7 @@ function isColorCode(str)
 end
 
 --gets settings from the config file
-function readConfig()
+local function readConfig()
   upgradeFiles()
   if not filesystem.exists(configPath) then
     writeFile(getFile(defaultConfigURL, 15), configPath)
@@ -76,11 +76,11 @@ function readConfig()
   local settings=tfl.read(configPath)[1]
   return settings
 end
-function writeConfig()
+local function writeConfig()
   tfl.write(settings, configPath)
 end
 
-function catRel(file, doStoreLines)
+local function catRel(file, doStoreLines)
   if doStoreLines==nil then doStoreLines=false end
   local index=0
   local output={}
@@ -97,7 +97,7 @@ function catRel(file, doStoreLines)
 end
 
 --writes a line to a file leaving all other lines untouched
-function writeLine(line, lineNum, fileName)
+local function writeLine(line, lineNum, fileName)
   local file=catRel(fileName)
   table.insert(file, lineNum, line)
   local newFile=filesystem.open(fileName, "w")
@@ -109,7 +109,7 @@ function writeLine(line, lineNum, fileName)
   newFile.close()
 end
 --takes a table of file lines and writes it
-function writeFile(fileTable, fileName)
+local function writeFile(fileTable, fileName)
   local file=filesystem.open(fileName, "w")
   local index=1
   while fileTable[index]~=nil do
@@ -119,14 +119,14 @@ function writeFile(fileTable, fileName)
   file.close()
 end
 --gets a file from a url and puts it in a table
-function getFile(url, timeout)
+local function getFile(url, timeout)
   local settings={}
   if not timeout then
     settings=readConfig()
   else
     settings.httpTimeout=timeout
   end
-  local http=httpRequest{url=url, requestMethod="GET", timeout=settings.httpTimeout}
+  local http=httpRequest({url=url}, {url=url, requestMethod="GET", timeout=settings.httpTimeout})
   local file=http["input"]
   local err=http.getResponseCode()
   local line=file:readLine()
@@ -138,7 +138,7 @@ function getFile(url, timeout)
   return output
 end
 --gets a single instruction from the make file and deletes it
-function getInstruction(makeFile)
+local function getInstruction(makeFile)
   local property={}
   local foundInstruction=false
   local line=1
@@ -171,7 +171,7 @@ function getInstruction(makeFile)
   return property
 end
 
-function doesBindingExist(profile, instruction)
+local function doesBindingExist(profile, instruction)
   local foundMatch=false
   for id, binding in pairs(profile) do
     if not foundMatch then
@@ -183,7 +183,7 @@ function doesBindingExist(profile, instruction)
   return foundMatch
 end
 --takes an instruction from a make file and executes it
-function setBinding(instruction)
+local function setBinding(instruction)
   local profile=getProfile()
   local settings=getSettings()
   profile=settings["profiles"][profile]
@@ -195,7 +195,7 @@ function setBinding(instruction)
   settings.save()
 end
 --removes all bindings of a given script
-function unsetBindings(script)
+local function unsetBindings(script)
   local settings=getSettings()
   local profile=settings["profiles"][getProfile()]
   for id, binding in pairs(profile) do
@@ -206,7 +206,7 @@ function unsetBindings(script)
   settings.save()
 end
 --handles bindings and finishes installation
-function make(makeFile)
+local function make(makeFile)
   local line=makeFile[1]
   while line~=nil do
     local instruction=getInstruction(makeFile)
@@ -218,7 +218,7 @@ function make(makeFile)
 end
 
 --grabs package lists from repositories and writes to the package list
-function getRepositories(silent)
+local function getRepositories(silent)
   local settings=readConfig()
 
   if silent=="true" or silent then silent=true
@@ -233,7 +233,7 @@ function getRepositories(silent)
   --fetch package lists from repositories
   local packages={}
   for id, url in pairs(repositories) do
-    local packageList=httpRequest{url=url, requestMethod="GET", timeout=settings.httpTimeout}["input"]
+    local packageList=httpRequest({url=url}, {url=url, requestMethod="GET", timeout=settings.httpTimeout})["input"]
     if not silent then
       local a,b=url:find(".com")
       local c=url:find("/", b+2)
@@ -287,7 +287,7 @@ function searchPackage(packageList, packageName)
   return packages
 end
 --searches the packageVersions file for the package and returns the version, nil if not found
-function getPackageVersion(packageName)
+local function getPackageVersion(packageName)
   local settings=readConfig()
 
   local packageVersion=nil
@@ -303,7 +303,7 @@ function getPackageVersion(packageName)
   return packageVersion
 end
 --updates version list for a given package
-function writePackageVersion(packageName, version)
+local function writePackageVersion(packageName, version)
   local settings=readConfig()
 
   local versionsFile=catRel(settings.packageVersionsPath)
@@ -321,7 +321,7 @@ function writePackageVersion(packageName, version)
   writeFile(versionsFile, settings.packageVersionsPath)
 end
 --removes scripts for a package from the filesystem, leaves config and files not in the make file
-function removePackage(packageName)
+local function removePackage(packageName)
   local settings=readConfig()
   --grab packageName from packageList to match case
   packageName=searchPackage(catRel(settings.packageListPath), packageName)[1]
@@ -354,7 +354,7 @@ function removePackage(packageName)
   end
 end
 --grabs scripts for a package
-function getPackage(packageName, silent)
+local function getPackage(packageName, silent)
   local settings=readConfig()
 
   if silent=="true" or silent then silent=true
@@ -368,7 +368,7 @@ function getPackage(packageName, silent)
     local packageId=package[1]:sub(1, package[1]:find(":")-1) --the package name in the repository
     local url=package[1]:match(":[%S]+"):gsub("^:", "")
     local scripts={}
-    local scriptList=httpRequest{url=url, requestMethod="GET", timeout=settings.httpTimeout}["input"]
+    local scriptList=httpRequest({url=url}, {url=url, requestMethod="GET", timeout=settings.httpTimeout})["input"]
     local line=scriptList:readLine()
     local packageVersion
     local AMVersion=_MOD_VERSION
@@ -580,7 +580,7 @@ function getPackage(packageName, silent)
     end
   end
 end
-function listPackages()
+local function listPackages()
   local settings=readConfig()
 
   --fetch repositories
@@ -597,7 +597,7 @@ function listPackages()
 
       --check each repository for packages
       local packages={}
-      local packageList=httpRequest{url=repo, requestMethod="GET", timeout=settings.httpTimeout}["input"]
+      local packageList=httpRequest({url=repo}, {url=repo, requestMethod="GET", timeout=settings.httpTimeout})["input"]
       local line=packageList:readLine()
       while line~=nil do
         if line:match(":htt[ps]+://") then

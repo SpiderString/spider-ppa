@@ -3,7 +3,7 @@ local forceUpgrade=args[1]
 
 local doUpdate=false
 doUpdate=doUpdate or forceUpgrade
-function getInstalledPackages()
+local function getInstalledPackages()
   run("fileLib")
   local settings=readConfig()
 
@@ -16,7 +16,7 @@ function getInstalledPackages()
   return packages
 end
 
-function upgrade()
+local function upgrade()
   run("fileLib")
   local settings=readConfig()
 

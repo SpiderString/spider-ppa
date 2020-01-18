@@ -2,7 +2,7 @@
 local args={...}
 
 local cli=run("commandLib.lua")
-function help()
+local function help()
 
 end
 --trigger ui
