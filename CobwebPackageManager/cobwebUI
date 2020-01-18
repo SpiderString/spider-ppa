@@ -1,6 +1,7 @@
 --Can be bound to ChatSendFilter or to a key
 local args={...}
 
+local fileLib=run("fileLib")
 local cli=run("commandLib.lua")
 local function help()
 
@@ -11,34 +12,30 @@ if args[1]:lower()=="key" then
 
 --parse commands
 elseif args[1]:lower()=="event" and args[2]:lower()=="chatsendfilter" then
-  run("fileLib")
-  local settings=readConfig()
+  local settings=fileLib.readConfig()
 
   local command=cli.getArguments(args[3], settings.commandPrefix)
   if command then
     --begin command matching
     if command[1]=="update" then
-      run("fileLib")
       if command[2] then
-        getRepositories(command[2])
+        fileLib.getRepositories(command[2])
       else
-        getRepositories()
+        fileLib.getRepositories()
       end
     elseif command[1]=="upgrade" then
       run("autoUpdate", true)
     elseif command[1]=="install" and command[2] then
-      run("fileLib")
       if settings.autoUpdatePackages then
-        getRepositories(command[3])
+        fileLib.getRepositories(command[3])
       end
-      getPackage(command[2], command[3])
+      fileLib.getPackage(command[2], command[3])
     elseif command[1]=="remove" and command[2] then
-      run("fileLib")
-      removePackage(command[2])
+      fileLib.removePackage(command[2])
     elseif command[1]=="help" then
       help()
     elseif command[1]=="list" then
-      listPackages()
+      fileLib.listPackages()
     end
   else
     return args[3]

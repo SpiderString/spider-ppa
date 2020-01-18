@@ -1,31 +1,33 @@
+local lib={}
+
 local configPath="~/common/CobwebPackageManager/CPM.cfg"
 local defaultConfigURL="https://raw.githubusercontent.com/SpiderString/spider-ppa/master/CobwebPackageManager/CPM.cfg"
 
 local tfl=run("tableFileLib.lua")
 local utils=run("utilsLib.lua")
-local function copyFile(source, dest)
+function lib.copyFile(source, dest)
   if filesystem.exists(source) and not filesystem.isDir(source) then
     writeFile(catRel(source), dest)
   end
 end
-local function mv(source, dest)
+function lib.mv(source, dest)
   if filesystem.exists(source) and not filesystem.exists(dest) then
     copyFile(source, dest)
     filesystem.delete(source)
   end
 end
 --moves existing config and registry files from older installations to common
-local function upgradeFiles()
+function lib.upgradeFiles()
   if not filesystem.isDir("~/common/CobwebPackageManager") then
     filesystem.mkDir("~/common/CobwebPackageManager")
   end
-  mv("~/macros/CobwebPackageManager/config", "~/common/CobwebPackageManager/CPM.cfg")
-  mv("~/macros/CobwebPackageManager/repositoryList", "~/common/CobwebPackageManager/CPMRepositoryList")
-  mv("~/macros/CobwebPackageManager/packageList", "~/common/CobwebPackageManager/CPMPackageList")
-  mv("~/macros/CobwebPackageManager/packageVersions", "~/common/CobwebPackageManager/CPMPackageVersions")
+  lib.mv("~/macros/CobwebPackageManager/config", "~/common/CobwebPackageManager/CPM.cfg")
+  lib.mv("~/macros/CobwebPackageManager/repositoryList", "~/common/CobwebPackageManager/CPMRepositoryList")
+  lib.mv("~/macros/CobwebPackageManager/packageList", "~/common/CobwebPackageManager/CPMPackageList")
+  lib.mv("~/macros/CobwebPackageManager/packageVersions", "~/common/CobwebPackageManager/CPMPackageVersions")
 end
 --return if the argument is an integer
-local function isInt(num)
+function lib.isInt(num)
   if tonumber(num) then
     return math.floor(tonumber(num))==tonumber(num)
   else
@@ -33,17 +35,17 @@ local function isInt(num)
   end
 end
 --return if the argument is a valid file
-local function isFile(path)
+function lib.isFile(path)
   path=tostring(path)
   return filesystem.exists(path) and not filesystem.isDir(path)
 end
 --return if the argument is a boolean
-local function isBool(val)
+function lib.isBool(val)
   val=tostring(val)
   return val:lower()=="true" or val:lower()=="false"
 end
 --return if the argument is a valid color code
-local function isColorCode(str)
+function lib.isColorCode(str)
   str=tostring(str)
   if str:len()%2~=0 then
     return false
@@ -65,8 +67,8 @@ local function isColorCode(str)
 end
 
 --gets settings from the config file
-local function readConfig()
-  upgradeFiles()
+function lib.readConfig()
+  lib.upgradeFiles()
   if not filesystem.exists(configPath) then
     writeFile(getFile(defaultConfigURL, 15), configPath)
   end
@@ -76,11 +78,11 @@ local function readConfig()
   local settings=tfl.read(configPath)[1]
   return settings
 end
-local function writeConfig()
+function lib.writeConfig()
   tfl.write(settings, configPath)
 end
 
-local function catRel(file, doStoreLines)
+function lib.catRel(file, doStoreLines)
   if doStoreLines==nil then doStoreLines=false end
   local index=0
   local output={}
@@ -97,7 +99,7 @@ local function catRel(file, doStoreLines)
 end
 
 --writes a line to a file leaving all other lines untouched
-local function writeLine(line, lineNum, fileName)
+function lib.writeLine(line, lineNum, fileName)
   local file=catRel(fileName)
   table.insert(file, lineNum, line)
   local newFile=filesystem.open(fileName, "w")
@@ -109,7 +111,7 @@ local function writeLine(line, lineNum, fileName)
   newFile.close()
 end
 --takes a table of file lines and writes it
-local function writeFile(fileTable, fileName)
+function lib.writeFile(fileTable, fileName)
   local file=filesystem.open(fileName, "w")
   local index=1
   while fileTable[index]~=nil do
@@ -119,10 +121,10 @@ local function writeFile(fileTable, fileName)
   file.close()
 end
 --gets a file from a url and puts it in a table
-local function getFile(url, timeout)
+function lib.getFile(url, timeout)
   local settings={}
   if not timeout then
-    settings=readConfig()
+    settings=lib.readConfig()
   else
     settings.httpTimeout=timeout
   end
@@ -138,7 +140,7 @@ local function getFile(url, timeout)
   return output
 end
 --gets a single instruction from the make file and deletes it
-local function getInstruction(makeFile)
+function lib.getInstruction(makeFile)
   local property={}
   local foundInstruction=false
   local line=1
@@ -171,7 +173,7 @@ local function getInstruction(makeFile)
   return property
 end
 
-local function doesBindingExist(profile, instruction)
+function lib.doesBindingExist(profile, instruction)
   local foundMatch=false
   for id, binding in pairs(profile) do
     if not foundMatch then
@@ -183,19 +185,19 @@ local function doesBindingExist(profile, instruction)
   return foundMatch
 end
 --takes an instruction from a make file and executes it
-local function setBinding(instruction)
+function lib.setBinding(instruction)
   local profile=getProfile()
   local settings=getSettings()
   profile=settings["profiles"][profile]
   --if binding doesn't already exist
-  if not doesBindingExist(profile, instruction) then
+  if not lib.doesBindingExist(profile, instruction) then
     instruction["enabled"]=true
     table.insert(profile, instruction)
   end
   settings.save()
 end
 --removes all bindings of a given script
-local function unsetBindings(script)
+function lib.unsetBindings(script)
   local settings=getSettings()
   local profile=settings["profiles"][getProfile()]
   for id, binding in pairs(profile) do
@@ -206,24 +208,24 @@ local function unsetBindings(script)
   settings.save()
 end
 --handles bindings and finishes installation
-local function make(makeFile)
+function lib.make(makeFile)
   local line=makeFile[1]
   while line~=nil do
-    local instruction=getInstruction(makeFile)
+    local instruction=lib.getInstruction(makeFile)
     if instruction~=nil then
-      setBinding(instruction)
+      lib.setBinding(instruction)
     end
     line=makeFile[1]
   end
 end
 
 --grabs package lists from repositories and writes to the package list
-local function getRepositories(silent)
-  local settings=readConfig()
+function lib.getRepositories(silent)
+  local settings=lib.readConfig()
 
   if silent=="true" or silent then silent=true
   else silent=false end
-  local repoList=catRel(settings.repositoryListPath)
+  local repoList=lib.catRel(settings.repositoryListPath)
   local repositories={}
   for id, line in pairs(repoList) do
     if line:match("^htt[ps]+://") then
@@ -252,7 +254,7 @@ local function getRepositories(silent)
   end
   --Get packages not already on the list
   if not filesystem.exists(settings.packageListPath) then filesystem.open(settings.packageListPath, "w"):close() end
-  local packageList=catRel(settings.packageListPath)
+  local packageList=lib.catRel(settings.packageListPath)
   local newPackages=0
   local newPackageList={}
   for id, package in pairs(packages) do
@@ -264,7 +266,7 @@ local function getRepositories(silent)
     end
   end
   --write package list to packageList
-  writeFile(packageList, settings.packageListPath)
+  lib.writeFile(packageList, settings.packageListPath)
   if not silent then
     local newPackageString=""
     for id, package in pairs(newPackageList) do
@@ -276,7 +278,7 @@ local function getRepositories(silent)
   return newPackages
 end
 --searches for a package, returns nil if not found
-function searchPackage(packageList, packageName)
+function lib.searchPackage(packageList, packageName)
   local packages={}
   for id, package in pairs(packageList) do
     local packageListName=package:sub(1, package:find(":")-1)
@@ -287,13 +289,13 @@ function searchPackage(packageList, packageName)
   return packages
 end
 --searches the packageVersions file for the package and returns the version, nil if not found
-local function getPackageVersion(packageName)
-  local settings=readConfig()
+function lib.getPackageVersion(packageName)
+  local settings=lib.readConfig()
 
   local packageVersion=nil
   local foundMatch=false
   if not filesystem.exists(settings.packageVersionsPath) then filesystem.open(settings.packageVersionsPath, "w"):close() end
-  local versionsFile=catRel(settings.packageVersionsPath)
+  local versionsFile=lib.catRel(settings.packageVersionsPath)
   for id, line in pairs(versionsFile) do
     if line:sub(1, line:find(":")-1):lower()==packageName:lower() and not foundMatch then
       packageVersion=line:sub(line:find(":")+1):match("[%S]+")
@@ -303,10 +305,10 @@ local function getPackageVersion(packageName)
   return packageVersion
 end
 --updates version list for a given package
-local function writePackageVersion(packageName, version)
-  local settings=readConfig()
+function lib.writePackageVersion(packageName, version)
+  local settings=lib.readConfig()
 
-  local versionsFile=catRel(settings.packageVersionsPath)
+  local versionsFile=lib.catRel(settings.packageVersionsPath)
   local foundMatch=false
   for id, line in pairs(versionsFile) do
     if line:sub(1, line:find(":")-1):lower()==packageName:lower() and not foundMatch then
@@ -318,13 +320,13 @@ local function writePackageVersion(packageName, version)
   if not foundMatch then
     table.insert(versionsFile, packageName..":"..version)
   end
-  writeFile(versionsFile, settings.packageVersionsPath)
+  lib.writeFile(versionsFile, settings.packageVersionsPath)
 end
 --removes scripts for a package from the filesystem, leaves config and files not in the make file
-local function removePackage(packageName)
-  local settings=readConfig()
+function lib.removePackage(packageName)
+  local settings=lib.readConfig()
   --grab packageName from packageList to match case
-  packageName=searchPackage(catRel(settings.packageListPath), packageName)[1]
+  packageName=lib.searchPackage(lib.catRel(settings.packageListPath), packageName)[1]
   if packageName~=nil and packageName~="" then
     local a=packageName:find(":")
     packageName=packageName:sub(1, a-1)
@@ -336,13 +338,13 @@ local function removePackage(packageName)
     log(settings.statusColor.."Removing package '"..packageName.."'...")
     --unbind scripts
     for id, file in pairs(filesystem.list("~/macros/"..packageName)) do
-      unsetBindings(packageName.."/"..file)
+      lib.unsetBindings(packageName.."/"..file)
       log(settings.statusColor.."Removing file '..."..packageName.."/"..file.."'...")
       filesystem.delete("~/macros/"..packageName.."/"..file)
     end
     filesystem.delete("~/macros/"..packageName)
     --remove package from packageVersions
-    local versions=catRel(settings.packageVersionsPath)
+    local versions=lib.catRel(settings.packageVersionsPath)
     local versionsFile=filesystem.open(settings.packageVersionsPath, "w")
     for id, line in pairs(versions) do
       if line:sub(1, line:find(":")-1):lower()~=packageName:lower() then
@@ -354,14 +356,14 @@ local function removePackage(packageName)
   end
 end
 --grabs scripts for a package
-local function getPackage(packageName, silent)
-  local settings=readConfig()
+function lib.getPackage(packageName, silent)
+  local settings=lib.readConfig()
 
   if silent=="true" or silent then silent=true
   else silent=false end
 
-  local packageList=catRel(settings.packageListPath)
-  local package=searchPackage(packageList, packageName)
+  local packageList=lib.catRel(settings.packageListPath)
+  local package=lib.searchPackage(packageList, packageName)
   if next(package)==nil then
     advLog({text="Could not find package '"..packageName.."'", color=settings.statusColor})
   else
@@ -392,7 +394,7 @@ local function getPackage(packageName, silent)
     end
 
     --gets current installed version
-    local installedVersion=getPackageVersion(packageId)
+    local installedVersion=lib.getPackageVersion(packageId)
     if installedVersion==nil then
       installedVersion=-1
     end
@@ -563,16 +565,16 @@ local function getPackage(packageName, silent)
           local scriptName=fields[#fields]
           advLog({text="GET: ".."..."..packageName.."/"..scriptName.."...", color=settings.httpColor, tooltip=url})
         end
-        writeFile(getFile(url), "~/macros/"..packageId.."/"..name)
+        lib.writeFile(lib.getFile(url), "~/macros/"..packageId.."/"..name)
       end
       --get make instructions
       if filesystem.exists("~/macros/"..packageId.."/make") then
-        local makeFile=catRel("~/macros/"..packageId.."/make")
-        make(makeFile)
+        local makeFile=lib.catRel("~/macros/"..packageId.."/make")
+        lib.make(makeFile)
         filesystem.delete("~/macros/"..packageId.."/make")
       end
       --write new version
-      writePackageVersion(packageId, packageVersion)
+      lib.writePackageVersion(packageId, packageVersion)
       if not silent then
         advLog({text="Installation Complete", color=settings.statusColor, tooltip="Successfully installed "..packageId})
       end
@@ -580,11 +582,11 @@ local function getPackage(packageName, silent)
     end
   end
 end
-local function listPackages()
-  local settings=readConfig()
+function lib.listPackages()
+  local settings=lib.readConfig()
 
   --fetch repositories
-  local repoList=catRel(settings.repositoryListPath)
+  local repoList=lib.catRel(settings.repositoryListPath)
   for id, line in pairs(repoList) do
     if line:match("^htt[ps]+://") then
       local repo=line:match("[%S]+")
@@ -610,3 +612,5 @@ local function listPackages()
     end
   end
 end
+
+return lib

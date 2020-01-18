@@ -1,13 +1,13 @@
 local args={...}
 local forceUpgrade=args[1]
+local fileLib=run("fileLib")
 
 local doUpdate=false
 doUpdate=doUpdate or forceUpgrade
 local function getInstalledPackages()
-  run("fileLib")
-  local settings=readConfig()
+  local settings=fileLib.readConfig()
 
-  local versionsFile=catRel(settings.packageVersionsPath)
+  local versionsFile=fileLib.catRel(settings.packageVersionsPath)
   local packages={}
   for id, line in pairs(versionsFile) do
     local package=line:sub(1, line:find(":")-1):gsub("[%s]+", "")
@@ -17,15 +17,14 @@ local function getInstalledPackages()
 end
 
 local function upgrade()
-  run("fileLib")
-  local settings=readConfig()
+  local settings=fileLib.readConfig()
 
   advLog({text="Checking for updates", color=settings.autoUpdateColor})
-  advLog({text="Found "..getRepositories(true).." new packages", color=settings.autoUpdateColor})
+  advLog({text="Found "..fileLib.getRepositories(true).." new packages", color=settings.autoUpdateColor})
   local newPackages={}
   local upgraded=0
   for id, package in pairs(getInstalledPackages()) do
-    local newPackage=getPackage(package,true)
+    local newPackage=fileLib.getPackage(package,true)
     if newPackage~=nil then
       table.insert(newPackages, newPackage)
       upgraded=upgraded+1
