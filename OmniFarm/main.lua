@@ -12,7 +12,7 @@ local defaultCfgURL="https://raw.githubusercontent.com/SpiderString/spider-ppa/m
 
 --gets a file from a url and puts it in a table
 --used to grab the default config if necessary
-function getFile(url)
+local function getFile(url)
   local http=httpRequest({url=url}, {url=url, requestMethod="GET", timeout=15})
   local file=http["input"]
   local err=http.getResponseCode()
@@ -37,7 +37,7 @@ local regLib=run("registryLib.lua")
 
 --type checking functions
 --return if the argument is a valid color code
-function isColorCode(str)
+local function isColorCode(str)
   str=tostring(str)
   if str:len()%2~=0 then
     return false
@@ -58,7 +58,7 @@ function isColorCode(str)
   end
 end
 --return if the argument is a boolean
-function isBool(val)
+local function isBool(val)
   val=tostring(val)
   return val:lower()=="true" or val:lower()=="false"
 end
