@@ -1,7 +1,7 @@
 local args={...}
 local chatGroup="group" --name of group to switch to
 local switchGroup=false --whether you should switch to a chat group before saying it.
-function getCombatTag(chat, unformattedChat)
+local function getCombatTag(chat, unformattedChat)
   --&cYou have engaged in combat with &b[player]&c. 
   local combattag
   if chat:match("&cYou have engaged in combat with") then
