@@ -12,6 +12,9 @@ if not KEYDAEMONRUNNING then return end
 
 local utils=run("utilsLib.lua")
 local tfl=run("tableFileLib.lua")
+
+while not getPlayer() do end
+
 local keybinds=tfl.read(keybindFile)[1]
 if keybinds==nil or not next(keybinds) then KEYDAEMONRUNNING=false; return end --no point in running if there's no keybinds, is there?
 
