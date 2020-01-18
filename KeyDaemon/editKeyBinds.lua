@@ -3,11 +3,11 @@ local keybindFile="~/common/KeyDaemon.cfg"
 local tfl=run("tableFileLib.lua")
 local utils=run("utilsLib.lua")
 
-function isValidScript(path)
+local function isValidScript(path)
   if filesystem.exists("~/macros/"..path) and not filesystem.isDir("~/macros/"..path) then return true
   else return false end
 end
-function isValidKeybind(code)
+local function isValidKeybind(code)
   local keycode=utils.split(code, "+")
   for id, key in pairs(keycode) do
     if pcall(isKeyDown, key) then
