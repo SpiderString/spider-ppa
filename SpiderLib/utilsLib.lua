@@ -13,6 +13,7 @@
 --lib.intersperse(Value:v, Table:t) --takes an array t and places a value v between each entry
 --lib.nodups(Table:t) --takes an array and removes all duplicates, keeping the first entry. No guaranteed efficiency for larger arrays.
 --lib.contains(Value:v, Table:t) --takes a table and return true/false depending on if it contains a value equal to the value supplied
+--lib.combinations(Int:n, Array:t) --returns an array of all combinations of t with length n. E.G. combinations(2, {"a", "b", "c"} -> {{"a", "b"}, {"a", "c"}, {"b", "c"}}
 
 local lib={}
 function lib.cat(filePath)
@@ -103,6 +104,29 @@ function lib.contains(v, t)
     if value==v then return true end
   end
   return false
+end
+function lib.combinations(n, t)
+  assert(math.floor(n) == n)
+  local output={}
+  if #t == 0 then return {} end
+  if n == 0 then return {} end
+  if n == 2 and #t == 1 then return {} end
+  if n == 1 then
+    for _, v in ipairs(t) do
+      table.insert(output, {v})
+    end
+    return output
+  end
+  local buffer={}
+  for i, v in pairs(t) do buffer[i]=v end
+  local t = buffer
+  local head = table.remove(t, 1)
+  local inner = lib.combinations(n-1, t)
+  local tail = lib.combinations(n, t)
+  local cons = function(_t) table.insert(_t, 1, head); return _t; end
+  local init = lib.map(cons, inner)
+
+  return lib.concat({init, tail})
 end
 
 return lib
