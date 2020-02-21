@@ -105,28 +105,50 @@ function lib.contains(v, t)
   end
   return false
 end
-function lib.combinations(n, t)
-  assert(math.floor(n) == n)
-  local output={}
-  if #t == 0 then return {} end
-  if n == 0 then return {} end
-  if n == 2 and #t == 1 then return {} end
-  if n == 1 then
-    for _, v in ipairs(t) do
-      table.insert(output, {v})
+function lib.combinations(n, _t)
+  local function push(k, a, b)
+    for i=1, math.min(k, #a) do
+      table.insert(b, 1, table.remove(a, 1))
     end
-    return output
   end
-  local buffer={}
-  for i, v in pairs(t) do buffer[i]=v end
-  local t = buffer
-  local head = table.remove(t, 1)
-  local inner = lib.combinations(n-1, t)
-  local tail = lib.combinations(n, t)
-  local cons = function(_t) table.insert(_t, 1, head); return _t; end
-  local init = lib.map(cons, inner)
-
-  return lib.concat({init, tail})
+  local recur = function() build={}; goto Recur; end
+  local t = {table.unpack(_t)}
+  local output={}
+  local build={}
+  local c={} --buffer1
+  local d={} --buffer2 "protected buffer"
+  ::Recur::
+  if #t < n then return output end
+  push(n-1, t, build)
+  ::Loop::
+  if #t == 0 then --fully exhausted combinations with current head
+    push(#build-1, build, t)
+    push(#d, d, t)
+    recur()
+  end
+  for i=1, #t do
+    local elem={}
+    for i, e in ipairs(build) do --build is in stacked formation(reverse order)
+      table.insert(elem, 1, e)
+    end
+    table.insert(elem, t[i])
+    table.insert(output, elem)
+  end
+  if #build==0 then --n=1
+    return output
+  elseif #build == 1 then --n=2 or certain combinations of (n, k)
+    recur()
+  end
+  push(1, build, c)
+  push(1, t, build)
+  if #t==0 then --exhausted combinations with current init
+    push(1, build, t)
+    push(#c, c, t)
+    if #build==1 then recur() end --init=head, discard head
+    push(1, build, d)
+    push(n-1-#build, t, build)
+  end
+  goto Loop
 end
 
 return lib
