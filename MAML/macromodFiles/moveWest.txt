@@ -1,0 +1,9 @@
+#x = %XPOS% - 1
+
+do()
+    look(0,90);
+    keydown(left);
+    until(%#x% = %XPOS%);
+keyup(left);
+
+

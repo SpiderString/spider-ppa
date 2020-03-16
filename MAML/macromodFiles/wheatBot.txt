@@ -1,0 +1,114 @@
+$${
+
+//This is a farming bot by Wingzero54
+//The goal was to be faster than sanwi's script
+//Developed for Caledonia wheat farm
+//Start in the SouthWest corner
+
+#z=847;
+#znorth=768;
+//Orientation is script starts at SW corner, goes north clearing wheat, back south planting seeds, dumps inventory, east one row, resets
+//Change #z based on the first block (give one extra south of the wheat if possible);
+//Change #znorth depending on what the last block is (give one extra past the wheat);
+//Make sure to start with a hotbar full of seeds
+
+#xs=%XPOS%;
+#xeast=8143;
+#xt=(#xeast-#xs);
+//This counts how many rows you are starting from the east end of the farm
+
+if(farming==false);
+    log(Script Started);
+    set(farming);
+
+    Do(%#xt%);
+    //This is # of rows you need to do - calculated above
+
+            if(%HUNGER%<19);
+                look(0,270,20ms);
+                Do(50);
+                key(use);
+                loop;
+            endif;
+
+            Look(0,60,20ms);
+            Keydown(forward);
+            Keydown(sprint);
+            slot(1);
+
+
+        Do;
+            Look(0,60,20ms);
+            key(attack);
+            wait(20ms);
+        until(%ZPOS%=#znorth);
+        //this part finishes moving to the north end
+
+        keyup(forward);
+        wait(100ms);
+
+        Look(0,60,20ms);
+        keydown(back);
+
+        Do();
+            pick(wheat_seeds);
+            wait(20ms);
+
+            if(%STACKSIZE%>2);
+                key(use);
+                wait(20ms);
+            else(%STACKSIZE%<2);
+                inventoryup(1);
+                wait(20ms);
+                key(use);
+                wait(20ms);
+            endif;
+
+        until(%ZPOS%=#z);
+        //this part selects seeds and makes sure you don't empty all the seeds out of the hot bar
+
+        keyup(back);
+        wait(100ms);
+
+        do(1);
+        look(180,35,20ms);
+            gui(inventory);
+            wait(100ms);
+            for(#forthrow,9,26);
+                slotclick(%#forthrow%);
+                wait(%#wait%ms);
+                slotclick(-999);
+                wait(%#wait%ms);
+            next;
+            gui();
+        loop;
+        //this part dumps the inventory in the water collection
+
+        #x=%XPOS%;
+
+        Do;
+            Look(90,0,20ms);
+            keydown(sneak);
+            keydown(forward);
+        until(%XPOS%=(#x+1));
+        //this part scoots over one row
+
+        keyup(forward);
+        keyup(sneak);
+        wait(100ms);
+
+    loop;
+
+endif;
+
+    elseif(farming==true);
+    unset(farming);
+    keyup(forward);
+    keyup(back);
+    log(Script Stopped);
+    stop();
+
+endif;
+
+
+}$$

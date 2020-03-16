@@ -1,0 +1,70 @@
+$${
+#south = -509
+#north = -382
+#east = -5432
+gui(inventory);
+wait(4000ms);
+gui();
+
+do();
+    do();
+        look(0,90);
+        pick(nether_wart);
+        key(attack);
+        wait(10ms);
+        key(use);
+        $$<moveNorth.txt>;
+        $$<botFeeder.txt>;
+    until(%ZPOS% = %#south%);
+    key(attack);
+    wait(10ms);
+    key(use);
+    //Throw wart into collection
+    look(0,0);
+    gui(inventory);
+    do();
+        getslot(nether_wart,#nvar,0);
+        wait(1t);
+        slotclick(%#nvar%,0,0);
+        wait(5t);
+        slotclick(-999,0,0);
+    until(%#nvar% = -1);
+    wait(1t);
+    gui();
+    wait(5t);
+    $$<moveEast.txt>;
+    do();
+        look(0,90);
+        pick(nether_wart);
+        key(attack);
+        wait(10ms);
+        key(use);
+            $$<moveSouth.txt>;
+            $$<botFeeder.txt>;
+    until(%ZPOS% = %#north%);
+    key(attack);
+    wait(10ms);
+    key(use);
+   // Throw seeds away
+    look(180,0);
+    gui(inventory);
+    do();
+        getslot(beetroot_seeds,#beetvar,0);
+       if(%#beetvar% > 26)
+       #beetvar = -1;
+       endif();
+        wait(1t);
+        slotclick(%#beetvar%,0,0);
+      wait(5t);
+       slotclick(-999,0,0);
+   until(%#beetvar% = -1);
+    wait(1t);
+    gui();
+    wait(5t);
+    $$<moveEast.txt>;
+until(%XPOS% > %#east%);
+    
+$$<botFeeder.txt>;
+disconnect();
+}$$
+
