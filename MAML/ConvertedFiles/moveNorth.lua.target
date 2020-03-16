@@ -1,0 +1,12 @@
+local __getPlayerZ() = function()
+  local _, _, z = getPlayerBlockPos()
+  return z
+end
+
+local _a = __getPlayerZ() - 1
+
+repeat
+  look(0-180,90-90);
+  forward(-1);
+until(_a == __getPlayerZ());
+forward(0);
