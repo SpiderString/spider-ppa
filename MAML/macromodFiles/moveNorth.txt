@@ -1,0 +1,9 @@
+#z = %ZPOS% - 1
+
+do()
+    look(0,90);
+    keydown(forward);
+    until(%#z% = %ZPOS%);
+keyup(forward);
+
+
