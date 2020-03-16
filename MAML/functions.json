@@ -1,0 +1,10 @@
+{
+  "look":"__look"
+  "wait":"sleep"
+  "ms":""
+  "t":"*50"
+  "s":"*1000"
+  "XPOS":"__getPlayerX"
+  "YPOS":"__getPlayerY"
+  "ZPOS":"__getPlayerZ"
+}

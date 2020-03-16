@@ -1,0 +1,6 @@
+{
+  "__getPlayerX":"function()\n  local x = getPlayerBlockPos()\n return x\nend"
+  "__getPlayerY":"function()\n  local _,y = getPlayerBlockPos()\n return y\nend"
+  "__getPlayerZ":"function()\n  local _, _, z = getPlayerBlockPos()\n return z\nend"
+  "__look":"function(y, p)\n  look(y-180, p-90)\nend"
+}
