@@ -111,7 +111,6 @@ function lib.combinations(n, _t)
       table.insert(b, 1, table.remove(a, 1))
     end
   end
-  local recur = function() build={}; goto Recur; end
   local t = {table.unpack(_t)}
   local output={}
   local build={}
@@ -124,7 +123,8 @@ function lib.combinations(n, _t)
   if #t == 0 then --fully exhausted combinations with current head
     push(#build-1, build, t)
     push(#d, d, t)
-    recur()
+    build={}
+    goto Recur
   end
   for i=1, #t do
     local elem={}
@@ -137,7 +137,8 @@ function lib.combinations(n, _t)
   if #build==0 then --n=1
     return output
   elseif #build == 1 then --n=2 or certain combinations of (n, k)
-    recur()
+    build={}
+    goto Recur
   end
   push(1, build, c)
   push(1, t, build)
