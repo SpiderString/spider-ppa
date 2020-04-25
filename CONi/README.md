@@ -1,6 +1,24 @@
 # CONi
+***
 ###### *Writing Classes to Files in AM Lua*
 
+
+## Contents
+   ----
+- [What is CONi?](#what-is-coni)
+- [CON?](#con)
+- [Getting Started with CONi](#getting-started-with-coni)
+- [CON Format](#con-format)
+  - [CON Expression Parsing](#con-expression-parsing)
+  - [Field Referencing](#field-referencing)
+    - [Static versus Dynamic](#static-versus-dynamic)
+  - [Bang! Strict References](#bang-strict-references)
+  - [Function Application](#function-application)
+    - [Function Declaration](#function-declaration)
+    - [Embedded Scripts](#embedded-scripts)
+  - [Lazy Expressions](#lazy-expressions)
+- [Planned Features](#planned-features)
+  
 
 ## What is CONi?
   CONi is a Lua based parser for the Concise Object Notation([CON](#con)) format for use within the [Advanced Macros(AM) Minecraft mod](https://www.curseforge.com/minecraft/mc-mods/advanced-macros). It provides full support for the **CON standards(Link to CON Format here)** and supports embedded and external Lua scripts for function declarations. CONi interprets a CON file into a CONi(CON interpreted) Object, which functions as a wrapper around the data and implementation details. 
