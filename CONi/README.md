@@ -58,7 +58,7 @@ This is not a comprehensive list, and if you want that and more detailed documen
 ## CON Format
 
   The CON format was heavily based around the look of CSS while wanting to have something as flexible as XML and doing a job similar to JSON files. Central to CON are the ideas of containers(AKA children) and properties(props). Everything in a CON file is contained in the implied root container(`/`). This is the container that, once interpreted, is returned by CONi and put in a wrapper. A CON file is tab delimited for readability and line-sensitive for interpreter simplicity(though this may change in the future). Containers are denoted by their name, a newline, and then an indentation increase. For example,
-  ```json
+  ```python
   myprop: "Hello World!"
   x: 50
   myChild
@@ -96,7 +96,7 @@ This is not a comprehensive list, and if you want that and more detailed documen
   
 #### CON Expression parsing
   CON values also support the basic math operators `+`, `-`, `*`, and `/`. These function identically to their Lua counterparts with the one exception that *any failure returns `nil` instead of crashing*. This was done for several reasons, partially for peak stability, but even more importantly to allow for the [lazy features](#static-versus-dynamic) to be more powerful. For example, all of the following are valid CON props which produce number values
-  ```json
+  ```python
   x: 680
   y: 680/2
   scale: 680/(680/2)
@@ -107,7 +107,7 @@ This is not a comprehensive list, and if you want that and more detailed documen
   Some of the values these properties would then have are `scale: 2`, `average: 120`, and `inf: nil`. Crucially, since `inf` is assigned the value `nil` statically [more on static vs. dynamic later](#static-versus-dynamic), it will be absent from the table after interpretation(in Lua, any variables assigned `nil` are effectively unassigned). This means you may have unexpected holes in your CON objects if you aren't careful. 
 
   In addition to mathematical operators, CON has one more operator for its expression parsing: string concatenation. String concatenation is done by juxtaposition(Placing two string-y things next to each other), with `nil` being converted to the empty string `""` and any other value being cast into a string. For example:
-  ```json
+  ```python
   txt: "Hell" "o Worl" "d!"
   close: "Spaces don't mat""ter either!"
   5:"15/3="15/3
@@ -123,7 +123,7 @@ This is not a comprehensive list, and if you want that and more detailed documen
 
 #### Field Referencing
   CON also supports references to fields(properties or containers) by using the dot(`.`) operator. This is done by placing the dot before the name of the field you wish to reference. There is currently **NOT** any way to reference number-index fields. This will likely be implemented by using brackets`[#]` around the number. For example:
-  ```json
+  ```python
   guiWidth: 680
   guiHeight: 340
   resolution: .guiWidth/.guiHeight
@@ -136,7 +136,7 @@ This is not a comprehensive list, and if you want that and more detailed documen
    3. If the property has not been found but you have already checked the root, return `nil`. 
    
    As an example:
-   ```json
+   ```python
    x: 5
    y: 10
    bg
@@ -156,7 +156,7 @@ This is not a comprehensive list, and if you want that and more detailed documen
 
 #### Bang! Strict References
   With as nice as dynamic references can be, sometimes you want to just use a field as a static reference. In this scenario, rather than having the property automatically update whenever the field changes, it would simply use the value defined at interpretation time. For this purpose, CON also has the bang (`!`) operator. The bang operator should be placed before a dot reference and marks that reference *only* as being strict. For example,
-  ```json
+  ```python
   guiWidth: 680
   guiHeight: !.guiWidth/2
   widthScale: .guiWidth/!.guiWidth
@@ -164,7 +164,7 @@ This is not a comprehensive list, and if you want that and more detailed documen
   In this example, `guiWidth` is initiated to `680`, while `guiHeight` is initiated to `340` and is strict, meaning that changing `guiWidth` after loading the CON object does *not* change `guiHeight`. The prop `widthScale` shows a mixed usage of strict and dynamic references and is initiated to `1`, but changes when `guiWidth` is updated, maintaining the scale factor of the original width that gives the new width. In other words, changing `guiWidth` to `340` causes `widthScale` to change to `0.5`.
   
   In addition, if you want an entire property to be strict, the bang can be placed before the property name rather than placing them before every dot operator. As a simple example:
-  ```json
+  ```python
   guiWidth: 680
   guiHeight: 340
   !startingResolution: .guiWidth/.guiHeight
@@ -174,7 +174,7 @@ This is not a comprehensive list, and if you want that and more detailed documen
 #### Function Application
 
   Where the power and flexibility of CON truly shines, though, is with function application. Function application uses the dot(`.`) operator in the same way that field references do, with the added necessity of a pair of parenthesis after the function name. These parenthesis contain the function's arguments, if any, and make it clear whether it is a field reference or a function call. Before functions are called, they first must be [*declared*](#function-declaration), or defined, but for now let's assume that the functions `ceil(#)` and `max(#, #)` are already defined and act like their mathematical counterparts.
-  ```json
+  ```python
   guiWidth: 680
   guiHeight: 280
   longest: .max(.guiWidth, .guiHeight)
@@ -183,7 +183,7 @@ This is not a comprehensive list, and if you want that and more detailed documen
   Here, `longest` would be initialized to `680`, and update whenever `guiWidth` or `guiHeight` is changed, and `resolution` would be initialized to `3` and update on any change to `guiWidth` or `guiHeight`. It should be noted that we used a comma(`,`) to separate function arguments and that we can also use *any* expression(dynamic or otherwise) as a function argument as well. Moreover, function application *also* accepts bang operators in the same way field references do, supporting both the prefix syntax(bang-before-dot) and the prop(bang-before-prop name) syntax. It should be noted, though, that if a function is strict, then all of its arguments *automatically become strict*. In other words, `!.foo(.bar, .func())` is equivalent to `!.foo(!.bar, !.func())`. However, because functions can potentially have side effects(that is, they could act differently even with the same arguments), `.foo(!.bar, !.func())` is *not* strictly evaluated(at least, not when looking at `foo`).
   
   A particularly interesting usage of strict functions is delegating code to be run at interpretation time. In CONi, if a strict or static property returns `nil`, then that property is effectively discarded because CONi is embedded in Lua and setting variables to `nil` in Lua is analogous to freeing them. This can be used to effectively create embedded "init" scripts which run whenever the CON is interpreted. For example:
-  ```json
+  ```python
   !_init: .init()
   data: 5
   ```
@@ -196,7 +196,7 @@ This is not a comprehensive list, and if you want that and more detailed documen
   
 ###### Function Declaration
    Of course, for the interpreter to have any idea what you're talking about, you first have to declare the function to begin with. For this purpose, the function declaration(`@`) operator is used. Function declaration is handled by creating a container and prefixing its name with `@`. For example:
-   ```json
+   ```python
    @length
       script: "embedded.lua"
    x: .length(.array)
@@ -217,7 +217,7 @@ This is not a comprehensive list, and if you want that and more detailed documen
 
 ###### Embedded Scripts
    The `script` prop of a function declaration points to the path of the script which contains the function implementation. The CON format itself is language-agnostic. That is to say, language support is interpreter dependent. In the case of CONi, it supports only Lua scripts without any plans currently to expand this. In addition, CON supports both external *and* embedded scripts(scripts which are contained within the CON file itself), with preference being given to embedded scripts. This means that a CON file can handle object structure and functionality all in one file(or modularly if desired). For embedded scripts, they are defined as a container prefixed with the script operator(`$`). Embedded scripts do not have any concept of scope when and so should be placed somewhere in the root(typically at the bottom of the file). For example:
-   ```json
+   ```python
    @length
       script: "embedded.lua"
    x: .length(.array)
@@ -233,7 +233,54 @@ This is not a comprehensive list, and if you want that and more detailed documen
    A few things of note: since scripts are still containers, if you are just copy/pasting code into a CON file, you should indent each line once. And, crucially, the script should *return* the functions in some way when executed. For CONi and Lua scripts, this means that when you run it, any functions you wish to access *need* to be returned in a table. If they are not, then the script will simply not load any functions, and all functions which use it will simply be `nil`.
 
    And with that, you now know all the features and formatting associated with a CON file! If you still need more examples, and applications, then you can check those out [here](#examples), and if you want to know what's next then check out [Planned Features](#planned-features). Or if you're ready to start hacking it out, feel free to check out the documentation for CONi at the top of [coni.lua](coni.lua).
-   
+
+## Examples
+   This is one of the example CON files I use during development for test cases. It is actually based off a translation of a GUI I made for CPM. If you have any examples you'd like to add, feel free to submit a pull request for the readme or to message me on Discord if you know me there.
+   ```python
+   @length
+      script: "embedded.lua"
+   @text
+      func: "textArea"
+      script: "embedded.lua"
+   @close
+      script: "embedded.lua"
+   guiWidth: 680
+   guiHeight: 340
+   onClose: .close()
+   yMargin: 40/2
+   x: (.guiWidth-.guiHeight)/2
+   arrayLen: .length(.array)
+   array
+      1=3
+      2=2
+      3=1
+   bgPointer: .bg
+   bg
+      @test
+         func: "length"
+         script: "embedded.lua"
+      type: "rect"
+      x: 0
+      y: 0
+      width: .guiWidth
+      height: .guiHeight
+      color: 0x70333333
+   $embedded.lua
+      local funcs={}
+      function funcs.length(t) return #t end
+      function funcs.close() guiOpen=false end
+      function funcs.textArea(packageId, AMVersion)
+         return {
+         "&6Your Advanced Macros installation is version &c".._MOD_VERSION..".",
+         "&6while the package '&b"..packageId.."&6' uses version &c"..AMVersion..".",
+         "&6It is &chighly unlikely &6that this package will work with your version.",
+         "",
+         "",
+         "&bInstall anyway?"}
+      end
+      return funcs
+   ```
+
 ## Planned Features
    - External Script support
    - Number-index field referencing
