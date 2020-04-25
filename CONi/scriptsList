@@ -1,0 +1,10 @@
+Version:1.0
+AM Version:7.7.7
+functionalize.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/CONi/functionalize.lua
+operatorLib.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/CONi/operatorLib.lua
+opParse.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/CONi/opParse.lua
+parse.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/CONi/parse.lua
+readLib.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/CONi/readLib.lua
+shuntingYard.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/CONi/shuntingYard.lua
+tokenize.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/CONi/tokenize.lua
+wrapper.lua:https://raw.githubusercontent.com/SpiderString/spider-ppa/master/CONi/wrapper.lua
