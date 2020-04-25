@@ -3,7 +3,7 @@
 
 
 ## What is CONi?
-  CONi is a Lua based parser for the Concise Object Notation([CON](##con?)) format for use within the [Advanced Macros(AM) Minecraft mod](https://www.curseforge.com/minecraft/mc-mods/advanced-macros). It provides full support for the **CON standards(Link to CON Format here)** and supports embedded and external Lua scripts for function declarations. CONi interprets a CON file into a CONi(CON interpreted) Object, which functions as a wrapper around the data and implementation details. 
+  CONi is a Lua based parser for the Concise Object Notation([CON](#con)) format for use within the [Advanced Macros(AM) Minecraft mod](https://www.curseforge.com/minecraft/mc-mods/advanced-macros). It provides full support for the **CON standards(Link to CON Format here)** and supports embedded and external Lua scripts for function declarations. CONi interprets a CON file into a CONi(CON interpreted) Object, which functions as a wrapper around the data and implementation details. 
  
 ## CON?
   Concise Object Notation(CON) is a format developed by me with help from [TheIncgi](https://github.com/TheIncgi). The goal was to create a method of storing objects that is:
@@ -13,7 +13,7 @@
 - Flexible. CON supports both field references and function calls within the file itself.
 - Dynamic. CON distinguishes itself from formats like JSON by being able to store dynamic fields as well as static ones.
   
-Originally, this was meant to be used to simplify GUI creation, a task it lends itself to quite well with its embedded scripts and lazy evaluation. For more on CON formatting, see [CON Format](##con-format)
+Originally, this was meant to be used to simplify GUI creation, a task it lends itself to quite well with its embedded scripts and lazy evaluation. For more on CON formatting, see [CON Format](#con-format)
 
 ## Getting Started with CONi
   First, you should already have AM installed. From there, you can either download these files and store them in "*.minecraft/mods/advancedMacros/macros*", or you can install it as a package via [CPM](../CobwebPackageManager/) with the command `!cpm install coni`. Once installed, you can load a CON file using `run("~/CONi/coni.lua"):load(filePath::String)`, for example:
