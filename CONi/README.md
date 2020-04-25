@@ -55,7 +55,7 @@ This is not a comprehensive list, and if you want that and more detailed documen
 
 ## CON Format
 
-  The CON format was heavily based around the look of CSS while wanting to have something as flexible as XML while doing a job similar to JSON files. CON is based around the ideas of containers(AKA children) and properties(props). Everything in a CON file is contained in the implied root container(`/`). This is the container that, once interpreted, is returned by CONi and put in a wrapper. A CON file is tab delimited for readability and line-sensitive for interpreter simplicity(though this may change in the future). Containers are denoted by their name, a newline, and then an indentation increase. For example,
+  The CON format was heavily based around the look of CSS while wanting to have something as flexible as XML and doing a job similar to JSON files. Central to CON are the ideas of containers(AKA children) and properties(props). Everything in a CON file is contained in the implied root container(`/`). This is the container that, once interpreted, is returned by CONi and put in a wrapper. A CON file is tab delimited for readability and line-sensitive for interpreter simplicity(though this may change in the future). Containers are denoted by their name, a newline, and then an indentation increase. For example,
   ```json
   myprop: "Hello World!"
   x: 50
