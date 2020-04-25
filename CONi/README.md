@@ -94,7 +94,19 @@ This is not a comprehensive list, and if you want that and more detailed documen
 ###### Static versus Dynamic
   So far, all our values have been statically assigned. By *static*, I mean that the value is known at interpretation time and does not change. This means that, short of changing the field yourself, no matter what you do the value will remain the same after the file is interpreted and it is available immediately. However, by default, references to fields are *dynamic*. What this means is that, rather than setting the field to some value and being done with it, instead, everytime the field is referenced it checks for updates and will re-evaluate itself. Using the above example, this means that, while at interpretation time getting `resolution` would return `2`, if we were to change `guiWidth` to be equal to `120`, we would instead see that `resolution` has changed to be `0.5`!
   
-  This reveals one of the most powerful features of CON: the ability to *maintain* relationships between properties. Like I said in the introduction, CON was originally designed for use with GUI elements, a purpose it lends itself very well too as it allows the user to dynamically tweak values and watch all the other elements adjust themselves accordingly. This flexibility is only expanded upon later with [function calls](#function-application), allowing you to use any function within the CON file.
+  This reveals one of the most powerful features of CON: the ability to *maintain* relationships between properties. Like I said in the introduction, CON was originally designed for use with GUI elements, a purpose it lends itself very well to as it allows the user to dynamically tweak values and watch all the other elements adjust themselves accordingly. This flexibility is only expanded upon later with [function calls](#function-application), allowing you to use any function within the CON file.
 
 #### Bang! Strict References
   
+
+#### Function Application
+
+  Application syntax here
+
+###### Function Declaration
+
+###### Embedded Scripts
+
+#### Lazy Expressions
+
+## Planned Features
