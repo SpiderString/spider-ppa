@@ -8,6 +8,7 @@
 - [CON?](#con)
 - [Getting Started with CONi](#getting-started-with-coni)
 - [CON Format](#con-format)
+  - [Quick Syntax Reference](#quick-syntax-reference)
   - [CON Expression Parsing](#con-expression-parsing)
   - [Field Referencing](#field-referencing)
     - [Static versus Dynamic](#static-versus-dynamic)
@@ -71,7 +72,24 @@ This is not a comprehensive list, and if you want that and more detailed documen
            ,y=500}
   }
   ```
-  Specifically, `myChild` is considered a container which has the props `x` and `y`. If we were to then add at the end of our file the line `z: 30`, without indentation, then `z` would become a property of `/` instead of `/myChild`. This is because CON uses indentation(in the form of spaces or tabs, CONi interprets tabs as 2 spaces) to denote scope. If you've ever used Python, this should feel very familiar. While CONi is designed to be extremely lenient, you should take care that your indentation is consistent, or it may throw out lines or even produce undefined behavior. 
+  Specifically, `myChild` is considered a container which has the props `x` and `y`. If we were to then add at the end of our file the line `z: 30`, without indentation, then `z` would become a property of `/` instead of `/myChild`. This is because CON uses indentation(in the form of spaces or tabs, CONi interprets tabs as 2 spaces) to denote scope. If you've ever used Python, this should feel very familiar. While CONi is designed to be extremely lenient, you should take care that your indentation is consistent, or it may throw out lines or even produce undefined behavior. The CON format specifies several additional operators and syntax symbols which we'll get into in due time. The table below, however, gives a quick overview of these, their usage, and a brief description of their meaning.
+  
+###### Quick Syntax Reference
+  | Operator | Usage | Brief Description |
+  | :------: | :---: | :---------------- |
+  | : | prop: "val" | String assignment |
+  | = | 5="val" | Numeric assignment |
+  | + | 3+2 | Numeric addition |
+  | - | 3-2 | Numeric subtraction |
+  | * | 3\*2 | Multiplication |
+  | / | 15/3 | Division |
+  | "" | "string", "foo""bar" | Denotes string values |
+  | () | .func(), (1+2)/3 | Contains function arguments, mathematical parenthesis |
+  | . | .prop, .func() | [Field reference](#field-referencing)/[Function application](#function-application) |
+  | , | .max(5, 3) | Used to separate multiple function arguments |
+  | ! | !.prop, !.func(), !prop: 5, !1="test" | [Bang operator](#bang-strict-references). Strict evaluation |
+  | @ | @func | [Function Declaration](#function-declaration) |
+  | $ | $"script" | [Embedded Script Definition](#embedded-scripts) |
   
   As we saw before, it is not necessary to specify that `x: 50` uses `x` as a string. This doesn't mean we can't have number keys, in fact, `1: "myVal"` interprets `1` as a string, but `1="myVal"` uses `1` as a number key. There is currently no way, however, to create containers with number-valued names simply because the syntax hasn't been decided on. Therefor, all children of a CON object are guaranteed to be contained within string indexes of their parent, at least for now. 
   
