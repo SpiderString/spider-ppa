@@ -2,7 +2,6 @@
 ***
 ###### *Writing Classes to Files in AM Lua*
 
-
 ## Contents
    ----
 - [What is CONi?](#what-is-coni)
@@ -42,14 +41,15 @@ Originally, this was meant to be used to simplify GUI creation, a task it lends 
   ```
   The first line loads the CONi wrapper library and binds it to `con`, while the second loads `gui.con` and parses it, storing its data into `con`. The `.con` file extension is purely convention and is not necessary. Finally, the third line logs the CON data to the chat in the same way `log()` would show a table. Because of the CONi wrapper and how CON works, though, using `log(con)` would produce fairly useless data, though feel free to try it. Finally, the `:` syntax is a necessary convention due to how the wrapper works, and thus all CONi functions should be used with it, unless you like writing `con.get(con.get(con, "foo"), "bar")`and similar expressions.
   
-  Some additional, useful functions provided by the CONi wrapper include(-> denotes return value):
-  
-- `coni:fields()` -> array of string/number keys which are defined(dynamic values may still return nil).
-- `coni:containers()` -> array of all containers(fields which return a sub-CON object)
-- `coni:properties()` -> array of all properties(fields which don't return a sub-CON object)
-- `coni:get(key::[String|Number])` -> the value associated with a key. If it is a container, it returns another wrapper.
-- `coni:set(key::[String|Number], <value>)` -> nil. Sets the value at the field(can overwrite dynamic relationships).
-- `getmetatable(coni)=="CONi Wrapper"` -> Can be used along with type checking to tell if a table is a CONi wrapper.
+  Some additional, useful functions provided by the CONi wrapper include:
+  | Function | Return Type | Description |
+  | :------- | :---------: | :---------- |
+  | `coni:fields()` | array of keys | Returns all valid keys |
+  | `coni:containers()` | array of keys | Returns all keys which point to containers |
+  | `coni:properties()` | array of keys | Returns all keys which are not containers |
+  | `coni:get(key::[String\|Number])` | any | Returns whatever value is stored at the key |
+  | `coni:set(key::[String\|Number], <value>)` | nil | Sets the value at that key. |
+  | `getmetatable(coni)` | "Coni Wrapper" | Can be used for type checking | 
 
 This is not a comprehensive list, and if you want that and more detailed documentation, you should look in the comments at the top of the [`coni.lua`](coni.lua) file. Additionally, it is possible to get the underlying CONi object out of the CONi wrapper by simply indexing `wrapper.con`, though there are very few cases if any where this would be desirable or needed. It is also possible to get and set elements in a CONi wrapper using Lua table indexing, however, this does have the possibility of field collision with the wrapper functions and the reserved `con` field, which `get` and `set` bypass.
 
