@@ -115,7 +115,13 @@ This is not a comprehensive list, and if you want that and more detailed documen
   This reveals one of the most powerful features of CON: the ability to *maintain* relationships between properties. Like I said in the introduction, CON was originally designed for use with GUI elements, a purpose it lends itself very well to as it allows the user to dynamically tweak values and watch all the other elements adjust themselves accordingly. This flexibility is only expanded upon later with [function calls](#function-application), allowing you to use any function within the CON file.
 
 #### Bang! Strict References
-  
+  With as nice as dynamic references can be, sometimes you want to just use a field as a static reference. In this scenario, rather than having the property automatically update whenever the field changes, it would simply use the value defined at interpretation time. For this purpose, CON also has the bang (`!`) operator. The bang operator should be placed before a dot reference and marks that reference *only* as being strict. For example,
+  ```json
+  guiWidth: 680
+  guiHeight: !.guiWidth/2
+  widthScale: .guiWidth/!.guiWidth
+  ```
+  In this example, `guiWidth` is initiated to `680`, while `guiHeight` is initiated to `340` and is strict, meaning that changing `guiWidth` after loading the CON object does *not* change `guiHeight`. The prop `widthScale` shows a mixed usage of strict and dynamic references and is initiated to `1`, but changes when `guiWidth` is updated, maintaining the scale factor of the original width that gives the new width. In other words, changing `guiWidth` to `340` causes `widthScale` to change to `0.5`.  
 
 #### Function Application
 
