@@ -121,7 +121,15 @@ This is not a comprehensive list, and if you want that and more detailed documen
   guiHeight: !.guiWidth/2
   widthScale: .guiWidth/!.guiWidth
   ```
-  In this example, `guiWidth` is initiated to `680`, while `guiHeight` is initiated to `340` and is strict, meaning that changing `guiWidth` after loading the CON object does *not* change `guiHeight`. The prop `widthScale` shows a mixed usage of strict and dynamic references and is initiated to `1`, but changes when `guiWidth` is updated, maintaining the scale factor of the original width that gives the new width. In other words, changing `guiWidth` to `340` causes `widthScale` to change to `0.5`.  
+  In this example, `guiWidth` is initiated to `680`, while `guiHeight` is initiated to `340` and is strict, meaning that changing `guiWidth` after loading the CON object does *not* change `guiHeight`. The prop `widthScale` shows a mixed usage of strict and dynamic references and is initiated to `1`, but changes when `guiWidth` is updated, maintaining the scale factor of the original width that gives the new width. In other words, changing `guiWidth` to `340` causes `widthScale` to change to `0.5`.
+  
+  In addition, if you want an entire property to be strict, the bang can be placed before the property name rather than placing them before every dot operator. As a simple example:
+  ```json
+  guiWidth: 680
+  guiHeight: 340
+  !startingResolution: .guiWidth/.guiHeight
+  ```
+  In this example, `startingResolution` is set to be `2` statically, in the same way as if we were to have instead written `startingResolution: !.guiWidth/!.guiHeight`. 
 
 #### Function Application
 
