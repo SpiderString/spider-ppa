@@ -67,7 +67,7 @@ This is not a comprehensive list, and if you want that and more detailed documen
   42=7*6
   inf:1/0
   ```
-  Some of the values these properties would then have are `scale: 2`, `average: 120`, and `inf: nil`. Crucially, since `inf` is assigned the value `nil` statically[more on static vs. dynamic later](#static-versus-dynamic), it will be absent from the table after interpretation(in Lua, any variables assigned `nil` are effectively unassigned). This means you may have unexpected holes in your CON objects if you aren't careful. 
+  Some of the values these properties would then have are `scale: 2`, `average: 120`, and `inf: nil`. Crucially, since `inf` is assigned the value `nil` statically [more on static vs. dynamic later](#static-versus-dynamic), it will be absent from the table after interpretation(in Lua, any variables assigned `nil` are effectively unassigned). This means you may have unexpected holes in your CON objects if you aren't careful. 
 
   In addition to mathematical operators, CON has one more operator for its expression parsing: string concatenation. String concatenation is done by juxtaposition(Placing two string-y things next to each other), with `nil` being converted to the empty string `""` and any other value being cast into a string. For example:
   ```json
