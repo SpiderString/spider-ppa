@@ -151,8 +151,27 @@ This is not a comprehensive list, and if you want that and more detailed documen
 
 #### Function Application
 
-  Application syntax here
-
+  Where the power and flexibility of CON truly shines, though, is with function application. Function application uses the dot(`.`) operator in the same way that field references do, with the added necessity of a pair of parenthesis after the function name. These parenthesis contain the function's arguments, if any, and make it clear whether it is a field reference or a function call. Before functions are called, they first must be *declared*, or defined, but for now let's assume that the functions `ceil(#)` and `max(#, #)` are already defined and act like their mathematical counterparts.
+  ```json
+  guiWidth: 680
+  guiHeight: 280
+  longest: .max(.guiWidth, .guiHeight)
+  resolution: .ceil(.guiWidth/.guiHeight)
+  ```
+  Here, `longest` would be initialized to `680`, and update whenever `guiWidth` or `guiHeight` is changed, and `resolution` would be initialized to `3` and update on any change to `guiWidth` or `guiHeight`. It should be noted that we used a comma(`,`) to separate function arguments and that we can also use *any* expression(dynamic or otherwise) as a function argument as well. Moreover, function application *also* accepts bang operators in the same way field references do, supporting both the prefix syntax(bang-before-dot) and the prop(bang-before-prop name) syntax. It should be noted, though, that if a function is strict, then all of its arguments *automatically become strict*. In other words, `!.foo(.bar, .func())` is equivalent to `!.foo(!.bar, !.func())`. However, because functions can potentially have side effects(that is, they could act differently even with the same arguments), `.foo(!.bar, !.func())` is *not* strictly evaluated(at least, not when looking at `foo`).
+  
+  A particularly interesting usage of strict functions is delegating code to be run at interpretation time. In CONi, if a strict or static property returns `nil`, then that property is effectively discarded because CONi is embedded in Lua and setting variables to `nil` in Lua is analogous to freeing them. This can be used to effectively create embedded "init" scripts which run whenever the CON is interpreted. For example:
+  ```json
+  !_init: .init()
+  data: 5
+  ```
+  When the CON file is loaded and parsed, it will call `init()` once, then(since it returns `nil`) it will throw away the `_init` property, leaving just `data`. This could be done to run some code which sets a variable, or reads input from some external source and creates additional data, or anything else. As a final note with function calls, special care should be taken when working with **blocking functions**. If a function blocks thread execution(say, by waiting for input), it could halt the parser and prevent loading or simply make the process clunky and awkward. The specifics of interpret-time function execution(for those brave enough) are as follows:
+  
+  1. If a function call is strict, execute it and store its value
+  2. If a field reference is strict, evaluate it and store its value, evaluating any functions as neccessary.
+  
+  This means that for *any* function which is either strict or used by a strict function or strict reference, or some nested combination of these, then that function will be executed at interpretation time. Needless to say, this can get quite complicated for large projects, and so it is best to simply avoid using functions which are blocking unless absolutely necessary and to keep careful track of those props which depend on it if you do. 
+  
 ###### Function Declaration
 
 ###### Embedded Scripts
