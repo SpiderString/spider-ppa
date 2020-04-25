@@ -9,7 +9,8 @@
 --wrapper:get(field::[String|Number]) --returns the value contained in a field. If the field is a CON object, returns a new wrapper around it.
 --wrapper:set(field::[String|Number], <value>) --sets the value of a field. If value is not supplied, sets it to nil
 --wrapper:fields() --returns an array of all valid field values
---wrapper:children() --returns an array of all container names
+--wrapper:containers() --returns an array of all container names
+--wrapper:children()  --alias of wrapper:containers()
 --wrapper:properties() --returns an array of all properties(fields() that are not children())
 --wrapper:load(fileName::String) --interprets a CON file and loads it into the wrapper
 --wrapper:save(fileName::String) --TODO: UNIMPLEMENTED. Saves a CON object to a file
@@ -109,7 +110,7 @@ function wrapper.fields(wrapper)
   end
   return fields
 end
-function wrapper.children(wrapper)
+function wrapper.containers(wrapper)
   local childs={}
   if not wrapper.con then return childs end
   for f, v in pairs(wrapper.con) do
@@ -117,6 +118,7 @@ function wrapper.children(wrapper)
   end
   return childs
 end
+wrapper.children=wrapper.containers
 function wrapper.properties(wrapper)
   local props={}
   if not wrapper.con then return props end
