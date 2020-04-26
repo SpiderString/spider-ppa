@@ -282,6 +282,7 @@ This is not a comprehensive list, and if you want that and more detailed documen
    ```
 
 ## Planned Features
+   - Boolean value support
    - Number-index field referencing
    - Number-index container declaration
    - Unary minus
