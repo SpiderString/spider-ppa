@@ -8,7 +8,8 @@
 
 local lib={}
 --Moves the player by a float number of blocks, dependent on original orientation, can handle angles.
---Returns the error, positive error means you went further than necessary. Error seems to be within 0-0.05m
+--Returns the error, positive error means you went further than necessary.
+--Standard Deviation: 0.01233, Mean: -0.006943, Recorded Range: [-0.03241, 0.05380]
 --moveDistance(float:blocks, String:[forward|left|right|back], <Boolean:doCrouch=true>, <Boolean:debug=false>)
 function lib.moveDistance(blocks, dir, doCrouch, debug)
   if debug == nil then debug=false end
@@ -37,7 +38,17 @@ function lib.moveDistance(blocks, dir, doCrouch, debug)
     log("Position: ("..x..","..z..")")
   end
   local distance = math.sqrt(math.pow(targetX-x, 2) + math.pow(targetZ-z, 2))
-  while distance > 1 do
+  if dir == "left" then
+    left(-1)
+  elseif dir == "right" then
+    right(-1)
+  elseif dir == "back" then
+    back(-1)
+  else
+    forward(-1)
+  end
+  local epsilon=0.10684524
+  while distance > 1+epsilon do
     x, y, z = getPlayerPos()
     distance = math.sqrt(math.pow(targetX-x, 2) + math.pow(targetZ-z, 2))
     if debug then
@@ -49,19 +60,13 @@ function lib.moveDistance(blocks, dir, doCrouch, debug)
     if distance < 2 and doCrouch then
       sneak(-1)
     end
-    local moveTime = 1
-    if dir == "left" then
-        left(moveTime)
-    elseif dir == "right" then
-        right(moveTime)
-    elseif dir == "back" then
-        back(moveTime)
-    else
-        forward(moveTime)
-    end
   end
-  sneak(100)
+  left(0)
+  right(0)
+  back(0)
+  forward(0)
   sneak(0)
+  sleep(250)
   --returns error amount
   x,y,z = getPlayerPos()
   distance=math.sqrt(math.pow(targetX-x, 2) + math.pow(targetZ-z, 2))
