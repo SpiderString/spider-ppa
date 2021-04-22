@@ -105,51 +105,36 @@ function lib.contains(v, t)
   end
   return false
 end
-function lib.combinations(n, _t)
-  local function push(k, a, b)
-    for i=1, math.min(k, #a) do
-      table.insert(b, 1, table.remove(a, 1))
+function lib.combinations(n, t)
+  local len = #t
+  local output = {}
+  local ptrs = {}
+  if len < n then return output end
+  for i = 1, n do
+    table.insert(ptrs, i)
+  end
+  local j, comb = {}
+  while true do -- while ptr[1] is not at the starting zero
+    comb = {}
+    for _, ptr in ipairs(ptrs) do
+      table.insert(comb, t[ptr])
+    end
+    table.insert(output, comb)
+    if ptrs[1] == len - n + 1 then break end -- ptr[1] is at the starting zero
+    if ptrs[n] ~= len then
+      ptrs[n] = ptrs[n] + 1
+    else -- reset ptrs
+      j = n
+      while ptrs[j - 1] == ptrs[j] - 1 do -- prev ptr next to cur ptr
+        j = j - 1
+      end
+      ptrs[j - 1] = ptrs[j - 1] + 1 -- increment ptr
+      for i = j, n do
+        ptrs[i] = ptrs[i - 1] + 1 -- reset ptr
+      end
     end
   end
-  local t = {table.unpack(_t)}
-  local output={}
-  local build={}
-  local c={} --buffer1
-  local d={} --buffer2 "protected buffer"
-  ::Recur::
-  if #t < n then return output end
-  push(n-1, t, build)
-  ::Loop::
-  if #t == 0 then --fully exhausted combinations with current head
-    push(#build-1, build, t)
-    push(#d, d, t)
-    build={}
-    goto Recur
-  end
-  for i=1, #t do
-    local elem={}
-    for i, e in ipairs(build) do --build is in stacked formation(reverse order)
-      table.insert(elem, 1, e)
-    end
-    table.insert(elem, t[i])
-    table.insert(output, elem)
-  end
-  if #build==0 then --n=1
-    return output
-  elseif #build == 1 then --n=2 or certain combinations of (n, k)
-    build={}
-    goto Recur
-  end
-  push(1, build, c)
-  push(1, t, build)
-  if #t==0 then --exhausted combinations with current init
-    push(1, build, t)
-    push(#c, c, t)
-    if #build==1 then recur() end --init=head, discard head
-    push(1, build, d)
-    push(n-1-#build, t, build)
-  end
-  goto Loop
+  return output
 end
 
 return lib
