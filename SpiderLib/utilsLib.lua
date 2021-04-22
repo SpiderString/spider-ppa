@@ -105,54 +105,32 @@ function lib.contains(v, t)
   end
   return false
 end
-function lib.combinations(n, _t)
-  local function popPush(k, src, dest)
-    for i=1, math.min(k, #src) do
-      table.insert(dest, 1, table.remove(src, 1))
-    end
+function lib.combinations(n, t)
+  local len = #t
+  local output = {}
+  local ptrs = {}
+  if len < n then return output end
+  for i = 1, n do
+    table.insert(ptrs, i)
   end
-
-  local t = {table.unpack(_t)}
-  local output={}
-  local build={}
-  local buffer1={}
-  local buffer2={} --"protected buffer"
-
-  while #t >= n do
-    popPush(n - 1, t, build)
-
-    while true do
-      if #t == 0 then --fully exhausted combinations with current head
-        popPush(#build-1, build, t)
-        popPush(#buffer2, buffer2, t)
-        build={}
-        break
+  local j, comb = {}
+  while true do -- while ptr[1] is not at the starting zero
+    comb = {}
+    for _, ptr in ipairs(ptrs) do
+      table.insert(comb, t[ptr])
+    end
+    table.insert(output, comb)
+    if ptrs[1] == len - n + 1 then break end -- ptr[1] is at the starting zero
+    if ptrs[n] ~= len then
+      ptrs[n] = ptrs[n] + 1
+    else -- reset ptrs
+      j = n
+      while ptrs[j - 1] == ptrs[j] - 1 do -- prev ptr next to cur ptr
+        j = j - 1
       end
-
-      for i=1, #t do
-        local elem={}
-        for i, e in ipairs(build) do --build is in stacked formation(reverse order)
-          table.insert(elem, 1, e)
-        end
-        table.insert(elem, t[i])
-        table.insert(output, elem)
-      end
-
-      if #build==0 then --n=1
-        return output
-      elseif #build == 1 then --n=2 or certain combinations of (n, k)
-        build={}
-        break
-      end
-
-      popPush(1, build, buffer1)
-      popPush(1, t, build)
-      if #t==0 then --exhausted combinations with current init
-        popPush(1, build, t)
-        popPush(#buffer1, buffer1, t)
-        if #build==1 then recur() end --init=head, discard head
-        popPush(1, build, buffer2)
-        popPush(n-1-#build, t, build)
+      ptrs[j - 1] = ptrs[j - 1] + 1 -- increment ptr
+      for i = j, n do
+        ptrs[i] = ptrs[i - 1] + 1 -- reset ptr
       end
     end
   end
